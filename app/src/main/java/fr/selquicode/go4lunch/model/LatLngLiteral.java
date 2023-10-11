@@ -22,6 +22,8 @@ public class LatLngLiteral {
         this.lng = lng;
     }
 
+    public LatLngLiteral(){}
+
     public Double getLat() {
         return lat;
     }

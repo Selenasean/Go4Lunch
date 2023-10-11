@@ -17,6 +17,8 @@ public class Place {
         this.geometry = geometry;
     }
 
+    public Place(){};
+
     public Geometry getGeometry() {
         return geometry;
     }

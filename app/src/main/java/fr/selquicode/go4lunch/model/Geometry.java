@@ -21,6 +21,8 @@ public class Geometry {
         this.location = location;
     }
 
+    public Geometry(){};
+
     public LatLngLiteral getLocation() {
         return location;
     }

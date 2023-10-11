@@ -19,8 +19,9 @@ public class PlacesNearbySearchResponse {
 
     public PlacesNearbySearchResponse(List<Place> results) {
         this.results = results;
-
     }
+    
+    public PlacesNearbySearchResponse(){}
 
     public List<Place> getResults() {
         return results;

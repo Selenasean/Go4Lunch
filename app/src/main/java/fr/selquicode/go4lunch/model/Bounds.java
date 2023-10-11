@@ -20,6 +20,7 @@ public class Bounds {
         this.southwest = southwest;
     }
 
+    public Bounds(){};
 
     public LatLngLiteral getNortheast() {
         return northeast;
