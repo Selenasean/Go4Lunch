@@ -19,5 +19,8 @@ public class RetrofitService {
             .addConverterFactory(GsonConverterFactory.create(gson))
             .build();
 
-    public static PlacesNearbySearchResponseAPI getPlaceAPI(){ return retrofit.create(PlacesNearbySearchResponseAPI.class);}
+    //Allows us to get the request from PlacesNearbySearchResponseAPI using retrofit
+    public static PlacesNearbySearchResponseAPI getPlaceAPI(){
+        return retrofit.create(PlacesNearbySearchResponseAPI.class);
+    }
 }

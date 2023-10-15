@@ -1,4 +1,4 @@
-package fr.selquicode.go4lunch.model;
+package fr.selquicode.go4lunch.data.model;
 
 
 
@@ -21,7 +21,7 @@ public class Geometry {
         this.location = location;
     }
 
-    public Geometry(){};
+    //public Geometry(){};
 
     public LatLngLiteral getLocation() {
         return location;

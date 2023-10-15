@@ -1,4 +1,4 @@
-package fr.selquicode.go4lunch.model;
+package fr.selquicode.go4lunch.data.model;
 
 
 import com.google.gson.annotations.Expose;
@@ -17,7 +17,7 @@ public class Place {
         this.geometry = geometry;
     }
 
-    public Place(){};
+    //public Place(){};
 
     public Geometry getGeometry() {
         return geometry;

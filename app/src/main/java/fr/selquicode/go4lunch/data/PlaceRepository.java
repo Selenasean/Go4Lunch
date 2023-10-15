@@ -7,8 +7,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import java.util.List;
 
-import fr.selquicode.go4lunch.model.Place;
-import fr.selquicode.go4lunch.model.PlacesNearbySearchResponse;
+import fr.selquicode.go4lunch.data.model.Place;
+import fr.selquicode.go4lunch.data.model.PlacesNearbySearchResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -17,14 +17,13 @@ public class PlaceRepository {
 
     private PlacesNearbySearchResponseAPI apiService;
     private static String TAG= "PlaceRepository";
+    public MutableLiveData<List<Place>> placesMutableLiveData = new MutableLiveData<>();
 
     public PlaceRepository(PlacesNearbySearchResponseAPI apiService){
         this.apiService = apiService;
     }
 
     public LiveData<List<Place>> getPlaces(){
-        MutableLiveData<List<Place>> placesMutableLiveData = new MutableLiveData<>();
-        Log.i(TAG, "avant le enqueue");
         apiService.getListOfPlaces().enqueue(new Callback<PlacesNearbySearchResponse>() {
             @Override
             public void onResponse(Call<PlacesNearbySearchResponse> call, Response<PlacesNearbySearchResponse> response) {

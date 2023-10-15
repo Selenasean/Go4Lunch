@@ -1,12 +1,10 @@
-package fr.selquicode.go4lunch.model;
+package fr.selquicode.go4lunch.data.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 import java.util.Objects;
-
-import fr.selquicode.go4lunch.model.Place;
 
 //@SuppressWarnings({"ALL", "unused"})
 public class PlacesNearbySearchResponse {
@@ -21,7 +19,7 @@ public class PlacesNearbySearchResponse {
         this.results = results;
     }
     
-    public PlacesNearbySearchResponse(){}
+    //public PlacesNearbySearchResponse(){}
 
     public List<Place> getResults() {
         return results;

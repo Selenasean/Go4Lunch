@@ -1,4 +1,4 @@
-package fr.selquicode.go4lunch.model;
+package fr.selquicode.go4lunch.data.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -20,7 +20,7 @@ public class Bounds {
         this.southwest = southwest;
     }
 
-    public Bounds(){};
+    //public Bounds(){};
 
     public LatLngLiteral getNortheast() {
         return northeast;

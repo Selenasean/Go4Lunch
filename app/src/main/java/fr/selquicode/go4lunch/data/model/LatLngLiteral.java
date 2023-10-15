@@ -1,4 +1,4 @@
-package fr.selquicode.go4lunch.model;
+package fr.selquicode.go4lunch.data.model;
 
 
 
@@ -22,7 +22,7 @@ public class LatLngLiteral {
         this.lng = lng;
     }
 
-    public LatLngLiteral(){}
+    //public LatLngLiteral(){}
 
     public Double getLat() {
         return lat;
