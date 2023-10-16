@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
+
+    //string for bottom navigation bar
+    <string name="map">Map View</string>
+    <string name="list">List View</string>
+    <string name="workmates">Workmates</string>
+    <string name="map_view_desc">icon map to see the map</string>
+    <string name="list_map_view_desc">icon list to see the restaurants\' list</string>
+    <string name="workmates_desc">icon with people to see workmates</string>
 </resources>
