@@ -30,10 +30,9 @@ import fr.selquicode.go4lunch.ui.map.MapViewFragment;
 import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewFragment;
 
-public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MainActivity extends AppCompatActivity  {
 
     private ActivityMainBinding binding;
-    private GoogleMap mMap;
     private PlaceRepository repository = new PlaceRepository(RetrofitService.getPlaceAPI());
     private MainViewModel mMainViewModel;
 
@@ -43,15 +42,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_container);
-        assert mapFragment != null;
-        mapFragment.getMapAsync(this);
+
 
         //the fragment that will be displayed by default
         replaceFragment(new MapViewFragment());
-        //let user choose the fragment 
+        //let user choose the fragment
         binding.bottomNavigation.setOnItemSelectedListener(item -> fragmentChoice(item));
 
         //settings for ViewModel
@@ -98,26 +93,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * <p>
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
-    @Override
-    public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
-        // Add a marker in Lognes and move the camera
-        LatLng lognes = new LatLng(48.834275, 2.63731);
-        mMap.addMarker(new MarkerOptions()
-                .position(lognes)
-                .title("Marker in Lognes"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(lognes));
-    }
 
 
 }
