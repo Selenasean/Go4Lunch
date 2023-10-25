@@ -42,8 +42,6 @@ public class MainActivity extends AppCompatActivity  {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-
-
         //the fragment that will be displayed by default
         replaceFragment(new MapViewFragment());
         //let user choose the fragment
@@ -85,12 +83,6 @@ public class MainActivity extends AppCompatActivity  {
      */
     private void setViewModel() {
         mMainViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MainViewModel.class);
-        mMainViewModel.getPlacesLiveData().observe(this, places -> {
-            Log.i("MainActivity", places.size() + "");
-            for (Place place : places) {
-                Log.i("MainActivity", place.toString());
-            }
-        });
     }
 
 

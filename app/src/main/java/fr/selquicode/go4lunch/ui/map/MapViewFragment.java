@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,11 +20,16 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.selquicode.go4lunch.R;
+import fr.selquicode.go4lunch.data.model.Place;
+import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
-    private MapViewViewModel mViewModel;
+    private MapViewViewModel mapViewModel;
     private GoogleMap mMap;
 
     public static MapViewFragment newInstance() {
@@ -40,21 +46,36 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(MapViewViewModel.class);
+        settingViewModel();
         // TODO: Use the ViewModel
-
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.fragment_container_map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
+
+    }
+
+    private void settingViewModel() {
+        mapViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MapViewViewModel.class);
+        mapViewModel.getPlaces().observe(getViewLifecycleOwner(), this::render);
+    }
+
+    List<LatLng> restaurantLocations = new ArrayList<>();
+    private void render(List<Place> places) {
+        Log.i("MainActivity", places.size() + "");
+        for (Place place : places) {
+            Log.i("MainActivity", place.toString());
+            LatLng restaurant = new LatLng(place.getGeometry().getLocation().getLat(),place.getGeometry().getLocation().getLng());
+            restaurantLocations.add(restaurant);
+        }
     }
 
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * we just add a marker near Lognes, France.
      * <p>
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
@@ -69,7 +90,11 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 .position(lognes)
                 .title("Marker in Lognes"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lognes, 16));
-
+        for(LatLng restaurant : restaurantLocations){
+            mMap.addMarker(new MarkerOptions()
+                    .position(restaurant)
+                    .title("restaurant"));
+        }
     }
 
 }

@@ -7,6 +7,12 @@ import androidx.lifecycle.ViewModelProvider;
 import fr.selquicode.go4lunch.data.PlaceRepository;
 import fr.selquicode.go4lunch.data.RetrofitService;
 import fr.selquicode.go4lunch.ui.MainViewModel;
+import fr.selquicode.go4lunch.ui.list.ListViewFragment;
+import fr.selquicode.go4lunch.ui.list.ListViewViewModel;
+import fr.selquicode.go4lunch.ui.map.MapViewFragment;
+import fr.selquicode.go4lunch.ui.map.MapViewViewModel;
+import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewFragment;
+import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewViewModel;
 
 /**
  * Class who wil create a new ViewModel for every new activity/fragment
@@ -48,6 +54,12 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //injection of the Repository in the ViewModel constructor
             return (T) new MainViewModel(repository);
+        } else if(modelClass.isAssignableFrom(MapViewViewModel.class)){
+            return (T) new MapViewViewModel(repository);
+        } else if(modelClass.isAssignableFrom(ListViewViewModel.class)){
+            return (T) new ListViewViewModel(repository);
+        } else if(modelClass.isAssignableFrom(WorkmatesViewViewModel.class)){
+            return (T) new WorkmatesViewViewModel(repository);
         }
         throw new IllegalArgumentException("Unknown ViewModel class");
     }

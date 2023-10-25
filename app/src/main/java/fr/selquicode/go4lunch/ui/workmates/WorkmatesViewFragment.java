@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import fr.selquicode.go4lunch.R;
+import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 
 public class WorkmatesViewFragment extends Fragment {
 
@@ -29,10 +30,9 @@ public class WorkmatesViewFragment extends Fragment {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(WorkmatesViewViewModel.class);
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(WorkmatesViewViewModel.class);
         // TODO: Use the ViewModel
     }
-
-}
+} 
