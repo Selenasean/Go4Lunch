@@ -58,16 +58,16 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     private void settingViewModel() {
         mapViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MapViewViewModel.class);
-        mapViewModel.getPlaces().observe(getViewLifecycleOwner(), this::render);
     }
 
-    List<LatLng> restaurantLocations = new ArrayList<>();
     private void render(List<Place> places) {
         Log.i("MainActivity", places.size() + "");
         for (Place place : places) {
             Log.i("MainActivity", place.toString());
             LatLng restaurant = new LatLng(place.getGeometry().getLocation().getLat(),place.getGeometry().getLocation().getLng());
-            restaurantLocations.add(restaurant);
+            mMap.addMarker(new MarkerOptions()
+                    .position(restaurant)
+                    .title("restaurant"));
         }
     }
 
@@ -90,11 +90,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 .position(lognes)
                 .title("Marker in Lognes"));
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lognes, 16));
-        for(LatLng restaurant : restaurantLocations){
-            mMap.addMarker(new MarkerOptions()
-                    .position(restaurant)
-                    .title("restaurant"));
-        }
+        mapViewModel.getPlaces().observe(getViewLifecycleOwner(), this::render);
     }
 
 }
