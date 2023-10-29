@@ -8,18 +8,22 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <!-- image of the restaurant -->
     <ImageView
         android:id="@+id/image_restaurant"
-        android:layout_width="52dp"
-        android:layout_height="52dp"
+        android:layout_width="68dp"
+        android:layout_height="68dp"
         android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/imageDescription"
+        tools:srcCompat="@drawable/rounded_square"/>
 
+    <!-- name of restaurant -->
     <TextView
         android:id="@+id/name_restaurant"
         android:layout_marginStart="16dp"
@@ -34,27 +38,117 @@
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="restaurant" />
+        tools:text="Restaurant" />
 
+    <!-- position compared with user position -->
     <TextView
+        android:id="@+id/meters"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/name_restaurant"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="16dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toStartOf="@id/image_restaurant"
-        tools:text="120m"
-        android:layout_marginTop="4dp"/>
+        app:layout_constraintBaseline_toBaselineOf="@id/name_restaurant"
+        tools:text="120m"/>
+
+    <!-- type of food the restaurant serves -->
     <TextView
-        android:id="@+id/type_restaurant"
+        android:id="@+id/type_food"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:gravity="center"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp"
         app:layout_constraintTop_toBottomOf="@id/name_restaurant"
         app:layout_constraintStart_toStartOf="parent"
         tools:text="Chinese"
-        android:gravity="center"
-        android:layout_marginStart="16dp"
         />
 
+    <!-- Separation between type of food and address -->
+    <TextView
+        android:id="@+id/between"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="-"
+        android:textSize="18sp"
+        android:textColor="@color/black"
+        android:layout_marginStart="4dp"
+        android:layout_marginLeft="4dp"
+        app:layout_constraintBaseline_toBaselineOf="@id/type_food"
+        app:layout_constraintStart_toEndOf="@id/type_food"
+        app:layout_constraintTop_toBottomOf="@id/name_restaurant"
+        />
+
+    <!-- Address of the restaurant -->
+    <TextView
+        android:id="@+id/address"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:textSize="16dp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        app:layout_constraintStart_toEndOf="@id/between"
+        app:layout_constraintBaseline_toBaselineOf="@id/type_food"
+        app:layout_constraintEnd_toStartOf="@id/icon_workmates"
+        tools:text="21 Boulevard du Segrais"/>
+
+    <!-- Icon + numbers of workmates who'll go in the current restaurant  -->
+    <ImageView
+        android:id="@+id/icon_workmates"
+        android:layout_width="28dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="16dp"
+        app:srcCompat="@drawable/ic_person"
+        app:layout_constraintEnd_toStartOf="@id/workmates_number"
+        app:layout_constraintStart_toEndOf="@id/address"
+        app:layout_constraintTop_toBottomOf="@id/meters" />
+    <TextView
+        android:id="@+id/workmates_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintStart_toEndOf="@id/icon_workmates"
+        app:layout_constraintTop_toTopOf="@id/icon_workmates"
+        app:layout_constraintEnd_toStartOf="@id/image_restaurant"
+        tools:text="(3)"/>
+
+    <!-- Opening hour -->
+    <TextView
+        android:id="@+id/opening"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="16dp"
+        android:textStyle="italic"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/type_food"
+        tools:text="Open until 7pm"
+        />
+
+    <!-- Rating stars -->
+    <RatingBar
+        android:id="@+id/rating_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:numStars="3"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginRight="8dp"
+        style="?android:attr/ratingBarStyleSmall"
+        app:layout_constraintTop_toBottomOf="@id/icon_workmates"
+        app:layout_constraintEnd_toStartOf="@id/image_restaurant"
+        app:layout_constraintBottom_toBottomOf="parent"
+        />
 
 
 

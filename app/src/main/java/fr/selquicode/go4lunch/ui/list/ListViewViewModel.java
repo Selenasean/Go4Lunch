@@ -9,7 +9,6 @@ import fr.selquicode.go4lunch.data.PlaceRepository;
 import fr.selquicode.go4lunch.data.model.Place;
 
 public class ListViewViewModel extends ViewModel {
-    // TODO: Implement the ViewModel
 
     private PlaceRepository placeRepository;
 
@@ -22,4 +21,6 @@ public class ListViewViewModel extends ViewModel {
      * @return places type LiveData
      */
     public LiveData<List<Place>> getPlaces(){ return placeRepository.getPlaces();}
+
+    //TODO : recupérer la liste de restaurant et la mapper dans le viewState, pour l'UI
 }

@@ -8,4 +8,5 @@
     <string name="map_view_desc">icon map to see the map</string>
     <string name="list_map_view_desc">icon list to see the restaurants\' list</string>
     <string name="workmates_desc">icon with people to see workmates</string>
+    <string name="imageDescription">Restaurant\'s picture</string>
 </resources>
