@@ -9,6 +9,10 @@ import java.util.Objects;
 
 public class Place {
 
+    @SerializedName("place_id")
+    @Expose
+    private String placeId;
+
     @SerializedName("geometry")
     @Expose
     private Geometry geometry;
@@ -37,7 +41,9 @@ public class Place {
     @Expose
     private double rating;
 
-    public Place(Geometry geometry,
+
+    public Place(String placeId,
+                 Geometry geometry,
                  String address,
                  String formattedAddress,
                  String name,
@@ -45,6 +51,7 @@ public class Place {
                  List<PlacePhoto> placePhoto,
                  double rating){
 
+        this.placeId = placeId;
         this.geometry = geometry;
         this.address = address;
         this.formattedAddress = formattedAddress;
@@ -57,6 +64,10 @@ public class Place {
     //public Place(){};
 
     //GETTERS
+    public String getPlaceId() {
+        return placeId;
+    }
+
     public Geometry getGeometry() {
         return geometry;
     }
@@ -91,18 +102,19 @@ public class Place {
        if (this == o) return true;
        if (!(o instanceof Place)) return false;
        Place place = (Place) o;
-       return Double.compare(place.getRating(), getRating()) == 0 && getGeometry().equals(place.getGeometry()) && getAddress().equals(place.getAddress()) && getFormattedAddress().equals(place.getFormattedAddress()) && getName().equals(place.getName()) && getOpening().equals(place.getOpening()) && getPlacePhoto().equals(place.getPlacePhoto());
+       return Double.compare(place.getRating(), getRating()) == 0 && getPlaceId().equals(place.getPlaceId()) && getGeometry().equals(place.getGeometry()) && getAddress().equals(place.getAddress()) && getFormattedAddress().equals(place.getFormattedAddress()) && getName().equals(place.getName()) && getOpening().equals(place.getOpening()) && getPlacePhoto().equals(place.getPlacePhoto());
    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getGeometry(), getAddress(), getFormattedAddress(), getName(), getOpening(), getPlacePhoto(), getRating());
+        return Objects.hash(getPlaceId(), getGeometry(), getAddress(), getFormattedAddress(), getName(), getOpening(), getPlacePhoto(), getRating());
     }
 
     @Override
     public String toString() {
         return "Place{" +
-                "geometry=" + geometry +
+                "placeId='" + placeId + '\'' +
+                ", geometry=" + geometry +
                 ", address='" + address + '\'' +
                 ", formattedAddress='" + formattedAddress + '\'' +
                 ", name='" + name + '\'' +

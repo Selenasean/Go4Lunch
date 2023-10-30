@@ -6,7 +6,7 @@ import retrofit2.Call;
 import retrofit2.http.GET;
 
 public interface PlacesNearbySearchResponseAPI {
-    @GET("nearbysearch/json?location=48.834275%2C2.63731&radius=10000&type=restaurant&key=" + BuildConfig.MAPS_API_KEY)
+    @GET("nearbysearch/json?location=48.834275%2C2.63731&radius=5000&type=restaurant&key=" + BuildConfig.MAPS_API_KEY)
     Call<PlacesNearbySearchResponse> getListOfPlaces();
 
 }

@@ -1,10 +1,11 @@
 package fr.selquicode.go4lunch.ui.list;
 
-import android.media.Image;
-
 import androidx.annotation.NonNull;
 
 import java.util.Objects;
+
+import fr.selquicode.go4lunch.data.model.PlaceOpeningHours;
+import fr.selquicode.go4lunch.data.model.PlacePhoto;
 
 /**
  * This is the model of the view that the data have to fit into
@@ -14,44 +15,38 @@ import java.util.Objects;
 public class ListViewState {
 
     @NonNull
-    private final int id;
+    private final String id;
 
     @NonNull
-    private final String nameRestaurant, distance, foodType, address;
+    private final String nameRestaurant, address;
 
     @NonNull
     private boolean opening;
 
     @NonNull
-    private Image restaurantImg;
+    private PlacePhoto restaurantImg;
 
-    @NonNull private int ratings;
+    @NonNull private double ratings;
 
 
     /**
      * Constructor
-     * @param id                type int
+     * @param id                type String
      * @param nameRestaurant    type String
-     * @param distance          type String
-     * @param foodType          type String
      * @param address           type String
      * @param restaurantImg     type Image
      * @param opening           type Boolean
-     * @param ratings           type int
+     * @param ratings           type double
      */
-    public ListViewState(int id,
+    public ListViewState(String id,
                          @NonNull String nameRestaurant,
-                         @NonNull String distance,
-                         @NonNull String foodType,
                          @NonNull String address,
-                         @NonNull Image restaurantImg,
+                         @NonNull PlacePhoto restaurantImg,
                          @NonNull boolean opening,
-                         @NonNull int ratings
+                         @NonNull double ratings
                          ){
         this.id = id;
         this.nameRestaurant = nameRestaurant;
-        this.distance = distance;
-        this.foodType = foodType;
         this.address = address;
         this.opening = opening;
         this.restaurantImg = restaurantImg;
@@ -60,23 +55,13 @@ public class ListViewState {
     }
 
     // GETTERS
-    public int getId() {
+    public String getId() {
         return id;
     }
 
     @NonNull
     public String getNameRestaurant() {
         return nameRestaurant;
-    }
-
-    @NonNull
-    public String getDistance() {
-        return distance;
-    }
-
-    @NonNull
-    public String getFoodType() {
-        return foodType;
     }
 
     @NonNull
@@ -90,11 +75,11 @@ public class ListViewState {
     }
 
     @NonNull
-    public Image getRestaurantImg() {
+    public PlacePhoto getRestaurantImg() {
         return restaurantImg;
     }
 
-    public int getRatings() {
+    public double getRatings() {
         return ratings;
     }
 
@@ -103,12 +88,12 @@ public class ListViewState {
         if (this == o) return true;
         if (!(o instanceof ListViewState)) return false;
         ListViewState that = (ListViewState) o;
-        return getId() == that.getId() && getOpening() == that.getOpening() && getRatings() == that.getRatings() && getNameRestaurant().equals(that.getNameRestaurant()) && getDistance().equals(that.getDistance()) && getFoodType().equals(that.getFoodType()) && getAddress().equals(that.getAddress()) && getRestaurantImg().equals(that.getRestaurantImg());
+        return getId() == that.getId() && getOpening() == that.getOpening() && getRatings() == that.getRatings() && getNameRestaurant().equals(that.getNameRestaurant()) && getAddress().equals(that.getAddress()) && getRestaurantImg().equals(that.getRestaurantImg());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNameRestaurant(), getDistance(), getFoodType(), getAddress(), getOpening(), getRestaurantImg(), getRatings());
+        return Objects.hash(getId(), getNameRestaurant(), getAddress(), getOpening(), getRestaurantImg(), getRatings());
     }
 
     @Override
@@ -116,8 +101,6 @@ public class ListViewState {
         return "ListViewState{" +
                 "id=" + id +
                 ", nameRestaurant='" + nameRestaurant + '\'' +
-                ", distance='" + distance + '\'' +
-                ", foodType='" + foodType + '\'' +
                 ", address='" + address + '\'' +
                 ", opening=" + opening +
                 ", restaurantImg=" + restaurantImg +
