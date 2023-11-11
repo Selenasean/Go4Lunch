@@ -3,7 +3,6 @@ package fr.selquicode.go4lunch.data;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import fr.selquicode.go4lunch.BuildConfig;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -20,7 +19,7 @@ public class RetrofitService {
             .build();
 
     //Allows us to get the request from PlacesNearbySearchResponseAPI using retrofit
-    public static PlacesNearbySearchResponseAPI getPlaceAPI(){
-        return retrofit.create(PlacesNearbySearchResponseAPI.class);
+    public static PlacesAPI getPlaceAPI(){
+        return retrofit.create(PlacesAPI.class);
     }
 }

@@ -4,12 +4,12 @@ import androidx.lifecycle.ViewModel;
 
 import fr.selquicode.go4lunch.data.PlaceRepository;
 
-public class WorkmatesViewViewModel extends ViewModel {
+public class WorkmatesViewModel extends ViewModel {
     // TODO: Implement the ViewModel
 
     private PlaceRepository placeRepository;
 
-    public WorkmatesViewViewModel(PlaceRepository repository){
+    public WorkmatesViewModel(PlaceRepository repository){
         this.placeRepository = repository;
     }
 }

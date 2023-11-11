@@ -2,6 +2,8 @@ package fr.selquicode.go4lunch.data.model;
 
 
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,17 +18,22 @@ public class Geometry {
     @Expose
     private Bounds viewport;
 
-
-    public Geometry(LatLngLiteral location){
+    public Geometry(@NonNull LatLngLiteral location, @NonNull Bounds viewport){
         this.location = location;
     }
 
-    //public Geometry(){};
-
+    //GETTERS
+    @NonNull
     public LatLngLiteral getLocation() {
         return location;
     }
 
+    @NonNull
+    public Bounds getViewport() {
+        return viewport;
+    }
+
+    //UTILS METHODS
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

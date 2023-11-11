@@ -2,6 +2,9 @@ package fr.selquicode.go4lunch.data.model;
 
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -17,21 +20,23 @@ public class LatLngLiteral {
     private Double  lng;
 
 
-    public LatLngLiteral(Double lat, Double lng) {
+    public LatLngLiteral(@Nullable double lat, @Nullable  double lng) {
         this.lat = lat;
         this.lng = lng;
     }
 
-    //public LatLngLiteral(){}
-
+    //GETTERS
+    @Nullable
     public Double getLat() {
         return lat;
     }
 
+    @Nullable
     public Double getLng() {
         return lng;
     }
 
+    //METHODS UTILS
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

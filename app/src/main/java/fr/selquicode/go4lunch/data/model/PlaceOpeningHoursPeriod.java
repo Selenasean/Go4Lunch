@@ -1,5 +1,8 @@
 package fr.selquicode.go4lunch.data.model;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -16,16 +19,18 @@ public class PlaceOpeningHoursPeriod {
     private PlaceOpeningHoursPeriodDetail close;
 
 
-    public PlaceOpeningHoursPeriod(PlaceOpeningHoursPeriodDetail open, PlaceOpeningHoursPeriodDetail close){
+    public PlaceOpeningHoursPeriod(@NonNull PlaceOpeningHoursPeriodDetail open, @Nullable PlaceOpeningHoursPeriodDetail close){
         this.close = close;
         this.open = open;
     }
 
     //GETTERS
+    @NonNull
     public PlaceOpeningHoursPeriodDetail getOpen() {
         return open;
     }
 
+    @Nullable
     public PlaceOpeningHoursPeriodDetail getClose() {
         return close;
     }

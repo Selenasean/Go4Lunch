@@ -1,5 +1,7 @@
 package fr.selquicode.go4lunch.data.model;
 
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -9,9 +11,14 @@ import java.util.Objects;
 
 public class PlaceOpeningHours {
 
+    /**
+     * Type Boolean is used here because we need to know
+     * if the restaurant is open (isOpenNow() = true), is closed (isOpenNow() = false)
+     * or if PlaceOpeningHours = null because the request's response doesn't have that field
+     */
     @SerializedName("open_now")
     @Expose
-    private boolean isOpenNow;
+    private Boolean isOpenNow;
 
     @SerializedName("weekday_text")
     @Expose
@@ -22,21 +29,26 @@ public class PlaceOpeningHours {
     private List<PlaceOpeningHoursPeriod> periods;
 
 
-    public PlaceOpeningHours(boolean isOpenNow, List<String> weekdayText, List<PlaceOpeningHoursPeriod> periods){
+    public PlaceOpeningHours(@Nullable Boolean isOpenNow,
+                             @Nullable List<String> weekdayText,
+                             @Nullable  List<PlaceOpeningHoursPeriod> periods){
         this.isOpenNow = isOpenNow;
         this.weekdayText = weekdayText;
         this.periods = periods;
     }
 
     //GETTERS
-    public boolean isOpenNow() {
+    @Nullable
+    public Boolean isOpenNow() {
         return isOpenNow;
     }
 
+    @Nullable
     public List<String> getWeekdayText() {
         return weekdayText;
     }
 
+    @Nullable
     public List<PlaceOpeningHoursPeriod> getPeriods() {
         return periods;
     }

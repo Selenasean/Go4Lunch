@@ -1,6 +1,9 @@
 package fr.selquicode.go4lunch.data.model;
 
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -42,14 +45,14 @@ public class Place {
     private double rating;
 
 
-    public Place(String placeId,
-                 Geometry geometry,
-                 String address,
-                 String formattedAddress,
-                 String name,
-                 PlaceOpeningHours opening,
-                 List<PlacePhoto> placePhoto,
-                 double rating){
+    public Place(@Nullable String placeId,
+                 @Nullable Geometry geometry,
+                 @Nullable String address,
+                 @Nullable String formattedAddress,
+                 @Nullable String name,
+                 @Nullable PlaceOpeningHours opening,
+                 @Nullable List<PlacePhoto> placePhoto,
+                 @Nullable double rating){
 
         this.placeId = placeId;
         this.geometry = geometry;
@@ -61,37 +64,43 @@ public class Place {
         this.rating = rating;
     }
 
-    //public Place(){};
-
     //GETTERS
+    @Nullable
     public String getPlaceId() {
         return placeId;
     }
 
+    @Nullable
     public Geometry getGeometry() {
         return geometry;
     }
 
+    @Nullable
     public String getAddress() {
         return address;
     }
 
+    @Nullable
     public String getFormattedAddress() {
         return formattedAddress;
     }
 
+    @Nullable
     public String getName() {
         return name;
     }
 
+    @Nullable
     public PlaceOpeningHours getOpening() {
         return opening;
     }
 
-    public List<PlacePhoto> getPlacePhoto() {
+    @Nullable
+    public List<PlacePhoto> getPlacePhotos() {
         return placePhoto;
     }
 
+    @Nullable
     public double getRating() {
         return rating;
     }
@@ -102,12 +111,12 @@ public class Place {
        if (this == o) return true;
        if (!(o instanceof Place)) return false;
        Place place = (Place) o;
-       return Double.compare(place.getRating(), getRating()) == 0 && getPlaceId().equals(place.getPlaceId()) && getGeometry().equals(place.getGeometry()) && getAddress().equals(place.getAddress()) && getFormattedAddress().equals(place.getFormattedAddress()) && getName().equals(place.getName()) && getOpening().equals(place.getOpening()) && getPlacePhoto().equals(place.getPlacePhoto());
+       return Double.compare(place.getRating(), getRating()) == 0 && getPlaceId().equals(place.getPlaceId()) && getGeometry().equals(place.getGeometry()) && getAddress().equals(place.getAddress()) && getFormattedAddress().equals(place.getFormattedAddress()) && getName().equals(place.getName()) && getOpening().equals(place.getOpening()) && getPlacePhotos().equals(place.getPlacePhotos());
    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPlaceId(), getGeometry(), getAddress(), getFormattedAddress(), getName(), getOpening(), getPlacePhoto(), getRating());
+        return Objects.hash(getPlaceId(), getGeometry(), getAddress(), getFormattedAddress(), getName(), getOpening(), getPlacePhotos(), getRating());
     }
 
     @Override

@@ -1,5 +1,8 @@
 package fr.selquicode.go4lunch.data.model;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -20,21 +23,24 @@ public class PlaceOpeningHoursPeriodDetail {
     private String date;
 
 
-    public PlaceOpeningHoursPeriodDetail(Double day, String time, String date){
+    public PlaceOpeningHoursPeriodDetail(@NonNull double day, @NonNull String time, @Nullable String date){
         this.day = day;
         this.date = date;
         this.time = time;
     }
 
     //GETTERS
-    public Double getDay() {
+    @NonNull
+    public double getDay() {
         return day;
     }
 
+    @NonNull
     public String getTime() {
         return time;
     }
 
+    @Nullable
     public String getDate() {
         return date;
     }
@@ -45,7 +51,7 @@ public class PlaceOpeningHoursPeriodDetail {
         if (this == o) return true;
         if (!(o instanceof PlaceOpeningHoursPeriodDetail)) return false;
         PlaceOpeningHoursPeriodDetail that = (PlaceOpeningHoursPeriodDetail) o;
-        return getDay().equals(that.getDay()) && getTime().equals(that.getTime()) && getDate().equals(that.getDate());
+        return Objects.equals(getDay(), that.getDay()) && Objects.equals(getTime(), that.getTime()) && Objects.equals(getDate(), that.getDate());
     }
 
     @Override

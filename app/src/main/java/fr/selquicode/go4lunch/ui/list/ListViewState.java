@@ -1,6 +1,9 @@
 package fr.selquicode.go4lunch.ui.list;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import com.google.android.gms.common.annotation.NonNullApi;
 
 import java.util.Objects;
 
@@ -20,8 +23,8 @@ public class ListViewState {
     @NonNull
     private final String nameRestaurant, address;
 
-    @NonNull
-    private boolean opening;
+    @Nullable
+    private    Boolean opening;
 
     @NonNull
     private PlacePhoto restaurantImg;
@@ -41,8 +44,8 @@ public class ListViewState {
     public ListViewState(String id,
                          @NonNull String nameRestaurant,
                          @NonNull String address,
-                         @NonNull PlacePhoto restaurantImg,
-                         @NonNull boolean opening,
+                         @Nullable PlacePhoto restaurantImg,
+                         @Nullable Boolean opening,
                          @NonNull double ratings
                          ){
         this.id = id;
@@ -69,12 +72,12 @@ public class ListViewState {
         return address;
     }
 
-    @NonNull
-    public boolean getOpening() {
+    @Nullable
+    public Boolean getOpening() {
         return opening;
     }
 
-    @NonNull
+    @Nullable
     public PlacePhoto getRestaurantImg() {
         return restaurantImg;
     }

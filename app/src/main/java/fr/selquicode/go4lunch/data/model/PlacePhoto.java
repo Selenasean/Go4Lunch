@@ -1,5 +1,7 @@
 package fr.selquicode.go4lunch.data.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -25,7 +27,11 @@ public class PlacePhoto {
     private double width;
 
 
-    public PlacePhoto(double height, List<String> html_attributions, String photo_reference, double width){
+    public PlacePhoto(@NonNull double height,
+                      @NonNull List<String> html_attributions,
+                      @NonNull String photo_reference,
+                      @NonNull double width){
+
         this.height = height;
         this.html_attributions = html_attributions;
         this.photo_reference = photo_reference;
@@ -33,18 +39,22 @@ public class PlacePhoto {
     }
 
     //GETTERS
+    @NonNull
     public double getHeight() {
         return height;
     }
 
+    @NonNull
     public List<String> getHtml_attributions() {
         return html_attributions;
     }
 
+    @NonNull
     public String getPhoto_reference() {
         return photo_reference;
     }
 
+    @NonNull
     public double getWidth() {
         return width;
     }

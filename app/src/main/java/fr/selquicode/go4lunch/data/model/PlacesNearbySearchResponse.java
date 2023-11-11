@@ -14,17 +14,16 @@ public class PlacesNearbySearchResponse {
     @Expose
     private List<Place> results;
 
-
     public PlacesNearbySearchResponse(List<Place> results) {
         this.results = results;
     }
-    
-    //public PlacesNearbySearchResponse(){}
 
+    //GETTERS
     public List<Place> getResults() {
         return results;
     }
 
+    //METHODS UTILS
     @Override
     public String toString() {
         return "PlacesNearbySearchResponse{" +

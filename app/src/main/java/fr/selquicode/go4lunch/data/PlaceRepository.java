@@ -1,5 +1,6 @@
 package fr.selquicode.go4lunch.data;
 
+import android.location.Location;
 import android.util.Log;
 
 import androidx.lifecycle.LiveData;
@@ -15,16 +16,18 @@ import retrofit2.Response;
 
 public class PlaceRepository {
 
-    private PlacesNearbySearchResponseAPI apiService;
+    private PlacesAPI apiService;
     private static String TAG= "PlaceRepository";
-    public MutableLiveData<List<Place>> placesMutableLiveData = new MutableLiveData<>();
 
-    public PlaceRepository(PlacesNearbySearchResponseAPI apiService){
+    public PlaceRepository(PlacesAPI apiService){
         this.apiService = apiService;
     }
 
-    public LiveData<List<Place>> getPlaces(){
-        apiService.getListOfPlaces().enqueue(new Callback<PlacesNearbySearchResponse>() {
+    public LiveData<List<Place>> getPlaces(Location location){
+        MutableLiveData<List<Place>> placesMutableLiveData = new MutableLiveData<>();
+
+        String locationString = location.getLatitude() + "," + location.getLongitude();
+        apiService.getListOfPlaces(locationString).enqueue(new Callback<PlacesNearbySearchResponse>() {
             @Override
             public void onResponse(Call<PlacesNearbySearchResponse> call, Response<PlacesNearbySearchResponse> response) {
                 Log.i(TAG, "onResponse requete");
@@ -41,6 +44,8 @@ public class PlaceRepository {
                 t.printStackTrace();
             }
         });
+
         return placesMutableLiveData;
     }
+
 }

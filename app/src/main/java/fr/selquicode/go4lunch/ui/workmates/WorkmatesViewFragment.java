@@ -17,7 +17,7 @@ import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 
 public class WorkmatesViewFragment extends Fragment {
 
-    private WorkmatesViewViewModel mViewModel;
+    private WorkmatesViewModel mViewModel;
 
     public static WorkmatesViewFragment newInstance() {
         return new WorkmatesViewFragment();
@@ -32,7 +32,7 @@ public class WorkmatesViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(WorkmatesViewViewModel.class);
+        mViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(WorkmatesViewModel.class);
         // TODO: Use the ViewModel
     }
 } 

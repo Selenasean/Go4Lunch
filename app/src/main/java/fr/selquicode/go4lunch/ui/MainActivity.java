@@ -1,5 +1,6 @@
 package fr.selquicode.go4lunch.ui;
 
+import android.Manifest;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
+import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.data.PlaceRepository;
 import fr.selquicode.go4lunch.data.RetrofitService;
@@ -34,13 +36,19 @@ public class MainActivity extends AppCompatActivity  {
 
     private ActivityMainBinding binding;
     private PlaceRepository repository = new PlaceRepository(RetrofitService.getPlaceAPI());
-    private MainViewModel mMainViewModel;
+    private MainViewModel mainViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //ask permission to localise the user
+        this.requestPermissions(
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                0
+        );
 
         //the fragment that will be displayed by default
         replaceFragment(new MapViewFragment());
@@ -82,9 +90,12 @@ public class MainActivity extends AppCompatActivity  {
      * Settings to link ViewModel, Observer and UI
      */
     private void setViewModel() {
-        mMainViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MainViewModel.class);
+        mainViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MainViewModel.class);
     }
 
-
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mainViewModel.refresh();
+    }
 }

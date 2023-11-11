@@ -1,5 +1,6 @@
 package fr.selquicode.go4lunch.ui.list;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,6 +35,9 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
         public void bind(ListViewState item){
             //binding with viewState
             //TODO : bind avec le viewState
+            Log.i("getAdress", item.getAddress());
+            name.setText(item.getNameRestaurant());
+            address.setText(item.getAddress());
 
         }
     }

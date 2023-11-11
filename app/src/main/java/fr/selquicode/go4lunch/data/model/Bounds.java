@@ -1,5 +1,7 @@
 package fr.selquicode.go4lunch.data.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -15,21 +17,23 @@ public class Bounds {
     private LatLngLiteral southwest;
 
 
-    public Bounds(LatLngLiteral northeast, LatLngLiteral southwest) {
+    public Bounds(@NonNull LatLngLiteral northeast, @NonNull LatLngLiteral southwest) {
         this.northeast = northeast;
         this.southwest = southwest;
     }
 
-    //public Bounds(){};
-
+    //GETTERS
+    @NonNull
     public LatLngLiteral getNortheast() {
         return northeast;
     }
 
+    @NonNull
     public LatLngLiteral getSouthwest() {
         return southwest;
     }
 
+    //METHODS UTILS
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

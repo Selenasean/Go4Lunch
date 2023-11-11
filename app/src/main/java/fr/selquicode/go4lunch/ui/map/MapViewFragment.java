@@ -20,7 +20,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import fr.selquicode.go4lunch.R;
@@ -29,7 +28,7 @@ import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
-    private MapViewViewModel mapViewModel;
+    private MapViewModel mapViewModel;
     private GoogleMap mMap;
 
     public static MapViewFragment newInstance() {
@@ -57,7 +56,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void settingViewModel() {
-        mapViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MapViewViewModel.class);
+        mapViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MapViewModel.class);
     }
 
     private void render(List<Place> places) {
