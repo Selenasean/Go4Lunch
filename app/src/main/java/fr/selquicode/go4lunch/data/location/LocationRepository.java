@@ -44,7 +44,7 @@ public class LocationRepository {
     }
 
     /**
-     * Request to start localisation
+     * To start requesting user's localisation
      */
     @RequiresPermission(anyOf = {"android.permission.ACCESS_COARSE_LOCATION", "android.permission.ACCESS_FINE_LOCATION"})
     public void startLocationRequest() {
@@ -67,7 +67,7 @@ public class LocationRepository {
                         .setMinUpdateDistanceMeters(SMALLEST_DISPLACEMENT_THRESHOLD_METER)
                         .build(),
                 callback,
-                //call callback on he mainThread
+                //call callback on the mainThread
                 Looper.getMainLooper()
         );
     }

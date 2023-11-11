@@ -11,6 +11,11 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+
+import fr.selquicode.go4lunch.BuildConfig;
+import fr.selquicode.go4lunch.MainApplication;
+import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.databinding.RestaurantItemBinding;
 
 public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.ViewHolder> {
@@ -35,9 +40,17 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
         public void bind(ListViewState item){
             //binding with viewState
             //TODO : bind avec le viewState
-            Log.i("getAdress", item.getAddress());
             name.setText(item.getNameRestaurant());
-            address.setText(item.getAddress());
+            address.setText(item.getVicinity());
+
+            //set the restaurant's image
+            if(item.getRestaurantImg() != null){
+                String imgURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference="
+                        + item.getRestaurantImg().getPhoto_reference() + "&key=" + BuildConfig.MAPS_API_KEY;
+                Glide.with(MainApplication.getApplication()).load(imgURL).into(restaurantImg);
+            }else {
+                Glide.with(MainApplication.getApplication()).load(R.drawable.no_image).into(restaurantImg);
+            }
 
         }
     }

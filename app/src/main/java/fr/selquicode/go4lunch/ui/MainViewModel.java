@@ -31,7 +31,6 @@ public class MainViewModel extends ViewModel {
         this.permissionChecker = permissionChecker;
         this.locationRepository = locationRepository;
 
-        LiveData<Location> locationLiveData = locationRepository.getLocationLiveData();
 
     }
 

@@ -1,7 +1,5 @@
 package fr.selquicode.go4lunch.data.model;
 
-
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
@@ -20,13 +18,9 @@ public class Place {
     @Expose
     private Geometry geometry;
 
-    @SerializedName("adr_adress")
+    @SerializedName("vicinity")
     @Expose
-    private String address;
-
-    @SerializedName("formatted_address")
-    @Expose
-    private String formattedAddress;
+    private String vicinity;
 
     @SerializedName("name")
     @Expose
@@ -47,8 +41,7 @@ public class Place {
 
     public Place(@Nullable String placeId,
                  @Nullable Geometry geometry,
-                 @Nullable String address,
-                 @Nullable String formattedAddress,
+                 @Nullable String vicinity,
                  @Nullable String name,
                  @Nullable PlaceOpeningHours opening,
                  @Nullable List<PlacePhoto> placePhoto,
@@ -56,8 +49,7 @@ public class Place {
 
         this.placeId = placeId;
         this.geometry = geometry;
-        this.address = address;
-        this.formattedAddress = formattedAddress;
+        this.vicinity = vicinity;
         this.name = name;
         this.opening = opening;
         this.placePhoto = placePhoto;
@@ -76,14 +68,7 @@ public class Place {
     }
 
     @Nullable
-    public String getAddress() {
-        return address;
-    }
-
-    @Nullable
-    public String getFormattedAddress() {
-        return formattedAddress;
-    }
+    public String getVicinity(){ return vicinity; }
 
     @Nullable
     public String getName() {
@@ -111,12 +96,12 @@ public class Place {
        if (this == o) return true;
        if (!(o instanceof Place)) return false;
        Place place = (Place) o;
-       return Double.compare(place.getRating(), getRating()) == 0 && getPlaceId().equals(place.getPlaceId()) && getGeometry().equals(place.getGeometry()) && getAddress().equals(place.getAddress()) && getFormattedAddress().equals(place.getFormattedAddress()) && getName().equals(place.getName()) && getOpening().equals(place.getOpening()) && getPlacePhotos().equals(place.getPlacePhotos());
+       return Double.compare(place.getRating(), getRating()) == 0 && getPlaceId().equals(place.getPlaceId()) && getGeometry().equals(place.getGeometry()) && getVicinity().equals(place.getVicinity()) && getName().equals(place.getName()) && getOpening().equals(place.getOpening()) && getPlacePhotos().equals(place.getPlacePhotos());
    }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPlaceId(), getGeometry(), getAddress(), getFormattedAddress(), getName(), getOpening(), getPlacePhotos(), getRating());
+        return Objects.hash(getPlaceId(), getGeometry(), getVicinity(), getName(), getOpening(), getPlacePhotos(), getRating());
     }
 
     @Override
@@ -124,8 +109,7 @@ public class Place {
         return "Place{" +
                 "placeId='" + placeId + '\'' +
                 ", geometry=" + geometry +
-                ", address='" + address + '\'' +
-                ", formattedAddress='" + formattedAddress + '\'' +
+                ", vicinity='" + vicinity + '\'' +
                 ", name='" + name + '\'' +
                 ", opening=" + opening +
                 ", placePhoto=" + placePhoto +

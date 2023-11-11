@@ -29,7 +29,7 @@ import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     private MapViewModel mapViewModel;
-    private GoogleMap mMap;
+    private GoogleMap map;
 
     public static MapViewFragment newInstance() {
         return new MapViewFragment();
@@ -64,7 +64,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         for (Place place : places) {
             Log.i("MainActivity", place.toString());
             LatLng restaurant = new LatLng(place.getGeometry().getLocation().getLat(),place.getGeometry().getLocation().getLng());
-            mMap.addMarker(new MarkerOptions()
+            map.addMarker(new MarkerOptions()
                     .position(restaurant)
                     .title("restaurant"));
         }
@@ -82,13 +82,13 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
      */
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
-        mMap = googleMap;
+        map = googleMap;
         // Add a marker in Lognes and move the camera
         LatLng lognes = new LatLng(48.834275, 2.63731);
-        mMap.addMarker(new MarkerOptions()
+        map.addMarker(new MarkerOptions()
                 .position(lognes)
                 .title("Marker in Lognes"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lognes, 16));
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(lognes, 16));
         mapViewModel.getPlaces().observe(getViewLifecycleOwner(), this::render);
     }
 

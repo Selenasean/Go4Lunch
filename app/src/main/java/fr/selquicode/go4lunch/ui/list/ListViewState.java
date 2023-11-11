@@ -21,7 +21,7 @@ public class ListViewState {
     private final String id;
 
     @NonNull
-    private final String nameRestaurant, address;
+    private final String nameRestaurant, vicinity;
 
     @Nullable
     private    Boolean opening;
@@ -36,21 +36,21 @@ public class ListViewState {
      * Constructor
      * @param id                type String
      * @param nameRestaurant    type String
-     * @param address           type String
+     * @param vicinity          type String
      * @param restaurantImg     type Image
      * @param opening           type Boolean
      * @param ratings           type double
      */
     public ListViewState(String id,
                          @NonNull String nameRestaurant,
-                         @NonNull String address,
+                         @NonNull String vicinity,
                          @Nullable PlacePhoto restaurantImg,
                          @Nullable Boolean opening,
                          @NonNull double ratings
                          ){
         this.id = id;
         this.nameRestaurant = nameRestaurant;
-        this.address = address;
+        this.vicinity  = vicinity;
         this.opening = opening;
         this.restaurantImg = restaurantImg;
         this.ratings = ratings;
@@ -68,8 +68,8 @@ public class ListViewState {
     }
 
     @NonNull
-    public String getAddress() {
-        return address;
+    public String getVicinity() {
+        return vicinity;
     }
 
     @Nullable
@@ -91,12 +91,12 @@ public class ListViewState {
         if (this == o) return true;
         if (!(o instanceof ListViewState)) return false;
         ListViewState that = (ListViewState) o;
-        return getId() == that.getId() && getOpening() == that.getOpening() && getRatings() == that.getRatings() && getNameRestaurant().equals(that.getNameRestaurant()) && getAddress().equals(that.getAddress()) && getRestaurantImg().equals(that.getRestaurantImg());
+        return getId() == that.getId() && getOpening() == that.getOpening() && getRatings() == that.getRatings() && getNameRestaurant().equals(that.getNameRestaurant()) && getVicinity().equals(that.getVicinity()) && getRestaurantImg().equals(that.getRestaurantImg());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNameRestaurant(), getAddress(), getOpening(), getRestaurantImg(), getRatings());
+        return Objects.hash(getId(), getNameRestaurant(), getVicinity(), getOpening(), getRestaurantImg(), getRatings());
     }
 
     @Override
@@ -104,7 +104,7 @@ public class ListViewState {
         return "ListViewState{" +
                 "id=" + id +
                 ", nameRestaurant='" + nameRestaurant + '\'' +
-                ", address='" + address + '\'' +
+                ", vicinity ='" + vicinity + '\'' +
                 ", opening=" + opening +
                 ", restaurantImg=" + restaurantImg +
                 ", ratings=" + ratings +
