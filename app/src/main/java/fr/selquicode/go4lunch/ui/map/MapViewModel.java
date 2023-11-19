@@ -25,7 +25,7 @@ public class MapViewModel extends ViewModel {
         this.locationRepository = locationRepository;
 
         LiveData<Location> locationLiveData = locationRepository.getLocationLiveData();
-        // to get the list of restaurant using user's localisation (type LiveData)
+        // to get the list of restaurant using user's localisation from LocationRepository
         placesLiveData = Transformations.switchMap(locationLiveData, placeRepository::getPlaces);
     }
 
@@ -34,6 +34,7 @@ public class MapViewModel extends ViewModel {
      * @return places type LiveData
      */
     public LiveData<List<Place>> getPlaces(){ return placesLiveData;}
+
 
 
 

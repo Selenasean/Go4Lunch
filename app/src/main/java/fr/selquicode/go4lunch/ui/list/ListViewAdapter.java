@@ -44,7 +44,7 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
             address.setText(item.getVicinity());
 
             //set the restaurant's image
-            if(item.getRestaurantImg() != null){
+            if(item.getRestaurantImg() != null && item.getRestaurantImg().getPhoto_reference() != null){
                 String imgURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference="
                         + item.getRestaurantImg().getPhoto_reference() + "&key=" + BuildConfig.MAPS_API_KEY;
                 Glide.with(MainApplication.getApplication()).load(imgURL).into(restaurantImg);

@@ -8,5 +8,14 @@
     <string name="map_view_desc">icon map to see the map</string>
     <string name="list_map_view_desc">icon list to see the restaurants\' list</string>
     <string name="workmates_desc">icon with people to see workmates</string>
+
+    //string for detailActivity
     <string name="imageDescription">Restaurant\'s picture</string>
+    <string name="fab_add">button to add a restaurant</string>
+    <string name="ic_phone">phone icon to call restaurant</string>
+    <string name="call">CALL</string>
+    <string name="ic_like">icon to like the restaurant</string>
+    <string name="like">LIKE</string>
+    <string name="ic_website">icon world to get restaurant\'s website</string>
+    <string name="website">WEBSITE</string>
 </resources>

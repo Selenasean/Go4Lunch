@@ -1,6 +1,7 @@
 package fr.selquicode.go4lunch.data.model;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -49,7 +50,7 @@ public class PlacePhoto {
         return html_attributions;
     }
 
-    @NonNull
+    @Nullable
     public String getPhoto_reference() {
         return photo_reference;
     }

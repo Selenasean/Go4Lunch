@@ -14,6 +14,7 @@ import fr.selquicode.go4lunch.data.RetrofitService;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.permission_checker.PermissionChecker;
 import fr.selquicode.go4lunch.ui.MainViewModel;
+import fr.selquicode.go4lunch.ui.detail.DetailViewModel;
 import fr.selquicode.go4lunch.ui.list.ListViewModel;
 import fr.selquicode.go4lunch.ui.map.MapViewModel;
 import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewModel;
@@ -71,10 +72,11 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         } else if(modelClass.isAssignableFrom(MapViewModel.class)){
             return (T) new MapViewModel(repository, locationRepository);
         } else if(modelClass.isAssignableFrom(ListViewModel.class)){
-            return (T) new ListViewModel(repository);
+            return (T) new ListViewModel(repository, locationRepository);
         } else if(modelClass.isAssignableFrom(WorkmatesViewModel.class)){
             return (T) new WorkmatesViewModel(repository);
-        }
+        } else if(modelClass.isAssignableFrom(DetailViewModel.class))
+            return (T) new DetailViewModel();
         throw new IllegalArgumentException("Unknown ViewModel class : " + modelClass);
     }
 }

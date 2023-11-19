@@ -1,7 +1,11 @@
 package fr.selquicode.go4lunch.ui.map;
 
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,14 +26,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
+import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.data.model.Place;
+import fr.selquicode.go4lunch.data.permission_checker.PermissionChecker;
 import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
     private MapViewModel mapViewModel;
     private GoogleMap map;
+
 
     public static MapViewFragment newInstance() {
         return new MapViewFragment();
@@ -63,7 +70,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         Log.i("MainActivity", places.size() + "");
         for (Place place : places) {
             Log.i("MainActivity", place.toString());
-            LatLng restaurant = new LatLng(place.getGeometry().getLocation().getLat(),place.getGeometry().getLocation().getLng());
+            LatLng restaurant = new LatLng(place.getGeometry().getLocation().getLat(), place.getGeometry().getLocation().getLng());
             map.addMarker(new MarkerOptions()
                     .position(restaurant)
                     .title("restaurant"));
@@ -81,6 +88,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
      * installed Google Play services and returned to the app.
      */
     @Override
+    @SuppressLint("MissingPermission")
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
         // Add a marker in Lognes and move the camera
@@ -89,6 +97,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 .position(lognes)
                 .title("Marker in Lognes"));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(lognes, 16));
+        if (new PermissionChecker(MainApplication.getApplication()).hasLocationPermission()) {
+            map.setMyLocationEnabled(true);
+        }
+
         mapViewModel.getPlaces().observe(getViewLifecycleOwner(), this::render);
     }
 
