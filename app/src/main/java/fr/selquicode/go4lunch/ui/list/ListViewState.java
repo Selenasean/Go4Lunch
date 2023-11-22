@@ -37,7 +37,7 @@ public class ListViewState {
      * @param id                type String
      * @param nameRestaurant    type String
      * @param vicinity          type String
-     * @param restaurantImg     type Image
+     * @param restaurantImg     type PlacePhoto
      * @param opening           type Boolean
      * @param ratings           type double
      */

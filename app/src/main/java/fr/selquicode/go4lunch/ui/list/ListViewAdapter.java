@@ -1,7 +1,12 @@
 package fr.selquicode.go4lunch.ui.list;
 
+import static android.content.ClipData.newIntent;
+
+import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -17,22 +22,24 @@ import fr.selquicode.go4lunch.BuildConfig;
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.databinding.RestaurantItemBinding;
+import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 
 public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.ViewHolder> {
+
+    public static final String PLACE_ID = "PLACE_ID";
 
     public ListViewAdapter(){
         super(DIFF_CALLBACK);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private final TextView name, foodType, address, opening;
+        private final TextView name, address, opening;
         private final ImageView restaurantImg;
 
         public ViewHolder(@NonNull RestaurantItemBinding binding){
             super(binding.getRoot());
             //binding element
             name = binding.nameRestaurant;
-            foodType = binding.typeFood;
             address = binding.address;
             opening = binding.opening;
             restaurantImg = binding.imageRestaurant;
@@ -67,6 +74,27 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
     @Override
     public void onBindViewHolder(@NonNull ListViewAdapter.ViewHolder holder, int position) {
         holder.bind(getItem(position));
+
+        //onClickListener on items clicked of he list to go to the detail page
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                final Context context = holder.itemView.getContext();
+                String placeId = getItem(position).getId();
+                launchDetailActivity(placeId,  context);
+            }
+        });
+    }
+
+    /**
+     * Start DetailActivity
+     * @param placeId id of the item clicked = a place
+     * @param context the context
+     */
+    public void launchDetailActivity(String placeId, Context context){
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra(PLACE_ID, placeId);
+        context.startActivity(intent);
     }
 
     /**

@@ -1,10 +1,14 @@
 package fr.selquicode.go4lunch.ui.utils;
 
+import static androidx.lifecycle.SavedStateHandleSupport.createSavedStateHandle;
+
 import android.app.Application;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.viewmodel.CreationExtras;
 
 import com.google.android.gms.location.LocationServices;
 
@@ -14,6 +18,7 @@ import fr.selquicode.go4lunch.data.RetrofitService;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.permission_checker.PermissionChecker;
 import fr.selquicode.go4lunch.ui.MainViewModel;
+import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 import fr.selquicode.go4lunch.ui.detail.DetailViewModel;
 import fr.selquicode.go4lunch.ui.list.ListViewModel;
 import fr.selquicode.go4lunch.ui.map.MapViewModel;
@@ -62,21 +67,42 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
      * @param <T>        type of Class, here of ViewModel
      * @return new viewModel
      */
+//    @NonNull
+//    @Override
+//    public <T extends ViewModel> T create(Class<T> modelClass) {
+//        // if modelClass - model of classes ViewModel - is the same as new ViewModel created
+//        if (modelClass.isAssignableFrom(MainViewModel.class)) {
+//            //injection of the Repository in the ViewModel constructor
+//            return (T) new MainViewModel(permissionChecker, locationRepository);
+//        } else if(modelClass.isAssignableFrom(MapViewModel.class)){
+//            return (T) new MapViewModel(repository, locationRepository, permissionChecker);
+//        } else if(modelClass.isAssignableFrom(ListViewModel.class)){
+//            return (T) new ListViewModel(repository, locationRepository);
+//        } else if(modelClass.isAssignableFrom(WorkmatesViewModel.class)){
+//            return (T) new WorkmatesViewModel(repository);
+//        } else if(modelClass.isAssignableFrom(DetailViewModel.class))
+//            return (T) new DetailViewModel(repository);
+//        throw new IllegalArgumentException("Unknown ViewModel class : " + modelClass);
+//    }
+
     @NonNull
     @Override
-    public <T extends ViewModel> T create(Class<T> modelClass) {
+    public <T extends ViewModel> T create(@NonNull Class<T> modelClass, @NonNull CreationExtras extras) {
         // if modelClass - model of classes ViewModel - is the same as new ViewModel created
+        SavedStateHandle savedStateHandle = createSavedStateHandle(extras);
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //injection of the Repository in the ViewModel constructor
             return (T) new MainViewModel(permissionChecker, locationRepository);
         } else if(modelClass.isAssignableFrom(MapViewModel.class)){
-            return (T) new MapViewModel(repository, locationRepository);
+            return (T) new MapViewModel(repository, locationRepository, permissionChecker);
         } else if(modelClass.isAssignableFrom(ListViewModel.class)){
             return (T) new ListViewModel(repository, locationRepository);
         } else if(modelClass.isAssignableFrom(WorkmatesViewModel.class)){
             return (T) new WorkmatesViewModel(repository);
-        } else if(modelClass.isAssignableFrom(DetailViewModel.class))
-            return (T) new DetailViewModel();
+        } else if(modelClass.isAssignableFrom(DetailViewModel.class)){
+            String placeId = savedStateHandle.get(DetailActivity.PLACE_ID);
+            return (T) new DetailViewModel(repository, placeId);
+        }
         throw new IllegalArgumentException("Unknown ViewModel class : " + modelClass);
     }
 }

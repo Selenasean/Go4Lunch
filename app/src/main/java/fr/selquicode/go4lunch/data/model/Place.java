@@ -38,6 +38,13 @@ public class Place {
     @Expose
     private double rating;
 
+    @SerializedName("international_phone_number")
+    @Expose
+    private String phone;
+
+    @SerializedName("website")
+    @Expose
+    private String website;
 
     public Place(@Nullable String placeId,
                  @Nullable Geometry geometry,
@@ -45,7 +52,9 @@ public class Place {
                  @Nullable String name,
                  @Nullable PlaceOpeningHours opening,
                  @Nullable List<PlacePhoto> placePhoto,
-                 @Nullable double rating){
+                 @Nullable double rating,
+                 @Nullable String phone,
+                 @Nullable String website){
 
         this.placeId = placeId;
         this.geometry = geometry;
@@ -54,6 +63,9 @@ public class Place {
         this.opening = opening;
         this.placePhoto = placePhoto;
         this.rating = rating;
+        this.phone = phone;
+        this.website = website;
+
     }
 
     //GETTERS
@@ -90,31 +102,43 @@ public class Place {
         return rating;
     }
 
+    @Nullable
+    public String getPhone() {
+        return phone;
+    }
+
+    @Nullable
+    public String getWebsite() {
+        return website;
+    }
+
    //METHODS UTILS
    @Override
-   public boolean equals(Object o) {
-       if (this == o) return true;
-       if (!(o instanceof Place)) return false;
-       Place place = (Place) o;
-       return Double.compare(place.getRating(), getRating()) == 0 && getPlaceId().equals(place.getPlaceId()) && getGeometry().equals(place.getGeometry()) && getVicinity().equals(place.getVicinity()) && getName().equals(place.getName()) && getOpening().equals(place.getOpening()) && getPlacePhotos().equals(place.getPlacePhotos());
+   public String toString() {
+       return "Place{" +
+               "placeId='" + placeId + '\'' +
+               ", geometry=" + geometry +
+               ", vicinity='" + vicinity + '\'' +
+               ", name='" + name + '\'' +
+               ", opening=" + opening +
+               ", placePhoto=" + placePhoto +
+               ", rating=" + rating +
+               ", phone='" + phone + '\'' +
+               ", website='" + website + '\'' +
+               '}';
    }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(getPlaceId(), getGeometry(), getVicinity(), getName(), getOpening(), getPlacePhotos(), getRating());
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Place)) return false;
+        Place place = (Place) o;
+        return Double.compare(place.getRating(), getRating()) == 0 && Objects.equals(getPlaceId(), place.getPlaceId()) && Objects.equals(getGeometry(), place.getGeometry()) && Objects.equals(getVicinity(), place.getVicinity()) && Objects.equals(getName(), place.getName()) && Objects.equals(getOpening(), place.getOpening()) && Objects.equals(placePhoto, place.placePhoto) && Objects.equals(getPhone(), place.getPhone()) && Objects.equals(getWebsite(), place.getWebsite());
     }
 
     @Override
-    public String toString() {
-        return "Place{" +
-                "placeId='" + placeId + '\'' +
-                ", geometry=" + geometry +
-                ", vicinity='" + vicinity + '\'' +
-                ", name='" + name + '\'' +
-                ", opening=" + opening +
-                ", placePhoto=" + placePhoto +
-                ", rating=" + rating +
-                '}';
+    public int hashCode() {
+        return Objects.hash(getPlaceId(), getGeometry(), getVicinity(), getName(), getOpening(), placePhoto, getRating(), getPhone(), getWebsite());
     }
 
 }

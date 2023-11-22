@@ -1,11 +1,8 @@
 package fr.selquicode.go4lunch.ui.map;
 
-import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,10 +23,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
-import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.data.model.Place;
-import fr.selquicode.go4lunch.data.permission_checker.PermissionChecker;
 import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
@@ -93,14 +88,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         map = googleMap;
         // Add a marker in Lognes and move the camera
         LatLng lognes = new LatLng(48.834275, 2.63731);
-        map.addMarker(new MarkerOptions()
-                .position(lognes)
-                .title("Marker in Lognes"));
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(lognes, 16));
-        if (new PermissionChecker(MainApplication.getApplication()).hasLocationPermission()) {
-            map.setMyLocationEnabled(true);
-        }
-
+        // add a sign on map to see user's localisation
+        mapViewModel.locateTheUserOnMap(map);
+        // put Observer on the places' list
         mapViewModel.getPlaces().observe(getViewLifecycleOwner(), this::render);
     }
 

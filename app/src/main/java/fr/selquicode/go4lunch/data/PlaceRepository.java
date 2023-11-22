@@ -9,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 import fr.selquicode.go4lunch.data.model.Place;
+import fr.selquicode.go4lunch.data.model.PlaceDetailsResponse;
 import fr.selquicode.go4lunch.data.model.PlacesNearbySearchResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -46,6 +47,29 @@ public class PlaceRepository {
         });
 
         return placesMutableLiveData;
+    }
+
+    public LiveData<Place> getPlaceDetails(String placeId){
+        MutableLiveData<Place> placeDetailsMutableLiveData = new MutableLiveData<>();
+
+        apiService.getDetailOfPlace(placeId).enqueue(new Callback<PlaceDetailsResponse>() {
+            @Override
+            public void onResponse(Call<PlaceDetailsResponse> call, Response<PlaceDetailsResponse> response) {
+                if(response.isSuccessful() && response.body() != null){
+                    placeDetailsMutableLiveData.setValue(response.body().getResult());
+                }else{
+                    Log.e(TAG,"else onresponse place's details");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<PlaceDetailsResponse> call, Throwable t) {
+                Log.e(TAG, "onFailure place's details");
+                t.printStackTrace();
+            }
+        });
+
+        return placeDetailsMutableLiveData;
     }
 
 }
