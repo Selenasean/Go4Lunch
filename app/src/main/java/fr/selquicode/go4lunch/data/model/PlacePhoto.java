@@ -19,7 +19,7 @@ public class PlacePhoto {
     @Expose
     private List<String> html_attributions;
 
-    @SerializedName("photo-_reference")
+    @SerializedName("photo_reference")
     @Expose
     private String photo_reference;
 

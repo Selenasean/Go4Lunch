@@ -45,8 +45,11 @@ dependencies {
 
     //LIVEDATA
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.6.2'
+
+    //VIEW MODEL
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
     implementation "androidx.activity:activity:1.8.1"
+    implementation "androidx.fragment:fragment:1.6.2"
 
     //UNIT TEST
     testImplementation 'junit:junit:4.13.2'

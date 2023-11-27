@@ -26,16 +26,19 @@ public class ListViewModel extends ViewModel {
         this.locationRepository = locationRepository;
 
         LiveData<Location> locationLiveData = locationRepository.getLocationLiveData();
-        LiveData<List<Place>> placesLiveData = Transformations.switchMap(locationLiveData, placeRepository::getPlaces);
+        LiveData<List<Place>> placesLiveData = Transformations.switchMap(locationLiveData, location -> placeRepository.getPlaces(location));
         listLiveData = Transformations.map(placesLiveData, this::parseToViewState);
 
     }
 
     private List<ListViewState> parseToViewState(List<Place> places) {
+        //to get currentLocation
 
         List<ListViewState> listViewState = new ArrayList<>();
 
+
         for(Place place : places){
+            //to get the first photo of the restaurant from the photo's list
             List<PlacePhoto> photosList = place.getPlacePhotos();
             PlacePhoto photo;
             if (photosList == null || photosList.size() == 0) {
@@ -43,14 +46,17 @@ public class ListViewModel extends ViewModel {
             }else{
                 photo = photosList.get(0);
             }
+            // calculate the rating for 3 stars
+            double rating = place.getRating() * 3 / 5;
 
             listViewState.add(new ListViewState(
                     place.getPlaceId(),
                     place.getName() == null ? "": place.getName(),
                     place.getVicinity() == null ? "" : place.getVicinity(),
                     photo,
+                    0,
                     place.getOpening() == null ? null : place.getOpening().isOpenNow(),
-                    place.getRating()
+                    (float) rating
             ));
         }
         return listViewState;

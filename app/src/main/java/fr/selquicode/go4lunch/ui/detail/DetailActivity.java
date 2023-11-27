@@ -32,7 +32,10 @@ public class DetailActivity extends AppCompatActivity {
         //settings for ViewModel
         setViewModel();
 
+        displayElements();
+    }
 
+    private void displayElements() {
 
     }
 

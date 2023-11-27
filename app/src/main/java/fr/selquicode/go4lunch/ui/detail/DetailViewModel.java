@@ -34,14 +34,19 @@ public class DetailViewModel extends ViewModel {
 
 
     private PlaceDetailsViewState parseToViewState(Place place){
-        new PlaceDetailsViewState(
-                place.getName(),
-                place.getVicinity(),
-                place.getPhone(),
-                place.getWebsite(),
-                place.getPlacePhotos().get(0),
-                place.getRating());
+        //calculate rating for 3stars
+        float rating = (float) place.getRating() * 3 / 5;
 
-        return null;
+        PlaceDetailsViewState placeDetailsViewState = new PlaceDetailsViewState(
+                place.getName() == null ? "" : place.getName(),
+                place.getVicinity() == null ? "" : place.getVicinity(),
+                place.getPhone() == null ? "" : place.getPhone(),
+                place.getWebsite() == null ? "" : place.getWebsite(),
+                place.getPlacePhotos().get(0),
+                rating);
+
+        return placeDetailsViewState;
+
     }
 }
+

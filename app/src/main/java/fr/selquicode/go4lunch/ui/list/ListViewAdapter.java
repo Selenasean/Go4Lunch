@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -26,15 +27,14 @@ import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 
 public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.ViewHolder> {
 
-    public static final String PLACE_ID = "PLACE_ID";
-
     public ListViewAdapter(){
         super(DIFF_CALLBACK);
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
-        private final TextView name, address, opening;
+        private final TextView name, address, opening, distance;
         private final ImageView restaurantImg;
+        private final RatingBar rating;
 
         public ViewHolder(@NonNull RestaurantItemBinding binding){
             super(binding.getRoot());
@@ -42,11 +42,13 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
             name = binding.nameRestaurant;
             address = binding.address;
             opening = binding.opening;
+            distance = binding.meters;
             restaurantImg = binding.imageRestaurant;
+            rating = binding.ratingBar;
         }
         public void bind(ListViewState item){
             //binding with viewState
-            //TODO : bind avec le viewState
+            //TODO : bind avec le viewState ratinigs + distance + opening
             name.setText(item.getNameRestaurant());
             address.setText(item.getVicinity());
 
@@ -58,6 +60,10 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
             }else {
                 Glide.with(MainApplication.getApplication()).load(R.drawable.no_image).into(restaurantImg);
             }
+
+            //set rating
+            rating.setRating(item.getRatings());
+
 
         }
     }
@@ -76,13 +82,10 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
         holder.bind(getItem(position));
 
         //onClickListener on items clicked of he list to go to the detail page
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                final Context context = holder.itemView.getContext();
-                String placeId = getItem(position).getId();
-                launchDetailActivity(placeId,  context);
-            }
+        holder.itemView.setOnClickListener(view -> {
+            final Context context = holder.itemView.getContext();
+            String placeId = getItem(position).getId();
+            launchDetailActivity(placeId,  context);
         });
     }
 
@@ -93,7 +96,7 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
      */
     public void launchDetailActivity(String placeId, Context context){
         Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra(PLACE_ID, placeId);
+        intent.putExtra(DetailActivity.PLACE_ID, placeId);
         context.startActivity(intent);
     }
 

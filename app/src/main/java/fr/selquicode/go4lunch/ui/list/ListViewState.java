@@ -24,12 +24,15 @@ public class ListViewState {
     private final String nameRestaurant, vicinity;
 
     @Nullable
-    private    Boolean opening;
+    private Boolean opening;
+
+    @NonNull
+    private float distance;
 
     @NonNull
     private PlacePhoto restaurantImg;
 
-    @NonNull private double ratings;
+    @NonNull private float ratings;
 
 
     /**
@@ -38,21 +41,24 @@ public class ListViewState {
      * @param nameRestaurant    type String
      * @param vicinity          type String
      * @param restaurantImg     type PlacePhoto
+     * @param distance          type float
      * @param opening           type Boolean
-     * @param ratings           type double
+     * @param ratings           type float
      */
     public ListViewState(String id,
                          @NonNull String nameRestaurant,
                          @NonNull String vicinity,
                          @Nullable PlacePhoto restaurantImg,
+                         @NonNull float distance,
                          @Nullable Boolean opening,
-                         @NonNull double ratings
+                         @NonNull float ratings
                          ){
         this.id = id;
         this.nameRestaurant = nameRestaurant;
         this.vicinity  = vicinity;
         this.opening = opening;
         this.restaurantImg = restaurantImg;
+        this.distance = distance;
         this.ratings = ratings;
 
     }
@@ -82,7 +88,11 @@ public class ListViewState {
         return restaurantImg;
     }
 
-    public double getRatings() {
+    public float getDistance() {
+        return distance;
+    }
+
+    public float getRatings() {
         return ratings;
     }
 
@@ -91,12 +101,12 @@ public class ListViewState {
         if (this == o) return true;
         if (!(o instanceof ListViewState)) return false;
         ListViewState that = (ListViewState) o;
-        return getId() == that.getId() && getOpening() == that.getOpening() && getRatings() == that.getRatings() && getNameRestaurant().equals(that.getNameRestaurant()) && getVicinity().equals(that.getVicinity()) && getRestaurantImg().equals(that.getRestaurantImg());
+        return getId() == that.getId() && getDistance() == that.getDistance() && getOpening() == that.getOpening() && getRatings() == that.getRatings() && getNameRestaurant().equals(that.getNameRestaurant()) && getVicinity().equals(that.getVicinity()) && getRestaurantImg().equals(that.getRestaurantImg());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getNameRestaurant(), getVicinity(), getOpening(), getRestaurantImg(), getRatings());
+        return Objects.hash(getId(), getNameRestaurant(), getVicinity(), getOpening(), getRestaurantImg(), getDistance(), getRatings());
     }
 
     @Override
@@ -107,6 +117,7 @@ public class ListViewState {
                 ", vicinity ='" + vicinity + '\'' +
                 ", opening=" + opening +
                 ", restaurantImg=" + restaurantImg +
+                ", distance =" + distance +
                 ", ratings=" + ratings +
                 '}';
     }
