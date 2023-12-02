@@ -1,6 +1,7 @@
 package fr.selquicode.go4lunch.ui.detail;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.Objects;
 
@@ -8,21 +9,21 @@ import fr.selquicode.go4lunch.data.model.PlacePhoto;
 
 public class PlaceDetailsViewState {
 
-    @NonNull
+    @Nullable
     private final String nameRestaurant, vicinity, phoneNumber, website;
 
-    @NonNull
-    private PlacePhoto restaurantImg;
+    @Nullable
+    private final PlacePhoto restaurantImg;
 
     @NonNull
-    private double ratings;
+    private final float ratings;
 
-    public PlaceDetailsViewState(@NonNull String nameRestaurant,
-                                 @NonNull String vicinity,
-                                 @NonNull String phoneNumber,
-                                 @NonNull String website,
-                                 @NonNull PlacePhoto restaurantImg,
-                                 @NonNull double ratings){
+    public PlaceDetailsViewState(@Nullable String nameRestaurant,
+                                 @Nullable String vicinity,
+                                 @Nullable String phoneNumber,
+                                 @Nullable String website,
+                                 @Nullable PlacePhoto restaurantImg,
+                                 @NonNull float ratings){
         this.nameRestaurant = nameRestaurant;
         this.vicinity = vicinity;
         this.phoneNumber = phoneNumber;
@@ -33,32 +34,32 @@ public class PlaceDetailsViewState {
     }
 
     //GETTERS
-    @NonNull
+    @Nullable
     public String getNameRestaurant() {
         return nameRestaurant;
     }
 
-    @NonNull
+    @Nullable
     public String getVicinity() {
         return vicinity;
     }
 
-    @NonNull
+    @Nullable
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-    @NonNull
+    @Nullable
     public String getWebsite() {
         return website;
     }
 
-    @NonNull
+    @Nullable
     public PlacePhoto getRestaurantImg() {
         return restaurantImg;
     }
 
-    public double getRatings() {
+    public float getRatings() {
         return ratings;
     }
 

@@ -14,6 +14,7 @@ import fr.selquicode.go4lunch.data.PlaceRepository;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.model.Place;
 import fr.selquicode.go4lunch.data.model.PlacePhoto;
+import fr.selquicode.go4lunch.ui.utils.RatingCalculator;
 
 public class ListViewModel extends ViewModel {
 
@@ -47,7 +48,7 @@ public class ListViewModel extends ViewModel {
                 photo = photosList.get(0);
             }
             // calculate the rating for 3 stars
-            double rating = place.getRating() * 3 / 5;
+            float rating = RatingCalculator.calculateRating((float)place.getRating());
 
             listViewState.add(new ListViewState(
                     place.getPlaceId(),
@@ -56,7 +57,7 @@ public class ListViewModel extends ViewModel {
                     photo,
                     0,
                     place.getOpening() == null ? null : place.getOpening().isOpenNow(),
-                    (float) rating
+                    rating
             ));
         }
         return listViewState;
