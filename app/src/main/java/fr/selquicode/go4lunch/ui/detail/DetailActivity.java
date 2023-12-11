@@ -72,16 +72,9 @@ public class DetailActivity extends AppCompatActivity {
         final ImageView website = binding.websiteBtn;
         final TextView callTV = binding.callTextview;
         final TextView websiteTV = binding.websiteTextview;
-        final int colorGrey = R.color.grey;
 
         // set restaurant's img
-        if(placeDetailsViewState.getRestaurantImg() != null || placeDetailsViewState.getRestaurantImg().getPhoto_reference() != null){
-            String imgURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference="
-                    + placeDetailsViewState.getRestaurantImg().getPhoto_reference() + "&key=" + BuildConfig.MAPS_API_KEY;
-            Glide.with(MainApplication.getApplication()).load(imgURL).centerCrop().into(restaurantImg);
-        }else{
-            Glide.with(MainApplication.getApplication()).load(R.drawable.no_img_available).into(restaurantImg);
-        }
+        setRestaurantImg(placeDetailsViewState, restaurantImg);
 
         // name and address
         name.setText(placeDetailsViewState.getNameRestaurant());
@@ -91,7 +84,36 @@ public class DetailActivity extends AppCompatActivity {
         rating.setRating(placeDetailsViewState.getRatings());
 
         // call phone number
-        if(placeDetailsViewState.getPhoneNumber() != null && !placeDetailsViewState.getPhoneNumber().equals("")){
+        goToPhoneNumber(placeDetailsViewState, callBtn, callTV);
+
+        // go to website
+        goToWebsite(placeDetailsViewState, website, websiteTV);
+
+    }
+
+    /**
+     * Method to set restaurant's image
+     * @param placeDetailsViewState details of place type ViewState
+     * @param restaurantImg ImageView in layout
+     */
+    private void setRestaurantImg(PlaceDetailsViewState placeDetailsViewState, ImageView restaurantImg) {
+        if(placeDetailsViewState.getRestaurantImg() != null || placeDetailsViewState.getRestaurantImg().getPhoto_reference() != null){
+            String imgURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference="
+                    + placeDetailsViewState.getRestaurantImg().getPhoto_reference() + "&key=" + BuildConfig.MAPS_API_KEY;
+            Glide.with(MainApplication.getApplication()).load(imgURL).centerCrop().into(restaurantImg);
+        }else{
+            Glide.with(MainApplication.getApplication()).load(R.drawable.no_img_available).into(restaurantImg);
+        }
+    }
+
+    /**
+     * Method to open dialog with restaurant's phone number, when phone icon is clicked
+     * @param placeDetailsViewState details of place type viewState
+     * @param callBtn phone icon in layout
+     * @param callTV phone TextView in layout
+     */
+    private void goToPhoneNumber(PlaceDetailsViewState placeDetailsViewState, ImageView callBtn, TextView callTV) {
+        if(placeDetailsViewState.getPhoneNumber() != null){
             //then open Dialer to call the phone number
             callBtn.setOnClickListener(view -> {
                 Uri phoneNumber = Uri.parse("tel:" + placeDetailsViewState.getPhoneNumber());
@@ -104,12 +126,19 @@ public class DetailActivity extends AppCompatActivity {
             });
         }else{
             // make phone icon not clickable and grey
-            callBtn.setColorFilter(getResources().getColor(colorGrey, null));
-            callTV.setTextColor(getResources().getColor(colorGrey, null));
+            callBtn.setColorFilter(getResources().getColor(R.color.grey, null));
+            callTV.setTextColor(getResources().getColor(R.color.grey, null));
         }
+    }
 
-        // go to website
-        if(placeDetailsViewState.getWebsite() != null && !placeDetailsViewState.getWebsite().equals("")){
+    /**
+     * Method to open the website in browser's window
+     * @param placeDetailsViewState details of place type ViewState
+     * @param website icon website in layout
+     * @param websiteTV website TextView in layout
+     */
+    private void goToWebsite(PlaceDetailsViewState placeDetailsViewState, ImageView website, TextView websiteTV) {
+        if(placeDetailsViewState.getWebsite() != null){
             website.setOnClickListener(view -> {
                 Uri websiteURI = Uri.parse(placeDetailsViewState.getWebsite());
                 Intent goToWebsite = new Intent(Intent.ACTION_VIEW, websiteURI);
@@ -120,8 +149,9 @@ public class DetailActivity extends AppCompatActivity {
                 }
             });
         }else {
-            website.setColorFilter(getResources().getColor(colorGrey,null));
-            websiteTV.setTextColor(getResources().getColor(colorGrey, null));
+            website.setColorFilter(getResources().getColor(R.color.grey,null));
+            websiteTV.setTextColor(getResources().getColor(R.color.grey, null));
         }
     }
+
 }

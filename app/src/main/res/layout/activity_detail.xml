@@ -117,6 +117,7 @@
                 android:contentDescription="@string/ic_phone"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:background="?selectableItemBackgroundBorderless"
                 />
             <TextView
                 android:id="@+id/call_textview"
@@ -124,7 +125,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/call"
                 android:textStyle="bold"
-                android:textColor="@color/red"/>
+                android:textColor="?colorPrimary"/>
 
         </LinearLayout>
         <!-- Lyt for like -->
@@ -173,6 +174,7 @@
                 android:contentDescription="@string/ic_website"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:background="?selectableItemBackgroundBorderless"
                 />
             <TextView
                 android:id="@+id/website_textview"

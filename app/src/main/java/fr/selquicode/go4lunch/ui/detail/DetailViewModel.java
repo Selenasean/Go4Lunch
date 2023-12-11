@@ -49,8 +49,8 @@ public class DetailViewModel extends ViewModel {
         PlaceDetailsViewState placeDetailsViewState = new PlaceDetailsViewState(
                 place.getName() == null ? "" : place.getName(),
                 place.getVicinity() == null ? "" : place.getVicinity(),
-                place.getPhone() == null ? "" : place.getPhone(),
-                place.getWebsite() == null ? "" : place.getWebsite(),
+                place.getPhone(),
+                place.getWebsite(),
                 photo,
                 rating);
 

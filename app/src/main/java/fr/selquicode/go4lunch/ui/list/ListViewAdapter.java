@@ -48,7 +48,7 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
         }
         public void bind(ListViewState item){
             //binding with viewState
-            //TODO : bind avec le viewState ratings + distance + opening
+            //TODO : bind avec le viewState distance + opening
             name.setText(item.getNameRestaurant());
             address.setText(item.getVicinity());
 
@@ -64,6 +64,8 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
             //set rating
             rating.setRating(item.getRatings());
 
+            //set distance between user's location and restaurant's location
+            distance.setText(String.valueOf(item.getDistance()));
 
         }
     }

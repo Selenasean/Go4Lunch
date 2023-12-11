@@ -43,6 +43,8 @@ public class LocationRepository {
         return locationMutableLiveData;
     }
 
+    public Location getLocation(){ return getLocationLiveData().getValue(); }
+
     /**
      * To start requesting user's localisation
      */
