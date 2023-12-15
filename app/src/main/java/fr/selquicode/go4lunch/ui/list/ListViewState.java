@@ -27,7 +27,7 @@ public class ListViewState {
     private Boolean opening;
 
     @NonNull
-    private float distance;
+    private String distance;
 
     @NonNull
     private PlacePhoto restaurantImg;
@@ -41,7 +41,7 @@ public class ListViewState {
      * @param nameRestaurant    type String
      * @param vicinity          type String
      * @param restaurantImg     type PlacePhoto
-     * @param distance          type float
+     * @param distance          type String
      * @param opening           type Boolean
      * @param ratings           type float
      */
@@ -49,7 +49,7 @@ public class ListViewState {
                          @NonNull String nameRestaurant,
                          @NonNull String vicinity,
                          @Nullable PlacePhoto restaurantImg,
-                         @NonNull float distance,
+                         @NonNull String distance,
                          @Nullable Boolean opening,
                          @NonNull float ratings
                          ){
@@ -88,7 +88,7 @@ public class ListViewState {
         return restaurantImg;
     }
 
-    public float getDistance() {
+    public String getDistance() {
         return distance;
     }
 
@@ -101,7 +101,7 @@ public class ListViewState {
         if (this == o) return true;
         if (!(o instanceof ListViewState)) return false;
         ListViewState that = (ListViewState) o;
-        return getId() == that.getId() && getDistance() == that.getDistance() && getOpening() == that.getOpening() && getRatings() == that.getRatings() && getNameRestaurant().equals(that.getNameRestaurant()) && getVicinity().equals(that.getVicinity()) && getRestaurantImg().equals(that.getRestaurantImg());
+        return getId().equals(that.getId()) && getDistance().equals(that.getDistance()) && getOpening() == that.getOpening() && getRatings() == that.getRatings() && getNameRestaurant().equals(that.getNameRestaurant()) && getVicinity().equals(that.getVicinity()) && getRestaurantImg().equals(that.getRestaurantImg());
     }
 
     @Override

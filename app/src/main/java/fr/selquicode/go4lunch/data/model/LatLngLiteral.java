@@ -14,25 +14,23 @@ public class LatLngLiteral {
 
     @SerializedName("lat")
     @Expose
-    private Double lat;
+    private double lat;
     @SerializedName("lng")
     @Expose
-    private Double  lng;
+    private double  lng;
 
 
-    public LatLngLiteral(@Nullable double lat, @Nullable  double lng) {
+    public LatLngLiteral(double lat, double lng) {
         this.lat = lat;
         this.lng = lng;
     }
 
     //GETTERS
-    @Nullable
-    public Double getLat() {
+    public double getLat() {
         return lat;
     }
 
-    @Nullable
-    public Double getLng() {
+    public double getLng() {
         return lng;
     }
 
@@ -50,6 +48,7 @@ public class LatLngLiteral {
         return Objects.hash(getLat(), getLng());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "LatLngLiteral{" +

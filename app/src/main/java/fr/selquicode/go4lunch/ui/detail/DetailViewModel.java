@@ -32,8 +32,6 @@ public class DetailViewModel extends ViewModel {
         return placeDetailsLiveData;
     }
 
-
-
     private PlaceDetailsViewState parseToViewState(Place place){
         //calculate rating for 3stars
         float rating = RatingCalculator.calculateRating((float) place.getRating());

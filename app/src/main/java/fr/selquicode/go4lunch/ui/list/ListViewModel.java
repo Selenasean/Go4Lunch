@@ -83,20 +83,18 @@ public class ListViewModel extends ViewModel {
 
             //calculate distance between user's location and restaurant's location
             assert place.getGeometry() != null;
-
-
             Location restaurantLocation = new Location(LocationManager.GPS_PROVIDER);
             restaurantLocation.setLatitude(place.getGeometry().getLocation().getLat());
             restaurantLocation.setLongitude(place.getGeometry().getLocation().getLng());
             float distance = userLocation.distanceTo(restaurantLocation);
-            Log.i("distance", String.valueOf(distance));
+            String distanceString = String.valueOf(distance).split("\\.")[0] + "m";
 
             listViewState.add(new ListViewState(
                     place.getPlaceId(),
                     place.getName() == null ? "": place.getName(),
                     place.getVicinity() == null ? "" : place.getVicinity(),
                     photo,
-                    distance,
+                    distanceString,
                     place.getOpening() == null ? null : place.getOpening().isOpenNow(),
                     rating
             ));
