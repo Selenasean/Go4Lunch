@@ -1,6 +1,9 @@
+
+
 plugins {
     id 'com.android.application'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
+
 }
 
 android {
@@ -35,7 +38,7 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.10.0'
+    implementation 'com.google.android.material:material:1.11.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 
@@ -48,7 +51,7 @@ dependencies {
 
     //VIEW MODEL
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2'
-    implementation "androidx.activity:activity:1.8.1"
+    implementation "androidx.activity:activity:1.8.2"
     implementation "androidx.fragment:fragment:1.6.2"
 
     //UNIT TEST
@@ -69,8 +72,11 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
 
-    //FIREBASE
+    //FIREBASE + FIREBASE UI
     implementation platform('com.google.firebase:firebase-bom:32.6.0')
+    implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
 }
+
+apply plugin: 'com.google.gms.google-services'

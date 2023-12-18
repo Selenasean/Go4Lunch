@@ -49,7 +49,7 @@ public class ListViewModel extends ViewModel {
 
         locationLiveData = locationRepository.getLocationLiveData();
 
-        LiveData<List<Place>> placesLiveData = Transformations.switchMap(locationLiveData, location -> placeRepository.getPlaces(location));
+        LiveData<List<Place>> placesLiveData = Transformations.switchMap(locationLiveData, placeRepository::getPlaces);
         listLiveData = Transformations.map(placesLiveData, this::parseToViewState);
 
     }
