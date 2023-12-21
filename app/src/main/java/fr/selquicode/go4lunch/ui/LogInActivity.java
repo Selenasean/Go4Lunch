@@ -1,5 +1,7 @@
 package fr.selquicode.go4lunch.ui;
 
+import static android.app.PendingIntent.getActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,6 +10,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
@@ -18,6 +21,8 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Arrays;
 import java.util.List;
 
+import fr.selquicode.go4lunch.R;
+
 public class LogInActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
@@ -25,6 +30,7 @@ public class LogInActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
+
         //initialize Firebase
         firebaseAuth = FirebaseAuth.getInstance();
 
@@ -34,17 +40,24 @@ public class LogInActivity extends AppCompatActivity {
 
     private void isUserSigned() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-        if(currentUser != null){
-            Intent intent = new Intent(this, MainActivity.class);
-            this.startActivity(intent);
-        }else{
-            Log.i("login", "open firebase activity");
-            //TODO : open FirebaseUI actiivity
-            startFirebaseLogIn();
-        }
+//        if(currentUser != null){
+//            Intent intent = new Intent(this, MainActivity.class);
+//            this.startActivity(intent);
+//        }else{
+//            Log.i("login", "open firebase activity");
+//            startFirebaseLogIn();
+//        }
+        startFirebaseLogIn();
     }
 
     private void startFirebaseLogIn() {
+        //bind the created custom layout XML resource & firebaseUI
+        AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
+                .Builder(R.layout.firebase_login)
+                .setEmailButtonId(R.id.sign_email)
+                .setGoogleButtonId(R.id.sign_google)
+                .build();
+
         //choose authentication providers
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.EmailBuilder().build(),
@@ -55,6 +68,9 @@ public class LogInActivity extends AppCompatActivity {
         Intent signInIntent = AuthUI.getInstance()
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
+                .setIsSmartLockEnabled(true)
+                .setTheme(R.style.Theme_Go4Lunch)
+                .setAuthMethodPickerLayout(customLayout)
                 .build();
 
         signInLauncher.launch(signInIntent);
