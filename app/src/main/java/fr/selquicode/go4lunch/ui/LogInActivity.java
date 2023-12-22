@@ -41,6 +41,7 @@ public class LogInActivity extends AppCompatActivity {
     private void isUserSigned() {
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 //        if(currentUser != null){
+//            Log.i("currentUser", currentUser.toString());
 //            Intent intent = new Intent(this, MainActivity.class);
 //            this.startActivity(intent);
 //        }else{
@@ -69,7 +70,6 @@ public class LogInActivity extends AppCompatActivity {
                 .createSignInIntentBuilder()
                 .setAvailableProviders(providers)
                 .setIsSmartLockEnabled(true)
-                .setTheme(R.style.Theme_Go4Lunch)
                 .setAuthMethodPickerLayout(customLayout)
                 .build();
 
@@ -95,6 +95,8 @@ public class LogInActivity extends AppCompatActivity {
             // Successfully signed in
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             // ...
+            Intent intent = new Intent(this, MainActivity.class);
+            this.startActivity(intent);
         } else {
             Log.i("MA", "sign in failed");
             //TODO
