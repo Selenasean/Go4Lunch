@@ -20,7 +20,10 @@
     <string name="website">WEBSITE</string>
     <string name="photo_description">workmate profil photo</string>
     <string name="icon_workmates">person icon</string>
+
+    //string for firebase layout
     <string name="diner_img">image of a diner</string>
     <string name="logo">bowl drawing logo go4Lunch</string>
     <string name="catch_phrase">Find a nice restaurant and invite your co-workers for lunch !</string>
+    <string name="backgroundDescription">clementine image for background</string>
 </resources>

@@ -11,16 +11,21 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.CreationExtras;
 
 import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.data.PlaceRepository;
 import fr.selquicode.go4lunch.data.RetrofitService;
+import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
+import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.permission_checker.PermissionChecker;
 import fr.selquicode.go4lunch.ui.MainViewModel;
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 import fr.selquicode.go4lunch.ui.detail.DetailViewModel;
 import fr.selquicode.go4lunch.ui.list.ListViewModel;
+import fr.selquicode.go4lunch.ui.login.LogInViewModel;
 import fr.selquicode.go4lunch.ui.map.MapViewModel;
 import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewModel;
 
@@ -39,7 +44,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
 
                     factory = new ViewModelFactory(
                             new PermissionChecker(application),
-                            new LocationRepository(LocationServices.getFusedLocationProviderClient(application))
+                            new LocationRepository(LocationServices.getFusedLocationProviderClient(application)),
+                            new FirebaseAuthRepository(FirebaseAuth.getInstance()),
+                            new FirestoreRepository(FirebaseFirestore.getInstance())
                     );
                 }
             }
@@ -50,14 +57,22 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     //Injection : reaching PlacesNearbySearchResponseAPI by putting it in repository constructor
     private final PlaceRepository repository = new PlaceRepository(RetrofitService.getPlaceAPI());
     private final LocationRepository locationRepository;
-    private PermissionChecker permissionChecker;
+    private final PermissionChecker permissionChecker;
+    private final FirebaseAuthRepository firebaseAuthRepository;
+    private final FirestoreRepository firestoreRepository;
 
     /**
      * Constructor
      */
-    private ViewModelFactory(PermissionChecker permissionChecker, LocationRepository locationRepository){
+    private ViewModelFactory(
+            PermissionChecker permissionChecker,
+            LocationRepository locationRepository,
+            FirebaseAuthRepository firebaseAuthRepository,
+            FirestoreRepository firestoreRepository ){
         this.permissionChecker = permissionChecker;
         this.locationRepository = locationRepository;
+        this.firebaseAuthRepository = firebaseAuthRepository;
+        this.firestoreRepository = firestoreRepository;
     }
 
     /**
@@ -67,24 +82,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
      * @param <T>        type of Class, here of ViewModel
      * @return new viewModel
      */
-//    @NonNull
-//    @Override
-//    public <T extends ViewModel> T create(Class<T> modelClass) {
-//        // if modelClass - model of classes ViewModel - is the same as new ViewModel created
-//        if (modelClass.isAssignableFrom(MainViewModel.class)) {
-//            //injection of the Repository in the ViewModel constructor
-//            return (T) new MainViewModel(permissionChecker, locationRepository);
-//        } else if(modelClass.isAssignableFrom(MapViewModel.class)){
-//            return (T) new MapViewModel(repository, locationRepository, permissionChecker);
-//        } else if(modelClass.isAssignableFrom(ListViewModel.class)){
-//            return (T) new ListViewModel(repository, locationRepository);
-//        } else if(modelClass.isAssignableFrom(WorkmatesViewModel.class)){
-//            return (T) new WorkmatesViewModel(repository);
-//        } else if(modelClass.isAssignableFrom(DetailViewModel.class))
-//            return (T) new DetailViewModel(repository);
-//        throw new IllegalArgumentException("Unknown ViewModel class : " + modelClass);
-//    }
-
+    @SuppressWarnings("Unchecked")
     @NonNull
     @Override
     public <T extends ViewModel> T create(@NonNull Class<T> modelClass, @NonNull CreationExtras extras) {
@@ -102,7 +100,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         } else if(modelClass.isAssignableFrom(DetailViewModel.class)){
             String placeId = savedStateHandle.get(DetailActivity.PLACE_ID);
             return (T) new DetailViewModel(repository, placeId);
+        } else if(modelClass.isAssignableFrom(LogInViewModel.class)){
+            return (T) new LogInViewModel(firebaseAuthRepository, firestoreRepository);
         }
-        throw new IllegalArgumentException("Unknown ViewModel class : " + modelClass);
+            throw new IllegalArgumentException("Unknown ViewModel class : " + modelClass);
     }
 }
