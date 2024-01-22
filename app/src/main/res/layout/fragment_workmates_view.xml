@@ -3,12 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/purple_500"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.workmates.WorkmatesViewFragment">
 
-    <TextView
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/workmates_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Hello" />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        />
 
 </FrameLayout>

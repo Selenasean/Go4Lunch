@@ -26,4 +26,10 @@
     <string name="logo">bowl drawing logo go4Lunch</string>
     <string name="catch_phrase">Find a nice restaurant and invite your co-workers for lunch !</string>
     <string name="backgroundDescription">clementine image for background</string>
+    <string name="no_restaurant_chosen">hasn\'t decided yet</string>
+    <string name="is_eating">"is eating at "</string>
+    <string name="cancelled_signin">sign in cancelled</string>
+    <string name="no_network">internet connexion failed</string>
+    <string name="unknown_error">"Unknown error "</string>
+    <string name="is_joining">is joining</string>
 </resources>

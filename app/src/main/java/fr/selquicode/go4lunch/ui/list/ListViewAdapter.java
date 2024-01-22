@@ -1,12 +1,8 @@
 package fr.selquicode.go4lunch.ui.list;
 
-import static android.content.ClipData.newIntent;
-
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -27,16 +23,16 @@ import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 
 public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.ViewHolder> {
 
-    public ListViewAdapter(){
+    public ListViewAdapter() {
         super(DIFF_CALLBACK);
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name, address, opening, distance;
         private final ImageView restaurantImg;
         private final RatingBar rating;
 
-        public ViewHolder(@NonNull RestaurantItemBinding binding){
+        public ViewHolder(@NonNull RestaurantItemBinding binding) {
             super(binding.getRoot());
             //binding element
             name = binding.nameRestaurant;
@@ -46,18 +42,19 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
             restaurantImg = binding.imageRestaurant;
             rating = binding.ratingBar;
         }
-        public void bind(ListViewState item){
+
+        public void bind(ListViewState item) {
             //binding with viewState
-            //TODO : bind avec le viewState distance + opening
+            // TODO : bind avec le viewState opening
             name.setText(item.getNameRestaurant());
             address.setText(item.getVicinity());
 
             //set the restaurant's image
-            if(item.getRestaurantImg() != null && item.getRestaurantImg().getPhoto_reference() != null){
+            if (item.getRestaurantImg() != null && item.getRestaurantImg().getPhoto_reference() != null) {
                 String imgURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference="
                         + item.getRestaurantImg().getPhoto_reference() + "&key=" + BuildConfig.MAPS_API_KEY;
                 Glide.with(MainApplication.getApplication()).load(imgURL).into(restaurantImg);
-            }else {
+            } else {
                 Glide.with(MainApplication.getApplication()).load(R.drawable.no_image).into(restaurantImg);
             }
 
@@ -73,9 +70,10 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
     @NonNull
     @Override
     public ListViewAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        RestaurantItemBinding binding = RestaurantItemBinding.inflate(LayoutInflater.from(parent.getContext()),
-                                                                        parent,
-                                                                        false);
+        RestaurantItemBinding binding = RestaurantItemBinding.inflate(
+                LayoutInflater.from(parent.getContext()),
+                parent,
+                false);
         return new ViewHolder(binding);
     }
 
@@ -87,20 +85,10 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
         holder.itemView.setOnClickListener(view -> {
             final Context context = holder.itemView.getContext();
             String placeId = getItem(position).getId();
-            launchDetailActivity(placeId,  context);
+            DetailActivity.launch(placeId, context);
         });
     }
 
-    /**
-     * Start DetailActivity
-     * @param placeId id of the item clicked = a place
-     * @param context the context
-     */
-    public void launchDetailActivity(String placeId, Context context){
-        Intent intent = new Intent(context, DetailActivity.class);
-        intent.putExtra(DetailActivity.PLACE_ID, placeId);
-        context.startActivity(intent);
-    }
 
     /**
      * method that compare two item and their content to update them if it's necessary
@@ -109,7 +97,7 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
             new DiffUtil.ItemCallback<ListViewState>() {
                 @Override
                 public boolean areItemsTheSame(@NonNull ListViewState oldItem, @NonNull ListViewState newItem) {
-                    return oldItem.getId() == newItem.getId();
+                    return oldItem.getId().equals(newItem.getId());
                 }
 
                 @Override

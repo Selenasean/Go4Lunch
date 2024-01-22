@@ -9,6 +9,9 @@ import fr.selquicode.go4lunch.data.model.PlacePhoto;
 
 public class PlaceDetailsViewState {
 
+    @NonNull
+    private final String idRestaurant;
+
     @Nullable
     private final String nameRestaurant, vicinity, phoneNumber, website;
 
@@ -18,12 +21,17 @@ public class PlaceDetailsViewState {
     @NonNull
     private final float ratings;
 
-    public PlaceDetailsViewState(@Nullable String nameRestaurant,
-                                 @Nullable String vicinity,
-                                 @Nullable String phoneNumber,
-                                 @Nullable String website,
-                                 @Nullable PlacePhoto restaurantImg,
-                                 @NonNull float ratings){
+
+    public PlaceDetailsViewState(
+            @NonNull String idRestaurant,
+            @Nullable String nameRestaurant,
+            @Nullable String vicinity,
+            @Nullable String phoneNumber,
+            @Nullable String website,
+            @Nullable PlacePhoto restaurantImg,
+            @NonNull float ratings
+    ){
+        this.idRestaurant = idRestaurant;
         this.nameRestaurant = nameRestaurant;
         this.vicinity = vicinity;
         this.phoneNumber = phoneNumber;
@@ -34,6 +42,12 @@ public class PlaceDetailsViewState {
     }
 
     //GETTERS
+
+    @NonNull
+    public String getIdRestaurant() {
+        return idRestaurant;
+    }
+
     @Nullable
     public String getNameRestaurant() {
         return nameRestaurant;
@@ -64,9 +78,25 @@ public class PlaceDetailsViewState {
     }
 
     //METHOD UTILS
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlaceDetailsViewState)) return false;
+        PlaceDetailsViewState that = (PlaceDetailsViewState) o;
+        return Float.compare(that.getRatings(), getRatings()) == 0 && Objects.equals(getIdRestaurant(), that.getIdRestaurant()) && Objects.equals(getNameRestaurant(), that.getNameRestaurant()) && Objects.equals(getVicinity(), that.getVicinity()) && Objects.equals(getPhoneNumber(), that.getPhoneNumber()) && Objects.equals(getWebsite(), that.getWebsite()) && Objects.equals(getRestaurantImg(), that.getRestaurantImg());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIdRestaurant(), getNameRestaurant(), getVicinity(), getPhoneNumber(), getWebsite(), getRestaurantImg(), getRatings());
+    }
+
+    @NonNull
     @Override
     public String toString() {
-        return "PlaceDetailViewState{" +
+        return "PlaceDetailsViewState{" +
+                "idRestaurant='" + idRestaurant + '\'' +
                 ", nameRestaurant='" + nameRestaurant + '\'' +
                 ", vicinity='" + vicinity + '\'' +
                 ", phoneNumber='" + phoneNumber + '\'' +
@@ -74,18 +104,5 @@ public class PlaceDetailsViewState {
                 ", restaurantImg=" + restaurantImg +
                 ", ratings=" + ratings +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof PlaceDetailsViewState)) return false;
-        PlaceDetailsViewState that = (PlaceDetailsViewState) o;
-        return Double.compare(that.getRatings(), getRatings()) == 0 &&  getNameRestaurant().equals(that.getNameRestaurant()) && getVicinity().equals(that.getVicinity()) && getPhoneNumber().equals(that.getPhoneNumber()) && getWebsite().equals(that.getWebsite()) && getRestaurantImg().equals(that.getRestaurantImg());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getNameRestaurant(), getVicinity(), getPhoneNumber(), getWebsite(), getRestaurantImg(), getRatings());
     }
 }

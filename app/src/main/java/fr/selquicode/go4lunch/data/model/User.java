@@ -66,7 +66,7 @@ public class User {
 
     @NonNull
     public List<String> getFavoritePlacesId() {
-        if(favoritePlacesId == null){
+        if(favoritePlacesId == null){ 
             return Collections.emptyList();
         }else{
             return favoritePlacesId;

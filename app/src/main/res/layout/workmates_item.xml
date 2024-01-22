@@ -1,31 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_gravity="center">
+    >
 
-    <!-- -->
+    <!-- profile picture -->
     <ImageView
         android:id="@+id/workmate_photo"
         android:layout_width="64dp"
         android:layout_height="64dp"
-        android:layout_margin="16dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="16dp"
         android:contentDescription="@string/photo_description"
-        tools:srcCompat="@drawable/round_img"
+        android:src="@drawable/round_img"
+        android:scaleType="centerCrop"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <!-- display name -->
     <TextView
         android:id="@+id/workmate_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="36dp"
         android:layout_marginStart="12dp"
-        android:textSize="18sp"
+        android:textSize="12sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/workmate_photo"
-        tools:text="Bryan is joining"/>
+        tools:text="Bryan"/>
+
+    <!-- workmate' state-->
+    <TextView
+        android:id="@+id/restaurant_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="36dp"
+        android:layout_marginStart="4dp"
+        android:textSize="12sp"
+        android:lines="2"
+        app:layout_constraintStart_toEndOf="@id/workmate_name"
+        tools:text="is eating at Restaurant"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

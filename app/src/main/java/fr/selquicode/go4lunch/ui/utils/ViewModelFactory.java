@@ -37,9 +37,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private static volatile ViewModelFactory factory;
 
     public static ViewModelFactory getInstance() {
-        if(factory == null){
-            synchronized (ViewModelFactory.class){
-                if(factory == null){
+        if (factory == null) {
+            synchronized (ViewModelFactory.class) {
+                if (factory == null) {
                     Application application = MainApplication.getApplication();
 
                     factory = new ViewModelFactory(
@@ -68,7 +68,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             PermissionChecker permissionChecker,
             LocationRepository locationRepository,
             FirebaseAuthRepository firebaseAuthRepository,
-            FirestoreRepository firestoreRepository ){
+            FirestoreRepository firestoreRepository) {
         this.permissionChecker = permissionChecker;
         this.locationRepository = locationRepository;
         this.firebaseAuthRepository = firebaseAuthRepository;
@@ -91,18 +91,18 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //injection of the Repository in the ViewModel constructor
             return (T) new MainViewModel(permissionChecker, locationRepository);
-        } else if(modelClass.isAssignableFrom(MapViewModel.class)){
+        } else if (modelClass.isAssignableFrom(MapViewModel.class)) {
             return (T) new MapViewModel(repository, locationRepository, permissionChecker);
-        } else if(modelClass.isAssignableFrom(ListViewModel.class)){
+        } else if (modelClass.isAssignableFrom(ListViewModel.class)) {
             return (T) new ListViewModel(repository, locationRepository);
-        } else if(modelClass.isAssignableFrom(WorkmatesViewModel.class)){
-            return (T) new WorkmatesViewModel(repository);
-        } else if(modelClass.isAssignableFrom(DetailViewModel.class)){
+        } else if (modelClass.isAssignableFrom(WorkmatesViewModel.class)) {
+            return (T) new WorkmatesViewModel(firestoreRepository, firebaseAuthRepository);
+        } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {
             String placeId = savedStateHandle.get(DetailActivity.PLACE_ID);
-            return (T) new DetailViewModel(repository, placeId);
-        } else if(modelClass.isAssignableFrom(LogInViewModel.class)){
+            return (T) new DetailViewModel(repository, placeId, firestoreRepository);
+        } else if (modelClass.isAssignableFrom(LogInViewModel.class)) {
             return (T) new LogInViewModel(firebaseAuthRepository, firestoreRepository);
         }
-            throw new IllegalArgumentException("Unknown ViewModel class : " + modelClass);
+        throw new IllegalArgumentException("Unknown ViewModel class : " + modelClass);
     }
 }

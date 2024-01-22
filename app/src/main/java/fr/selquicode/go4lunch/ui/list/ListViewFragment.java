@@ -18,14 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.List;
+import java.util.Objects;
 
 import fr.selquicode.go4lunch.databinding.FragmentListViewBinding;
 import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 
 public class ListViewFragment extends Fragment {
 
-    private ListViewModel mViewModel;
-    private ListViewAdapter adapter = new ListViewAdapter();
+    private ListViewModel viewModel;
+    private final ListViewAdapter adapter = new ListViewAdapter();
     private FragmentListViewBinding binding;
 
     public static ListViewFragment newInstance() {
@@ -43,8 +44,8 @@ public class ListViewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //settings for ViewModel and Observer
-        mViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(ListViewModel.class);
-        mViewModel.getPlaces().observe(getViewLifecycleOwner(), new Observer<List<ListViewState>>() {
+        viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(ListViewModel.class);
+        viewModel.getPlaces().observe(getViewLifecycleOwner(), new Observer<List<ListViewState>>() {
             @Override
             public void onChanged(List<ListViewState> listViewStates) {
                 adapter.submitList(listViewStates);
@@ -60,7 +61,7 @@ public class ListViewFragment extends Fragment {
      * Settings for Recycleview
      */
     private void setRecyclerView() {
-        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this.getContext(), DividerItemDecoration.VERTICAL);
+        DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this.requireContext(), DividerItemDecoration.VERTICAL);
         RecyclerView recyclerView = binding.list;
         recyclerView.addItemDecoration(dividerItemDecoration);
 

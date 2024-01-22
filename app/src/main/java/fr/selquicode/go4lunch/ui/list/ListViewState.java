@@ -3,11 +3,9 @@ package fr.selquicode.go4lunch.ui.list;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.android.gms.common.annotation.NonNullApi;
 
 import java.util.Objects;
 
-import fr.selquicode.go4lunch.data.model.PlaceOpeningHours;
 import fr.selquicode.go4lunch.data.model.PlacePhoto;
 
 /**
@@ -45,7 +43,7 @@ public class ListViewState {
      * @param opening           type Boolean
      * @param ratings           type float
      */
-    public ListViewState(String id,
+    public ListViewState(@NonNull String id,
                          @NonNull String nameRestaurant,
                          @NonNull String vicinity,
                          @Nullable PlacePhoto restaurantImg,
@@ -64,6 +62,7 @@ public class ListViewState {
     }
 
     // GETTERS
+    @NonNull
     public String getId() {
         return id;
     }
@@ -88,10 +87,12 @@ public class ListViewState {
         return restaurantImg;
     }
 
+    @NonNull
     public String getDistance() {
         return distance;
     }
 
+    @NonNull
     public float getRatings() {
         return ratings;
     }

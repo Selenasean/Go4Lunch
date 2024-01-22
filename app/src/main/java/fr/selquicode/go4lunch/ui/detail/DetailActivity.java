@@ -3,21 +3,29 @@ package fr.selquicode.go4lunch.ui.detail;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Objects;
 
 import fr.selquicode.go4lunch.BuildConfig;
@@ -34,6 +42,20 @@ public class DetailActivity extends AppCompatActivity {
     private ActivityDetailBinding binding;
     public static final String PLACE_ID = "PLACE_ID";
     private DetailViewModel detailViewModel;
+    private WorkmatesListDetailAdapter adapter = new WorkmatesListDetailAdapter();
+
+
+    /**
+     * Start DetailActivity
+     *
+     * @param placeId id of the item clicked = a restaurant
+     * @param context the context
+     */
+    public static void launch(String placeId, Context context) {
+        Intent intent = new Intent(context, DetailActivity.class);
+        intent.putExtra(DetailActivity.PLACE_ID, placeId);
+        context.startActivity(intent);
+    }
 
 
     @Override
@@ -49,6 +71,21 @@ public class DetailActivity extends AppCompatActivity {
 
         //settings for ViewModel
         setViewModel();
+
+        //settings for RecycleView
+        setRecycleView();
+
+        //btn to choose or not a restaurant
+        binding.fabAddRestaurant.setOnClickListener( listener -> detailViewModel.onRestaurantChoice());
+    }
+
+    /**
+     * Settings for the RecycleView
+     */
+    private void setRecycleView() {
+        RecyclerView recyclerView = binding.workmatesListInDetail;
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.getApplicationContext()));
+        recyclerView.setAdapter(adapter);
     }
 
     /**
@@ -57,6 +94,10 @@ public class DetailActivity extends AppCompatActivity {
     private void setViewModel() {
        detailViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(DetailViewModel.class);
        detailViewModel.getPlaceDetails().observe(this, this::render);
+       detailViewModel.getWorkmatesWhoChose().observe(
+               this,
+               workmatesDetailViewStatesList -> adapter.submitList(workmatesDetailViewStatesList)
+       );
     }
 
     /**
@@ -114,7 +155,7 @@ public class DetailActivity extends AppCompatActivity {
      */
     private void goToPhoneNumber(PlaceDetailsViewState placeDetailsViewState, ImageView callBtn, TextView callTV) {
         if(placeDetailsViewState.getPhoneNumber() != null){
-            //then open Dialer to call the phone number
+            //if there is a phone to call open Dialer to call the phone number
             callBtn.setOnClickListener(view -> {
                 Uri phoneNumber = Uri.parse("tel:" + placeDetailsViewState.getPhoneNumber());
                 Intent callPhoneNumber = new Intent(Intent.ACTION_DIAL, phoneNumber);
@@ -139,6 +180,7 @@ public class DetailActivity extends AppCompatActivity {
      */
     private void goToWebsite(PlaceDetailsViewState placeDetailsViewState, ImageView website, TextView websiteTV) {
         if(placeDetailsViewState.getWebsite() != null){
+            //if there is a website open it in browser's window
             website.setOnClickListener(view -> {
                 Uri websiteURI = Uri.parse(placeDetailsViewState.getWebsite());
                 Intent goToWebsite = new Intent(Intent.ACTION_VIEW, websiteURI);

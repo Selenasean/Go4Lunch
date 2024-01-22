@@ -33,4 +33,8 @@ public class LogInViewModel extends ViewModel {
         );
         firestoreRepository.createUser(userToCreate);
     }
+
+    public boolean isUserLogged(){
+        return firebaseAuthRepository.isUserLogged();
+    }
 }

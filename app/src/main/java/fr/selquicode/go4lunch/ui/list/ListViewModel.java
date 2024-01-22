@@ -12,6 +12,10 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import fr.selquicode.go4lunch.data.PlaceRepository;
@@ -35,32 +39,11 @@ public class ListViewModel extends ViewModel {
         this.placeRepository = placeRepository;
         this.locationRepository = locationRepository;
 
-
-//        listMediatorLiveData.addSource(
-//                locationLiveData,
-//                userLocation -> combine(
-//                        userLocation,
-//                        placeRepository.getPlaces(userLocation).getValue())
-//                );
-//        listMediatorLiveData.addSource(
-//                placeRepository.getPlaces(locationLiveData.getValue()),
-//                placeList ->         )
-//        );
-
         locationLiveData = locationRepository.getLocationLiveData();
-
         LiveData<List<Place>> placesLiveData = Transformations.switchMap(locationLiveData, placeRepository::getPlaces);
         listLiveData = Transformations.map(placesLiveData, this::parseToViewState);
 
     }
-
-//    private void combine(Location location, List<Place> placeList){
-//        //transform List<Place> into List<ListViewState>
-//        List<ListViewState> placeListViewState = parseToViewState(placeList, location);
-//        //then set into mediatorLiveData
-//        listMediatorLiveData.setValue(placeListViewState);
-//
-//    }
 
 
     private List<ListViewState> parseToViewState(List<Place> places) {
@@ -89,6 +72,7 @@ public class ListViewModel extends ViewModel {
             float distance = userLocation.distanceTo(restaurantLocation);
             String distanceString = String.valueOf(distance).split("\\.")[0] + "m";
 
+            assert place.getPlaceId() != null;
             listViewState.add(new ListViewState(
                     place.getPlaceId(),
                     place.getName() == null ? "": place.getName(),
@@ -99,6 +83,20 @@ public class ListViewModel extends ViewModel {
                     rating
             ));
         }
+        //sort by closer place first
+        listViewState.sort((o1, o2) -> {
+            String distanceString1 = o1.getDistance().split("m")[0];
+            String distanceString2 = o2.getDistance().split( "m")[0];
+            float distance1 = Float.parseFloat(distanceString1);
+            float distance2 = Float.parseFloat(distanceString2);
+            if(distance1 == distance2){
+                return 0;
+            }
+            if(distance1 > distance2){
+                return 1;
+            }
+            return -1;
+        });
         return listViewState;
     }
 
