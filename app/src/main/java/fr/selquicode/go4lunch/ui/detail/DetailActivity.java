@@ -1,7 +1,6 @@
 package fr.selquicode.go4lunch.ui.detail;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -28,8 +27,9 @@ public class DetailActivity extends AppCompatActivity {
 
     private ActivityDetailBinding binding;
     public static final String PLACE_ID = "PLACE_ID";
+    private String restaurantName;
     private DetailViewModel detailViewModel;
-    private WorkmatesListDetailAdapter adapter = new WorkmatesListDetailAdapter();
+    private final WorkmatesListDetailAdapter adapter = new WorkmatesListDetailAdapter();
 
 
     /**
@@ -63,8 +63,7 @@ public class DetailActivity extends AppCompatActivity {
         setRecycleView();
 
         //btn to choose or not a restaurant
-
-//        binding.fabAddRestaurant.setOnClickListener( listener -> detailViewModel.onRestaurantChoice());
+        binding.fabAddRestaurant.setOnClickListener( listener -> detailViewModel.onRestaurantChoice(restaurantName));
     }
 
     /**
@@ -84,18 +83,23 @@ public class DetailActivity extends AppCompatActivity {
        detailViewModel.getPlaceDetails().observe(this, this::render);
        detailViewModel.getWorkmatesWhoChose().observe(
                this,
-               workmatesDetailViewStatesList -> adapter.submitList(workmatesDetailViewStatesList)
+               adapter::submitList
        );
-       detailViewModel.isRestaurantChosenByUserLogged().observe(this, this::refreshUI);
+       detailViewModel.isRestaurantChosenByUserLogged().observe(this, this::refreshFab);
     }
 
-    private void refreshUI(Boolean aBoolean) {
+    /**
+     * Method to refreshes the style of the fab
+     * @param aBoolean
+     */
+    private void refreshFab(Boolean aBoolean) {
         if(aBoolean){
             binding.fabAddRestaurant.setImageResource(R.drawable.baseline_check_circle_24);
         }else{
             binding.fabAddRestaurant.setImageResource(R.drawable.baseline_add_circle_24);
         }
     }
+
 
     /**
      * Method to display elements on screen
@@ -115,6 +119,7 @@ public class DetailActivity extends AppCompatActivity {
         setRestaurantImg(placeDetailsViewState, restaurantImg);
 
         // name and address
+        restaurantName = placeDetailsViewState.getNameRestaurant();
         name.setText(placeDetailsViewState.getNameRestaurant());
         address.setText(placeDetailsViewState.getVicinity());
 

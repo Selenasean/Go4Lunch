@@ -119,7 +119,10 @@ public class DetailViewModel extends ViewModel {
 
     }
 
-    //TODO : check if user logged has the same idRestaurant as the restaurant we are interested in
+    /**
+     * To compare if restaurant chosen by user logged is the same as the restaurant details displayed
+     * @return boolean type LiveData
+     */
     public LiveData<Boolean> isRestaurantChosenByUserLogged() {
         LiveData<User> isUserLoggedChoose = firestoreRepository.userLogged(
                 firebaseAuthRepository.getCurrentUser().getUid());
@@ -128,5 +131,15 @@ public class DetailViewModel extends ViewModel {
         });
     }
 
+    /**
+     * Method that update from the firestore repository the restaurant chosen by the user logged
+     * @param restaurantName a String of the restaurant's name
+     */
+    public void onRestaurantChoice(String restaurantName) {
+        firestoreRepository.updateRestaurantChosen(
+                firebaseAuthRepository.getCurrentUser().getUid(),
+                placeId,
+                restaurantName);
+    }
 }
 
