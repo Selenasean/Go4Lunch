@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go4Lunch</string>
+
+    //string for bottom navigation bar
+    <string name="map">Carte</string>
+    <string name="list">Liste</string>
+    <string name="workmates">Collègues</string>
+    <string name="map_view_desc">Icone carte pour voir la carte</string>
+    <string name="list_map_view_desc">Icone liste pour voir la liste des restaurants</string>
+    <string name="workmates_desc">Icone de plusieurs personnes pour voir les collègues</string>
+
+    //string for detailActivity
+    <string name="imageDescription">Photo du restaurant</string>
+    <string name="fab_add">Bouton pour ajouter un restaurant</string>
+    <string name="ic_phone">Icône téléphone pour afficher le numero de téléphone du restaurant</string>
+    <string name="call">APPELER</string>
+    <string name="ic_like">Icone pour aimer le restaurant</string>
+    <string name="like">AIMER</string>
+    <string name="ic_website">Icone monde pour aller sur le site web du restaurant</string>
+    <string name="website">SITE WEB</string>
+    <string name="photo_description">Photo de profil d\'un collègue</string>
+    <string name="icon_workmates">Icone personne</string>
+
+    //string for firebase layout
+    <string name="logo">Logo Go4Lunch : dessin d\'un bol</string>
+    <string name="catch_phrase">Trouvez un restaurant sympa et invitez vos collègues pour le repas !</string>
+    <string name="backgroundDescription">Image de clementine pour le fond</string>
+    <string name="no_restaurant_chosen">n\'a pas encore décidé</string>
+    <string name="is_eating">va mangé à</string>
+    <string name="cancelled_signin">Inscription annulée</string>
+    <string name="no_network">Connexion internet à échouée</string>
+    <string name="unknown_error">Erreur inconnue</string>
+    <string name="is_joining">a rejoint</string>
+</resources>

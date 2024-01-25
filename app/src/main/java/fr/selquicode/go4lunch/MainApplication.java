@@ -9,8 +9,6 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.i("Application", "application");
-
         sApplication = this;
     }
 

@@ -53,9 +53,7 @@ public class WorkmatesListViewAdapter extends ListAdapter<WorkmatesViewState, Wo
 
         public void bind(WorkmatesViewState item){
             // set workmates name
-            String displayName = item.getDisplayName();
-            String firstName = displayName.contains(" ") ? displayName.split(" ")[0] : displayName;
-            workmateName.setText(firstName);
+            workmateName.setText(item.getDisplayName());
 
             //set workmates profile picture
             Glide.with(MainApplication.getApplication())

@@ -3,7 +3,6 @@ package fr.selquicode.go4lunch.ui.list;
 
 import android.location.Location;
 import android.location.LocationManager;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
@@ -12,18 +11,13 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import fr.selquicode.go4lunch.data.PlaceRepository;
+import fr.selquicode.go4lunch.data.place.PlaceRepository;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.model.Place;
 import fr.selquicode.go4lunch.data.model.PlacePhoto;
 import fr.selquicode.go4lunch.ui.utils.RatingCalculator;
-import kotlin.jvm.functions.Function1;
 
 public class ListViewModel extends ViewModel {
 
@@ -89,13 +83,7 @@ public class ListViewModel extends ViewModel {
             String distanceString2 = o2.getDistance().split( "m")[0];
             float distance1 = Float.parseFloat(distanceString1);
             float distance2 = Float.parseFloat(distanceString2);
-            if(distance1 == distance2){
-                return 0;
-            }
-            if(distance1 > distance2){
-                return 1;
-            }
-            return -1;
+            return Float.compare(distance1, distance2);
         });
         return listViewState;
     }

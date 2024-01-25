@@ -15,8 +15,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import fr.selquicode.go4lunch.MainApplication;
-import fr.selquicode.go4lunch.data.PlaceRepository;
-import fr.selquicode.go4lunch.data.RetrofitService;
+import fr.selquicode.go4lunch.data.place.PlaceRepository;
+import fr.selquicode.go4lunch.data.place.RetrofitService;
 import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
@@ -99,7 +99,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new WorkmatesViewModel(firestoreRepository, firebaseAuthRepository);
         } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {
             String placeId = savedStateHandle.get(DetailActivity.PLACE_ID);
-            return (T) new DetailViewModel(repository, placeId, firestoreRepository);
+            return (T) new DetailViewModel(repository, placeId, firestoreRepository, firebaseAuthRepository);
         } else if (modelClass.isAssignableFrom(LogInViewModel.class)) {
             return (T) new LogInViewModel(firebaseAuthRepository, firestoreRepository);
         }

@@ -88,7 +88,6 @@ public class FirestoreRepository {
 
     }
 
-
     /**
      * Request to get user's list to display in workmates' fragment
      * @return a list of users type LiveData for UI
@@ -113,11 +112,36 @@ public class FirestoreRepository {
     }
 
     /**
+     * Request to get the specific user logged
+     * @param userId id of the user currently logged
+     * @return user's data
+     */
+    public LiveData<User> userLogged(String userId){
+        MutableLiveData<User> userLoggedDataLD = new MutableLiveData<>();
+        this.getUsersCollection().document(userId)
+                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                    @Override
+                    public void onEvent(@Nullable DocumentSnapshot value,
+                                        @Nullable FirebaseFirestoreException error) {
+                        if(error == null && value != null){
+                            User userLogged = value.toObject(User.class);
+                            Log.i("firestoreRepo", String.valueOf(userLogged));
+                            userLoggedDataLD.setValue(userLogged);
+                        }else{
+                            //TODO deal with error
+                            Log.e(TAG,"task.getException in userLogged()");
+                        }
+                    }
+                });
+        return userLoggedDataLD;
+    }
+
+    /**
      * Request to get a list of user who choose a specific place to eat
      * @param placeId id of the restaurant chosen to eat
      * @return a list of users type LiveData for UI
      */
-    public LiveData<List<User>> getUserWhoChose(String placeId){
+    public LiveData<List<User>> getUsersWhoChose(String placeId){
         MutableLiveData<List<User>> usersWhoChoseListMLD = new MutableLiveData<>();
         this.getUsersCollection()
                 .whereEqualTo("restaurantId", placeId)
@@ -129,6 +153,7 @@ public class FirestoreRepository {
                             List<User> usersWhoChoseList = value.toObjects(User.class);
                             usersWhoChoseListMLD.setValue(usersWhoChoseList);
                         }else{
+                            //TODO : deal with error
                             Log.e(TAG, "task.getException");
                         }
 

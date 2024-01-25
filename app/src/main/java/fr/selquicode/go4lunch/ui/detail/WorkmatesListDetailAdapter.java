@@ -49,11 +49,9 @@ public class WorkmatesListDetailAdapter extends ListAdapter<WorkmatesDetailViewS
                     .into(workmatePictureProfile);
 
             // display workmates firstname
-            String displayName = item.getDisplayName();
-            String firstName = displayName.contains(" ") ? displayName.split(" ")[0] : displayName;
             workmateName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             workmateName.setTextColor(ContextCompat.getColor(MainApplication.getApplication(), R.color.black));
-            workmateName.setText(firstName);
+            workmateName.setText(item.getDisplayName());
 
             //display "is joining"
             joiningString.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));

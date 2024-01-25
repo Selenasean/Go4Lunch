@@ -8,9 +8,11 @@ import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-import fr.selquicode.go4lunch.data.PlaceRepository;
+import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
+import fr.selquicode.go4lunch.data.place.PlaceRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.model.Place;
 import fr.selquicode.go4lunch.data.model.PlacePhoto;
@@ -21,6 +23,7 @@ public class DetailViewModel extends ViewModel {
 
     private final PlaceRepository placeRepository;
     private final FirestoreRepository firestoreRepository;
+    private final FirebaseAuthRepository firebaseAuthRepository;
     private LiveData<PlaceDetailsViewState> placeDetailsLiveData;
     private final String placeId;
 
@@ -28,15 +31,22 @@ public class DetailViewModel extends ViewModel {
      * Constructor
      * @param placeRepository where we get all the places
      * @param placeId to know which restaurant we wanna get
+     * @param firestoreRepository to get info in db
      */
-    public DetailViewModel(PlaceRepository placeRepository, String placeId, FirestoreRepository firestoreRepository){
+    public DetailViewModel(
+            PlaceRepository placeRepository,
+            String placeId,
+            FirestoreRepository firestoreRepository,
+            FirebaseAuthRepository firebaseAuthRepository)
+    {
         this.placeRepository = placeRepository;
         this.firestoreRepository = firestoreRepository;
+        this.firebaseAuthRepository = firebaseAuthRepository;
         this.placeId = placeId;
 
+        //get a place using his id
         LiveData<Place> placeLiveData = placeRepository.getPlaceDetails(placeId);
         placeDetailsLiveData = Transformations.map(placeLiveData, this::parseToViewState);
-
     }
 
     /**
@@ -47,8 +57,12 @@ public class DetailViewModel extends ViewModel {
         return placeDetailsLiveData;
     }
 
+    /**
+     * To get a list of workmates who chose to eat in the restaurant displayed
+     * @return a list of workmates who chose the particular restaurant, type LiveData for the UI
+     */
     public LiveData<List<WorkmatesDetailViewState>> getWorkmatesWhoChose(){
-        LiveData<List<User>> usersWhoChoseListLD = firestoreRepository.getUserWhoChose(placeId);
+        LiveData<List<User>> usersWhoChoseListLD = firestoreRepository.getUsersWhoChose(placeId);
         return Transformations.map(usersWhoChoseListLD, this::parseToWorkmatesDetailViewState);
     }
 
@@ -58,11 +72,14 @@ public class DetailViewModel extends ViewModel {
      * @return a list of workmatesDetailViewState
      */
     private List<WorkmatesDetailViewState> parseToWorkmatesDetailViewState(List<User> users) {
+
         List<WorkmatesDetailViewState> workmatesDetailViewStateList = users.stream()
+                .filter(user -> !user.getId().equals(firebaseAuthRepository.getCurrentUser().getUid()))
                 .map(user ->
                         new WorkmatesDetailViewState(
                                 user.getId(),
-                                user.getDisplayName(),
+                                user.getDisplayName().contains(" ") ?
+                                        user.getDisplayName().split(" ")[0] : user.getDisplayName(),
                                 user.getPhotoUserUrl(),
                                 user.getRestaurantId()
                         )
@@ -102,9 +119,14 @@ public class DetailViewModel extends ViewModel {
 
     }
 
-    public void onRestaurantChoice() {
-        //TODO : if user had a restaurantId put the right logo
-        // if restaurantId doesnt exist put the right logo and when user click add restaurantId in db
+    //TODO : check if user logged has the same idRestaurant as the restaurant we are interested in
+    public LiveData<Boolean> isRestaurantChosenByUserLogged() {
+        LiveData<User> isUserLoggedChoose = firestoreRepository.userLogged(
+                firebaseAuthRepository.getCurrentUser().getUid());
+        return Transformations.map(isUserLoggedChoose, user -> {
+            return Objects.equals(user.getRestaurantId(), placeId);
+        });
     }
+
 }
 

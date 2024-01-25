@@ -50,7 +50,8 @@ public class WorkmatesViewModel extends ViewModel {
                 .map(user ->
                         new WorkmatesViewState(
                                 user.getId(),
-                                user.getDisplayName(),
+                                user.getDisplayName().contains(" ") ?
+                                        user.getDisplayName().split(" ")[0] : user.getDisplayName(),
                                 user.getPhotoUserUrl(),
                                 user.getRestaurantName(),
                                 user.getRestaurantId())

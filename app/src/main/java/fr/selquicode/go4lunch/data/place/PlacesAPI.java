@@ -1,4 +1,4 @@
-package fr.selquicode.go4lunch.data;
+package fr.selquicode.go4lunch.data.place;
 
 import fr.selquicode.go4lunch.BuildConfig;
 import fr.selquicode.go4lunch.data.model.PlaceDetailsResponse;

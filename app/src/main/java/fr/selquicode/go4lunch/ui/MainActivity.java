@@ -12,8 +12,8 @@ import androidx.lifecycle.ViewModelProvider;
 
 
 import fr.selquicode.go4lunch.R;
-import fr.selquicode.go4lunch.data.PlaceRepository;
-import fr.selquicode.go4lunch.data.RetrofitService;
+import fr.selquicode.go4lunch.data.place.PlaceRepository;
+import fr.selquicode.go4lunch.data.place.RetrofitService;
 import fr.selquicode.go4lunch.databinding.ActivityMainBinding;
 import fr.selquicode.go4lunch.ui.list.ListViewFragment;
 import fr.selquicode.go4lunch.ui.map.MapViewFragment;

@@ -11,7 +11,7 @@ import com.google.android.gms.maps.GoogleMap;
 
 import java.util.List;
 
-import fr.selquicode.go4lunch.data.PlaceRepository;
+import fr.selquicode.go4lunch.data.place.PlaceRepository;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.model.Place;
 import fr.selquicode.go4lunch.data.permission_checker.PermissionChecker;

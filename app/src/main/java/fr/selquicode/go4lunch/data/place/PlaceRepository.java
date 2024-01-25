@@ -1,4 +1,4 @@
-package fr.selquicode.go4lunch.data;
+package fr.selquicode.go4lunch.data.place;
 
 import android.location.Location;
 import android.util.Log;
