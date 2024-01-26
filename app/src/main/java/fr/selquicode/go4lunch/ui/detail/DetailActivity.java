@@ -1,6 +1,7 @@
 package fr.selquicode.go4lunch.ui.detail;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -80,17 +81,16 @@ public class DetailActivity extends AppCompatActivity {
      */
     private void setViewModel() {
        detailViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(DetailViewModel.class);
-       detailViewModel.getPlaceDetails().observe(this, this::render);
-       detailViewModel.getWorkmatesWhoChose().observe(
-               this,
-               adapter::submitList
-       );
-       detailViewModel.isRestaurantChosenByUserLogged().observe(this, this::refreshFab);
+       detailViewModel.getDetailViewStateLD().observe(this, detailViewState -> {
+           render(detailViewState);
+           refreshFab(detailViewState.isUserLoggedChose());
+           adapter.submitList(detailViewState.getWorkmateList());
+       });
     }
 
     /**
      * Method to refreshes the style of the fab
-     * @param aBoolean
+     * @param aBoolean type boolean
      */
     private void refreshFab(Boolean aBoolean) {
         if(aBoolean){
@@ -103,9 +103,9 @@ public class DetailActivity extends AppCompatActivity {
 
     /**
      * Method to display elements on screen
-     * @param placeDetailsViewState a Place with attributes type ViewState
+     * @param detailViewState data from database
      */
-    private void render(PlaceDetailsViewState placeDetailsViewState) {
+    private void render(DetailViewState detailViewState) {
         final ImageView restaurantImg = binding.imageRestaurant;
         final TextView name = binding.nameRestaurant;
         final TextView address = binding.addressRestaurant;
@@ -116,33 +116,33 @@ public class DetailActivity extends AppCompatActivity {
         final TextView websiteTV = binding.websiteTextview;
 
         // set restaurant's img
-        setRestaurantImg(placeDetailsViewState, restaurantImg);
+        setRestaurantImg(detailViewState, restaurantImg);
 
         // name and address
-        restaurantName = placeDetailsViewState.getNameRestaurant();
-        name.setText(placeDetailsViewState.getNameRestaurant());
-        address.setText(placeDetailsViewState.getVicinity());
+        restaurantName = detailViewState.getNameRestaurant();
+        name.setText(detailViewState.getNameRestaurant());
+        address.setText(detailViewState.getVicinity());
 
         // rating bar
-        rating.setRating(placeDetailsViewState.getRatings());
+        rating.setRating(detailViewState.getRatings());
 
         // call phone number
-        goToPhoneNumber(placeDetailsViewState, callBtn, callTV);
+        goToPhoneNumber(detailViewState, callBtn, callTV);
 
         // go to website
-        goToWebsite(placeDetailsViewState, website, websiteTV);
+        goToWebsite(detailViewState, website, websiteTV);
 
     }
 
     /**
      * Method to set restaurant's image
-     * @param placeDetailsViewState details of place type ViewState
+     * @param detailViewState details of place type ViewState
      * @param restaurantImg ImageView in layout
      */
-    private void setRestaurantImg(PlaceDetailsViewState placeDetailsViewState, ImageView restaurantImg) {
-        if(placeDetailsViewState.getRestaurantImg() != null || placeDetailsViewState.getRestaurantImg().getPhoto_reference() != null){
+    private void setRestaurantImg(DetailViewState detailViewState, ImageView restaurantImg) {
+        if(detailViewState.getRestaurantImg() != null || detailViewState.getRestaurantImg().getPhoto_reference() != null){
             String imgURL = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference="
-                    + placeDetailsViewState.getRestaurantImg().getPhoto_reference() + "&key=" + BuildConfig.MAPS_API_KEY;
+                    + detailViewState.getRestaurantImg().getPhoto_reference() + "&key=" + BuildConfig.MAPS_API_KEY;
             Glide.with(MainApplication.getApplication()).load(imgURL).centerCrop().into(restaurantImg);
         }else{
             Glide.with(MainApplication.getApplication()).load(R.drawable.no_img_available).into(restaurantImg);
@@ -151,15 +151,15 @@ public class DetailActivity extends AppCompatActivity {
 
     /**
      * Method to open dialog with restaurant's phone number, when phone icon is clicked
-     * @param placeDetailsViewState details of place type viewState
+     * @param detailViewState details of place type viewState
      * @param callBtn phone icon in layout
      * @param callTV phone TextView in layout
      */
-    private void goToPhoneNumber(PlaceDetailsViewState placeDetailsViewState, ImageView callBtn, TextView callTV) {
-        if(placeDetailsViewState.getPhoneNumber() != null){
+    private void goToPhoneNumber(DetailViewState detailViewState, ImageView callBtn, TextView callTV) {
+        if(detailViewState.getPhoneNumber() != null){
             //if there is a phone to call open Dialer to call the phone number
             callBtn.setOnClickListener(view -> {
-                Uri phoneNumber = Uri.parse("tel:" + placeDetailsViewState.getPhoneNumber());
+                Uri phoneNumber = Uri.parse("tel:" + detailViewState.getPhoneNumber());
                 Intent callPhoneNumber = new Intent(Intent.ACTION_DIAL, phoneNumber);
                 try{
                     startActivity(callPhoneNumber);
@@ -176,15 +176,15 @@ public class DetailActivity extends AppCompatActivity {
 
     /**
      * Method to open the website in browser's window
-     * @param placeDetailsViewState details of place type ViewState
+     * @param detailViewState details of place type ViewState
      * @param website icon website in layout
      * @param websiteTV website TextView in layout
      */
-    private void goToWebsite(PlaceDetailsViewState placeDetailsViewState, ImageView website, TextView websiteTV) {
-        if(placeDetailsViewState.getWebsite() != null){
+    private void goToWebsite(DetailViewState detailViewState, ImageView website, TextView websiteTV) {
+        if(detailViewState.getWebsite() != null){
             //if there is a website open it in browser's window
             website.setOnClickListener(view -> {
-                Uri websiteURI = Uri.parse(placeDetailsViewState.getWebsite());
+                Uri websiteURI = Uri.parse(detailViewState.getWebsite());
                 Intent goToWebsite = new Intent(Intent.ACTION_VIEW, websiteURI);
                 try{
                     startActivity(goToWebsite);

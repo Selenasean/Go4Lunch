@@ -3,11 +3,13 @@ package fr.selquicode.go4lunch.ui.detail;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.List;
 import java.util.Objects;
 
 import fr.selquicode.go4lunch.data.model.PlacePhoto;
+import fr.selquicode.go4lunch.data.model.Workmate;
 
-public class PlaceDetailsViewState {
+public class DetailViewState {
 
     @NonNull
     private final String idRestaurant;
@@ -18,19 +20,24 @@ public class PlaceDetailsViewState {
     @Nullable
     private final PlacePhoto restaurantImg;
 
-    @NonNull
     private final float ratings;
 
+    @NonNull
+    private final List<Workmate> workmateList;
 
-    public PlaceDetailsViewState(
+    private boolean isUserLoggedChose;
+
+    public DetailViewState(
             @NonNull String idRestaurant,
             @Nullable String nameRestaurant,
             @Nullable String vicinity,
             @Nullable String phoneNumber,
             @Nullable String website,
             @Nullable PlacePhoto restaurantImg,
-            @NonNull float ratings
-    ){
+            float ratings,
+            @NonNull List<Workmate> workmateList,
+            boolean isUserLoggedChose
+    ) {
         this.idRestaurant = idRestaurant;
         this.nameRestaurant = nameRestaurant;
         this.vicinity = vicinity;
@@ -38,7 +45,8 @@ public class PlaceDetailsViewState {
         this.website = website;
         this.restaurantImg = restaurantImg;
         this.ratings = ratings;
-
+        this.workmateList = workmateList;
+        this.isUserLoggedChose = isUserLoggedChose;
     }
 
     //GETTERS
@@ -77,25 +85,34 @@ public class PlaceDetailsViewState {
         return ratings;
     }
 
-    //METHOD UTILS
+    @NonNull
+    public List<Workmate> getWorkmateList() {
+        return workmateList;
+    }
+
+    public boolean isUserLoggedChose() {
+        return isUserLoggedChose;
+    }
+
+    //UTILS
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof PlaceDetailsViewState)) return false;
-        PlaceDetailsViewState that = (PlaceDetailsViewState) o;
-        return Float.compare(that.getRatings(), getRatings()) == 0 && Objects.equals(getIdRestaurant(), that.getIdRestaurant()) && Objects.equals(getNameRestaurant(), that.getNameRestaurant()) && Objects.equals(getVicinity(), that.getVicinity()) && Objects.equals(getPhoneNumber(), that.getPhoneNumber()) && Objects.equals(getWebsite(), that.getWebsite()) && Objects.equals(getRestaurantImg(), that.getRestaurantImg());
+        if (!(o instanceof DetailViewState)) return false;
+        DetailViewState viewState = (DetailViewState) o;
+        return Float.compare(viewState.getRatings(), getRatings()) == 0 && isUserLoggedChose() == viewState.isUserLoggedChose() && Objects.equals(getIdRestaurant(), viewState.getIdRestaurant()) && Objects.equals(getNameRestaurant(), viewState.getNameRestaurant()) && Objects.equals(getVicinity(), viewState.getVicinity()) && Objects.equals(getPhoneNumber(), viewState.getPhoneNumber()) && Objects.equals(getWebsite(), viewState.getWebsite()) && Objects.equals(getRestaurantImg(), viewState.getRestaurantImg()) && Objects.equals(getWorkmateList(), viewState.getWorkmateList());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getIdRestaurant(), getNameRestaurant(), getVicinity(), getPhoneNumber(), getWebsite(), getRestaurantImg(), getRatings());
+        return Objects.hash(getIdRestaurant(), getNameRestaurant(), getVicinity(), getPhoneNumber(), getWebsite(), getRestaurantImg(), getRatings(), getWorkmateList(), isUserLoggedChose());
     }
 
     @NonNull
     @Override
     public String toString() {
-        return "PlaceDetailsViewState{" +
+        return "DetailViewState{" +
                 "idRestaurant='" + idRestaurant + '\'' +
                 ", nameRestaurant='" + nameRestaurant + '\'' +
                 ", vicinity='" + vicinity + '\'' +
@@ -103,6 +120,8 @@ public class PlaceDetailsViewState {
                 ", website='" + website + '\'' +
                 ", restaurantImg=" + restaurantImg +
                 ", ratings=" + ratings +
+                ", workmateList=" + workmateList +
+                ", isUserLoggedChose=" + isUserLoggedChose +
                 '}';
     }
 }

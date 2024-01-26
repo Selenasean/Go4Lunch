@@ -17,13 +17,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.List;
+
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
+import fr.selquicode.go4lunch.data.model.Workmate;
 import fr.selquicode.go4lunch.databinding.WorkmatesItemBinding;
 import fr.selquicode.go4lunch.ui.workmates.WorkmatesListViewAdapter;
 import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewState;
 
-public class WorkmatesListDetailAdapter extends ListAdapter<WorkmatesDetailViewState, WorkmatesListDetailAdapter.ViewHolder> {
+public class WorkmatesListDetailAdapter extends ListAdapter<Workmate, WorkmatesListDetailAdapter.ViewHolder> {
 
 
    public WorkmatesListDetailAdapter() {
@@ -41,17 +44,17 @@ public class WorkmatesListDetailAdapter extends ListAdapter<WorkmatesDetailViewS
             joiningString = binding.restaurantName;
         }
 
-        public void bind(WorkmatesDetailViewState item){
+        public void bind(Workmate item){
             //display workmates profile picture
             Glide.with(MainApplication.getApplication())
-                    .load(item.getPhotoUrl())
+                    .load(item.getWorkmatePhotoUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(workmatePictureProfile);
 
             // display workmates firstname
             workmateName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
             workmateName.setTextColor(ContextCompat.getColor(MainApplication.getApplication(), R.color.black));
-            workmateName.setText(item.getDisplayName());
+            workmateName.setText(item.getWorkmateDisplayName());
 
             //display "is joining"
             joiningString.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
@@ -79,15 +82,15 @@ public class WorkmatesListDetailAdapter extends ListAdapter<WorkmatesDetailViewS
 
 
 
-    public static final DiffUtil.ItemCallback<WorkmatesDetailViewState> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<WorkmatesDetailViewState>() {
+    public static final DiffUtil.ItemCallback<Workmate> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Workmate>() {
                 @Override
-                public boolean areItemsTheSame(@NonNull WorkmatesDetailViewState oldItem, @NonNull WorkmatesDetailViewState newItem) {
+                public boolean areItemsTheSame(@NonNull Workmate oldItem, @NonNull Workmate newItem) {
                     return oldItem.getWorkmateId().equals(newItem.getWorkmateId());
                 }
 
                 @Override
-                public boolean areContentsTheSame(@NonNull WorkmatesDetailViewState oldItem, @NonNull WorkmatesDetailViewState newItem) {
+                public boolean areContentsTheSame(@NonNull Workmate oldItem, @NonNull Workmate newItem) {
                     return oldItem.equals(newItem);
                 }
 

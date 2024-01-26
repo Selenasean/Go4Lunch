@@ -1,82 +1,144 @@
 package fr.selquicode.go4lunch.ui.detail;
 
 
-import android.util.Log;
-
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
-import fr.selquicode.go4lunch.data.place.PlaceRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.model.Place;
 import fr.selquicode.go4lunch.data.model.PlacePhoto;
 import fr.selquicode.go4lunch.data.model.User;
+import fr.selquicode.go4lunch.data.model.Workmate;
+import fr.selquicode.go4lunch.data.place.PlaceRepository;
 import fr.selquicode.go4lunch.ui.utils.RatingCalculator;
 
 public class DetailViewModel extends ViewModel {
 
-    private final PlaceRepository placeRepository;
     private final FirestoreRepository firestoreRepository;
     private final FirebaseAuthRepository firebaseAuthRepository;
-    private LiveData<PlaceDetailsViewState> placeDetailsLiveData;
     private final String placeId;
+    private final MediatorLiveData<DetailViewState> detailMediatorLiveData = new MediatorLiveData<>();
 
     /**
      * Constructor
-     * @param placeRepository where we get all the places
-     * @param placeId to know which restaurant we wanna get
+     * @param placeRepository     where we get all the places
+     * @param placeId             to know which restaurant we wanna get
      * @param firestoreRepository to get info in db
      */
     public DetailViewModel(
             PlaceRepository placeRepository,
             String placeId,
             FirestoreRepository firestoreRepository,
-            FirebaseAuthRepository firebaseAuthRepository)
-    {
-        this.placeRepository = placeRepository;
+            FirebaseAuthRepository firebaseAuthRepository) {
+
         this.firestoreRepository = firestoreRepository;
         this.firebaseAuthRepository = firebaseAuthRepository;
         this.placeId = placeId;
 
         //get a place using his id
         LiveData<Place> placeLiveData = placeRepository.getPlaceDetails(placeId);
-        placeDetailsLiveData = Transformations.map(placeLiveData, this::parseToViewState);
+
+        // get a list of users who choose the restaurant displayed
+        LiveData<List<User>> workmatesWhoChoseListLD = firestoreRepository.getUsersWhoChose(placeId);
+
+        //get a boolean if user logged has chosen the restaurant displayed or not
+        LiveData<User> userLoggedData = firestoreRepository.userLogged(
+                firebaseAuthRepository.getCurrentUser().getUid());
+        LiveData<Boolean> isUserLoggedChoose = Transformations.map(
+                userLoggedData,
+                user -> Objects.equals(user.getRestaurantId(), placeId));
+
+        //combine the sources of the mediatorLivedata for the UI
+        detailMediatorLiveData.addSource(
+                placeLiveData,
+                placeDetail -> combine(
+                        placeDetail,
+                        workmatesWhoChoseListLD.getValue(),
+                        isUserLoggedChoose.getValue()
+                )
+        );
+        detailMediatorLiveData.addSource(
+                workmatesWhoChoseListLD,
+                workmatesWhoChoose -> combine(
+                        placeLiveData.getValue(),
+                        workmatesWhoChoose,
+                        isUserLoggedChoose.getValue()
+                )
+        );
+        detailMediatorLiveData.addSource(
+                isUserLoggedChoose,
+                choice -> combine(
+                        placeLiveData.getValue(),
+                        workmatesWhoChoseListLD.getValue(),
+                        choice
+                )
+        );
     }
 
     /**
-     * To get the restaurant's details we are interested in, in type LiveData for the UI
-     * @return a LiveData
+     * combine the 3 sources of LiveData into one by parsing the data into right type
+     *
+     * @param place             = a place
+     * @param workmatesWhoChose = a list of workmates who chose the restaurant displayed in UI
+     * @param isUserLoggedChose = a boolean, true if user logged chose the restaurant displayed
      */
-    public LiveData<PlaceDetailsViewState> getPlaceDetails(){
-        return placeDetailsLiveData;
+    private void combine(Place place, List<User> workmatesWhoChose, Boolean isUserLoggedChose) {
+        if (place == null) {
+            return;
+        }
+        //calculate rating for 3stars
+        float rating = RatingCalculator.calculateRating((float) place.getRating());
+        //get first photo of the restaurant from the list
+        PlacePhoto photo;
+        List<PlacePhoto> photolist = place.getPlacePhotos();
+        if (photolist == null || photolist.size() == 0) {
+            photo = null;
+        } else {
+            photo = photolist.get(0);
+        }
+
+        //parse List<User> into List<Workmate>
+        List<Workmate> workmatesList = new ArrayList<>();
+        if (workmatesWhoChose != null) {
+            workmatesList = parseToWorkmatesList(workmatesWhoChose);
+        }
+
+        //create a DetailViewState
+        assert place.getPlaceId() != null;
+        DetailViewState viewState = new DetailViewState(
+                place.getPlaceId(),
+                place.getName() == null ? null : place.getName(),
+                place.getVicinity() == null ? null : place.getVicinity(),
+                place.getPhone(),
+                place.getWebsite(),
+                photo,
+                rating,
+                workmatesList,
+                isUserLoggedChose
+        );
+        //set final value into mediatorLiveData
+        detailMediatorLiveData.setValue(viewState);
     }
 
     /**
-     * To get a list of workmates who chose to eat in the restaurant displayed
-     * @return a list of workmates who chose the particular restaurant, type LiveData for the UI
+     * Method to parse a List of User into a List of Workmate
+     *
+     * @param workmatesWhoChose : a List of User
+     * @return a List of Workmate
      */
-    public LiveData<List<WorkmatesDetailViewState>> getWorkmatesWhoChose(){
-        LiveData<List<User>> usersWhoChoseListLD = firestoreRepository.getUsersWhoChose(placeId);
-        return Transformations.map(usersWhoChoseListLD, this::parseToWorkmatesDetailViewState);
-    }
-
-    /**
-     * To parse a list of User into a list of WorkmatesDetailViewState
-     * @param users a list of users
-     * @return a list of workmatesDetailViewState
-     */
-    private List<WorkmatesDetailViewState> parseToWorkmatesDetailViewState(List<User> users) {
-
-        List<WorkmatesDetailViewState> workmatesDetailViewStateList = users.stream()
+    private List<Workmate> parseToWorkmatesList(List<User> workmatesWhoChose) {
+        return workmatesWhoChose.stream()
                 .filter(user -> !user.getId().equals(firebaseAuthRepository.getCurrentUser().getUid()))
                 .map(user ->
-                        new WorkmatesDetailViewState(
+                        new Workmate(
                                 user.getId(),
                                 user.getDisplayName().contains(" ") ?
                                         user.getDisplayName().split(" ")[0] : user.getDisplayName(),
@@ -85,54 +147,20 @@ public class DetailViewModel extends ViewModel {
                         )
                 )
                 .collect(Collectors.toList());
-        return workmatesDetailViewStateList;
     }
 
     /**
-     * Method to parse a Place into a PlaceDetailsViewState
-     * @param place type Place
-     * @return a PlaceDetailsViewState
+     * To get all the data we want to display in UI
+     *
+     * @return a mediatorLiveData which is the sum of the 3 LiveData used for this UI
      */
-    private PlaceDetailsViewState parseToViewState(Place place){
-        Log.i("detailView", place.getPlaceId() + "" );
-
-        //calculate rating for 3stars
-        float rating = RatingCalculator.calculateRating((float) place.getRating());
-        //get first photo of the restaurant from the list
-        PlacePhoto photo;
-        List<PlacePhoto> photolist = place.getPlacePhotos();
-        if(photolist == null || photolist.size() == 0){
-            photo = null;
-        }else{
-            photo = photolist.get(0);
-        }
-        //create PlaceDetailsViewState from Place
-        assert place.getPlaceId() != null;
-        return new PlaceDetailsViewState(
-                place.getPlaceId(),
-                place.getName() == null ? "" : place.getName(),
-                place.getVicinity() == null ? "" : place.getVicinity(),
-                place.getPhone(),
-                place.getWebsite(),
-                photo,
-                rating);
-
-    }
-
-    /**
-     * To compare if restaurant chosen by user logged is the same as the restaurant details displayed
-     * @return boolean type LiveData
-     */
-    public LiveData<Boolean> isRestaurantChosenByUserLogged() {
-        LiveData<User> isUserLoggedChoose = firestoreRepository.userLogged(
-                firebaseAuthRepository.getCurrentUser().getUid());
-        return Transformations.map(isUserLoggedChoose, user -> {
-            return Objects.equals(user.getRestaurantId(), placeId);
-        });
+    public LiveData<DetailViewState> getDetailViewStateLD() {
+        return detailMediatorLiveData;
     }
 
     /**
      * Method that update from the firestore repository the restaurant chosen by the user logged
+     *
      * @param restaurantName a String of the restaurant's name
      */
     public void onRestaurantChoice(String restaurantName) {
