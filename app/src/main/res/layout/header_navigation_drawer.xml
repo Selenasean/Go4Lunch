@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="280dp"
+    android:layout_marginBottom="20dp"
+    android:fitsSystemWindows="true"
+    >
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/vague_clementine"
+        android:contentDescription="@string/backgroundDescription" />
+
+
+        <!-- App name -->
+        <TextView
+            android:id="@+id/app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/app_name"
+            android:textColor="?colorOnPrimary"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <!-- User detail -->
+        <LinearLayout
+            android:id="@+id/linear_lyt_user_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="8dp"
+            android:orientation="horizontal">
+
+            <!-- User profile picture -->
+            <ImageView
+                android:id="@+id/profile_picture"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="16dp"
+                android:contentDescription="@string/photo_description"
+                android:scaleType="centerCrop"
+                android:src="@drawable/round_img" />
+
+            <!-- User name & email -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/user_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="?colorOnPrimary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    tools:text="Selena" />
+
+                <TextView
+                    android:id="@+id/user_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:textColor="?colorOnPrimary"
+                    tools:text="selena@gmail.com" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+</FrameLayout>

@@ -91,7 +91,7 @@ public class DetailViewModel extends ViewModel {
      * @param isUserLoggedChose = a boolean, true if user logged chose the restaurant displayed
      */
     private void combine(Place place, List<User> workmatesWhoChose, Boolean isUserLoggedChose) {
-        if (place == null) {
+        if (place == null || isUserLoggedChose == null) {
             return;
         }
         //calculate rating for 3stars
@@ -168,6 +168,10 @@ public class DetailViewModel extends ViewModel {
                 firebaseAuthRepository.getCurrentUser().getUid(),
                 placeId,
                 restaurantName);
+    }
+
+    public void onFavoriteChoice(String restaurantName) {
+
     }
 }
 

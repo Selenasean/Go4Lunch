@@ -27,7 +27,7 @@
     <string name="catch_phrase">Trouvez un restaurant sympa et invitez vos collègues pour le repas !</string>
     <string name="backgroundDescription">Image de clementine pour le fond</string>
     <string name="no_restaurant_chosen">n\'a pas encore décidé</string>
-    <string name="is_eating">va mangé à</string>
+    <string name="is_eating">va manger à </string>
     <string name="cancelled_signin">Inscription annulée</string>
     <string name="no_network">Connexion internet à échouée</string>
     <string name="unknown_error">Erreur inconnue</string>

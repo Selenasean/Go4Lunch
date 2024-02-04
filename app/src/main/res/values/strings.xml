@@ -31,4 +31,8 @@
     <string name="no_network">internet connexion failed</string>
     <string name="unknown_error">Unknown error </string>
     <string name="is_joining">is joining</string>
+    <string name="lunch">YOUR LUNCH</string>
+    <string name="settings">SETTINGS</string>
+    <string name="logout">LOGOUT</string>
+    <string name="hungry_string">I\'m Hungry !</string>
 </resources>

@@ -69,7 +69,7 @@ public class WorkmatesListViewAdapter extends ListAdapter<WorkmatesViewState, Wo
                 restaurantName.setTypeface(Typeface.defaultFromStyle(Typeface.BOLD));
                 restaurantName.setTextColor(ContextCompat.getColor(MainApplication.getApplication(), R.color.black));
                 String string = MainApplication.getApplication().getString(R.string.is_eating);
-                String concatString = string + item.getRestaurantName();
+                String concatString = string + " "+  item.getRestaurantName();
                 restaurantName.setText(concatString);
             }else{
                 restaurantName.setText(R.string.no_restaurant_chosen);

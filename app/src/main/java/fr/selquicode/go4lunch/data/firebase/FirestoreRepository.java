@@ -160,7 +160,7 @@ public class FirestoreRepository {
                             usersWhoChoseListMLD.setValue(usersWhoChoseList);
                         } else {
                             //TODO : deal with error
-                            Log.e(TAG, "task.getException");
+                            Log.e(TAG, "task.getException in getUsersWhaChose()");
                         }
 
                     }
@@ -168,10 +168,12 @@ public class FirestoreRepository {
         return usersWhoChoseListMLD;
     }
 
-    //TODO : updtate user when he choose a place to eat
-    // - use id and restaurant name
-    // - check if the place chosen is already chosen in db
-
+    /**
+     * Request to update a restaurant chosen by user logged
+     * @param userId user id logged
+     * @param placeId restaurant id clicked by user logged
+     * @param restaurantName name of the restaurant clicked
+     */
     public void updateRestaurantChosen(String userId, String placeId, String restaurantName) {
         this.getUsersCollection().document(userId)
                 .get()
@@ -196,23 +198,22 @@ public class FirestoreRepository {
                                             "restaurantName", null
                                     );
                                 }
-//                                if (!Objects.equals(user.getRestaurantId(), placeId) && user.getRestaurantId() != null) {
-//                                    //means that the user has already chosen a restaurant but it's different than the restaurant clicked
-//
-//                                }
 
                             } else {
-                                //mean user maybe == null
+                                //means user maybe == null
                                 // TODO : deal with error if task == null
-                                try {
-                                    throw Objects.requireNonNull(task.getException());
-                                } catch (Exception e) {
-                                    throw new RuntimeException(e);
-                                }
+                                Log.e(TAG, "task.getExeption in updateRestaurantChosen");
                             }
 
                         }
                     }
                 });
     }
+
+
+    //TODO : create request to add a restaurant to favorite
+    // if favorite list = null -> add
+    // if idRestaurant != idRestaurant in the list -> add
+    // if idRestaurant = idRestaurant in the list -> remove from list
+
 }

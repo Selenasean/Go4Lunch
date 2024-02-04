@@ -65,6 +65,9 @@ public class DetailActivity extends AppCompatActivity {
 
         //btn to choose or not a restaurant
         binding.fabAddRestaurant.setOnClickListener( listener -> detailViewModel.onRestaurantChoice(restaurantName));
+
+        //btn to add restaurant to favor
+        binding.likeBtn.setOnClickListener(listener -> detailViewModel.onFavoriteChoice(restaurantName));
     }
 
     /**
