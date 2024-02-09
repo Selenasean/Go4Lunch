@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel;
 
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
@@ -29,6 +31,7 @@ public class LogInViewModel extends ViewModel {
         CreateUserRequest userToCreate = new CreateUserRequest(
                 currentUser.getUid(),
                 currentUser.getDisplayName()  == null ? "" : currentUser.getDisplayName(),
+                Objects.requireNonNull(currentUser.getEmail()),
                 currentUser.getPhotoUrl() == null ? null : currentUser.getPhotoUrl().toString()
         );
         firestoreRepository.createUser(userToCreate);

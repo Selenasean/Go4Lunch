@@ -25,7 +25,8 @@ public class DetailViewState {
     @NonNull
     private final List<Workmate> workmateList;
 
-    private boolean isUserLoggedChose;
+    private final boolean isUserLoggedChose;
+    private final boolean isPlaceInFavorites;
 
     public DetailViewState(
             @NonNull String idRestaurant,
@@ -36,7 +37,8 @@ public class DetailViewState {
             @Nullable PlacePhoto restaurantImg,
             float ratings,
             @NonNull List<Workmate> workmateList,
-            boolean isUserLoggedChose
+            boolean isUserLoggedChose,
+            boolean isPlaceInFavorites
     ) {
         this.idRestaurant = idRestaurant;
         this.nameRestaurant = nameRestaurant;
@@ -47,6 +49,7 @@ public class DetailViewState {
         this.ratings = ratings;
         this.workmateList = workmateList;
         this.isUserLoggedChose = isUserLoggedChose;
+        this.isPlaceInFavorites = isPlaceInFavorites;
     }
 
     //GETTERS
@@ -94,21 +97,10 @@ public class DetailViewState {
         return isUserLoggedChose;
     }
 
+    public boolean isPlaceInFavorites(){ return isPlaceInFavorites; }
+
+
     //UTILS
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof DetailViewState)) return false;
-        DetailViewState viewState = (DetailViewState) o;
-        return Float.compare(viewState.getRatings(), getRatings()) == 0 && isUserLoggedChose() == viewState.isUserLoggedChose() && Objects.equals(getIdRestaurant(), viewState.getIdRestaurant()) && Objects.equals(getNameRestaurant(), viewState.getNameRestaurant()) && Objects.equals(getVicinity(), viewState.getVicinity()) && Objects.equals(getPhoneNumber(), viewState.getPhoneNumber()) && Objects.equals(getWebsite(), viewState.getWebsite()) && Objects.equals(getRestaurantImg(), viewState.getRestaurantImg()) && Objects.equals(getWorkmateList(), viewState.getWorkmateList());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getIdRestaurant(), getNameRestaurant(), getVicinity(), getPhoneNumber(), getWebsite(), getRestaurantImg(), getRatings(), getWorkmateList(), isUserLoggedChose());
-    }
-
     @NonNull
     @Override
     public String toString() {
@@ -122,6 +114,20 @@ public class DetailViewState {
                 ", ratings=" + ratings +
                 ", workmateList=" + workmateList +
                 ", isUserLoggedChose=" + isUserLoggedChose +
+                ", isPlaceInFavorites=" + isPlaceInFavorites +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof DetailViewState)) return false;
+        DetailViewState viewState = (DetailViewState) o;
+        return Float.compare(viewState.getRatings(), getRatings()) == 0 && isUserLoggedChose() == viewState.isUserLoggedChose() && isPlaceInFavorites() == viewState.isPlaceInFavorites() && Objects.equals(getIdRestaurant(), viewState.getIdRestaurant()) && Objects.equals(getNameRestaurant(), viewState.getNameRestaurant()) && Objects.equals(getVicinity(), viewState.getVicinity()) && Objects.equals(getPhoneNumber(), viewState.getPhoneNumber()) && Objects.equals(getWebsite(), viewState.getWebsite()) && Objects.equals(getRestaurantImg(), viewState.getRestaurantImg()) && Objects.equals(getWorkmateList(), viewState.getWorkmateList());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIdRestaurant(), getNameRestaurant(), getVicinity(), getPhoneNumber(), getWebsite(), getRestaurantImg(), getRatings(), getWorkmateList(), isUserLoggedChose(), isPlaceInFavorites());
     }
 }

@@ -1,5 +1,10 @@
 package fr.selquicode.go4lunch.data.firebase;
 
+import android.content.Context;
+
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -25,5 +30,9 @@ public class FirebaseAuthRepository {
      */
     public boolean isUserLogged(){
         return getCurrentUser() != null;
+    }
+
+    public Task<Void> signOut(Context context){
+        return AuthUI.getInstance().signOut(context);
     }
 }

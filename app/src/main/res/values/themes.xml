@@ -53,4 +53,10 @@
         <item name="android:statusBarColor" >@android:color/transparent</item>
     </style>
 
+    //For navigation view and text style
+    <style name="BottomNavigationViewStyle">
+        <item name="android:textAllCaps">true</item>
+    </style>
+
+
 </resources>

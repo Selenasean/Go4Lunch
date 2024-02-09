@@ -31,7 +31,7 @@ public class DetailActivity extends AppCompatActivity {
     private String restaurantName;
     private DetailViewModel detailViewModel;
     private final WorkmatesListDetailAdapter adapter = new WorkmatesListDetailAdapter();
-
+    private Boolean isPlaceInFavorites;
 
     /**
      * Start DetailActivity
@@ -63,11 +63,15 @@ public class DetailActivity extends AppCompatActivity {
         //settings for RecycleView
         setRecycleView();
 
-        //btn to choose or not a restaurant
+        //btn to choose or not a restaurant user is gonna eat to
         binding.fabAddRestaurant.setOnClickListener( listener -> detailViewModel.onRestaurantChoice(restaurantName));
 
-        //btn to add restaurant to favor
-        binding.likeBtn.setOnClickListener(listener -> detailViewModel.onFavoriteChoice(restaurantName));
+        //btn to chose restaurant to add on favorite restaurant's list
+        binding.likeBtn.setOnClickListener( listener -> {
+            Log.i("detailAct", String.valueOf(isPlaceInFavorites));
+            detailViewModel.onFavoriteChoice(isPlaceInFavorites);
+
+        });
     }
 
     /**
@@ -87,16 +91,32 @@ public class DetailActivity extends AppCompatActivity {
        detailViewModel.getDetailViewStateLD().observe(this, detailViewState -> {
            render(detailViewState);
            refreshFab(detailViewState.isUserLoggedChose());
+           isPlaceInFavorites = detailViewState.isPlaceInFavorites();
+           refreshFavorites();
            adapter.submitList(detailViewState.getWorkmateList());
        });
     }
 
     /**
-     * Method to refreshes the style of the fab
-     * @param aBoolean type boolean
+     * Method to refresh the like textView according the boolean isPlaceInFavorites
      */
-    private void refreshFab(Boolean aBoolean) {
-        if(aBoolean){
+    private void refreshFavorites() {
+        TextView likeTV = binding.likeTextview;
+        if(isPlaceInFavorites){
+            likeTV.setText(R.string.unlike);
+            likeTV.setTextSize(13);
+        } else{
+            likeTV.setText(R.string.like);
+            likeTV.setTextSize(14);
+        }
+    }
+
+    /**
+     * Method to refreshes the style of the fab
+     * @param isUserLoggedChose type boolean
+     */
+    private void refreshFab(Boolean isUserLoggedChose) {
+        if(isUserLoggedChose){
             binding.fabAddRestaurant.setImageResource(R.drawable.baseline_check_circle_24);
         }else{
             binding.fabAddRestaurant.setImageResource(R.drawable.baseline_add_circle_24);

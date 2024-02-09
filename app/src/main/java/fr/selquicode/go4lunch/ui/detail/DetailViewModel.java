@@ -1,6 +1,8 @@
 package fr.selquicode.go4lunch.ui.detail;
 
 
+import android.util.Log;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Transformations;
@@ -26,9 +28,11 @@ public class DetailViewModel extends ViewModel {
     private final FirebaseAuthRepository firebaseAuthRepository;
     private final String placeId;
     private final MediatorLiveData<DetailViewState> detailMediatorLiveData = new MediatorLiveData<>();
+    private String userLoggedId;
 
     /**
      * Constructor
+     *
      * @param placeRepository     where we get all the places
      * @param placeId             to know which restaurant we wanna get
      * @param firestoreRepository to get info in db
@@ -43,6 +47,8 @@ public class DetailViewModel extends ViewModel {
         this.firebaseAuthRepository = firebaseAuthRepository;
         this.placeId = placeId;
 
+        // defined user logged id
+        userLoggedId = firebaseAuthRepository.getCurrentUser().getUid();
         //get a place using his id
         LiveData<Place> placeLiveData = placeRepository.getPlaceDetails(placeId);
 
@@ -50,11 +56,23 @@ public class DetailViewModel extends ViewModel {
         LiveData<List<User>> workmatesWhoChoseListLD = firestoreRepository.getUsersWhoChose(placeId);
 
         //get a boolean if user logged has chosen the restaurant displayed or not
-        LiveData<User> userLoggedData = firestoreRepository.userLogged(
-                firebaseAuthRepository.getCurrentUser().getUid());
-        LiveData<Boolean> isUserLoggedChoose = Transformations.map(
+        LiveData<User> userLoggedData = firestoreRepository.userLogged(userLoggedId);
+        LiveData<Boolean> isUserLoggedChooseLD = Transformations.map(
                 userLoggedData,
                 user -> Objects.equals(user.getRestaurantId(), placeId));
+
+        //get boolean if current restaurant is in user's favorite list
+        LiveData<Boolean> isPlaceInFavoriteListLD = Transformations.map(
+                userLoggedData,
+                user -> {
+                    Log.i("vmdetailLD", String.valueOf(user.getFavoritePlacesId()));
+                    if (user.getFavoritePlacesId().contains(placeId)) {
+                        return true;
+                    }else{
+                        return false;
+                    }
+                }
+        );
 
         //combine the sources of the mediatorLivedata for the UI
         detailMediatorLiveData.addSource(
@@ -62,7 +80,8 @@ public class DetailViewModel extends ViewModel {
                 placeDetail -> combine(
                         placeDetail,
                         workmatesWhoChoseListLD.getValue(),
-                        isUserLoggedChoose.getValue()
+                        isUserLoggedChooseLD.getValue(),
+                        isPlaceInFavoriteListLD.getValue()
                 )
         );
         detailMediatorLiveData.addSource(
@@ -70,15 +89,27 @@ public class DetailViewModel extends ViewModel {
                 workmatesWhoChoose -> combine(
                         placeLiveData.getValue(),
                         workmatesWhoChoose,
-                        isUserLoggedChoose.getValue()
+                        isUserLoggedChooseLD.getValue(),
+                        isPlaceInFavoriteListLD.getValue()
                 )
         );
         detailMediatorLiveData.addSource(
-                isUserLoggedChoose,
+                isUserLoggedChooseLD,
                 choice -> combine(
                         placeLiveData.getValue(),
                         workmatesWhoChoseListLD.getValue(),
-                        choice
+                        choice,
+                        isPlaceInFavoriteListLD.getValue()
+                )
+        );
+
+        detailMediatorLiveData.addSource(
+                isPlaceInFavoriteListLD,
+                isPlaceInFavoriteList -> combine(
+                        placeLiveData.getValue(),
+                        workmatesWhoChoseListLD.getValue(),
+                        isUserLoggedChooseLD.getValue(),
+                        isPlaceInFavoriteList
                 )
         );
     }
@@ -86,14 +117,21 @@ public class DetailViewModel extends ViewModel {
     /**
      * combine the 3 sources of LiveData into one by parsing the data into right type
      *
-     * @param place             = a place
-     * @param workmatesWhoChose = a list of workmates who chose the restaurant displayed in UI
-     * @param isUserLoggedChose = a boolean, true if user logged chose the restaurant displayed
+     * @param place              = a place
+     * @param workmatesWhoChose  = a list of workmates who chose the restaurant displayed in UI
+     * @param isUserLoggedChose  = a boolean, true if user logged chose the restaurant displayed
+     * @param isPlaceInFavorites = a boolean, true if current restaurant is in user's favorite list
      */
-    private void combine(Place place, List<User> workmatesWhoChose, Boolean isUserLoggedChose) {
-        if (place == null || isUserLoggedChose == null) {
+    private void combine(
+            Place place,
+            List<User> workmatesWhoChose,
+            Boolean isUserLoggedChose,
+            Boolean isPlaceInFavorites) {
+
+        if (place == null || isUserLoggedChose == null || isPlaceInFavorites == null) {
             return;
         }
+
         //calculate rating for 3stars
         float rating = RatingCalculator.calculateRating((float) place.getRating());
         //get first photo of the restaurant from the list
@@ -111,6 +149,7 @@ public class DetailViewModel extends ViewModel {
             workmatesList = parseToWorkmatesList(workmatesWhoChose);
         }
 
+
         //create a DetailViewState
         assert place.getPlaceId() != null;
         DetailViewState viewState = new DetailViewState(
@@ -122,7 +161,8 @@ public class DetailViewModel extends ViewModel {
                 photo,
                 rating,
                 workmatesList,
-                isUserLoggedChose
+                isUserLoggedChose,
+                isPlaceInFavorites
         );
         //set final value into mediatorLiveData
         detailMediatorLiveData.setValue(viewState);
@@ -136,7 +176,7 @@ public class DetailViewModel extends ViewModel {
      */
     private List<Workmate> parseToWorkmatesList(List<User> workmatesWhoChose) {
         return workmatesWhoChose.stream()
-                .filter(user -> !user.getId().equals(firebaseAuthRepository.getCurrentUser().getUid()))
+                .filter(user -> !user.getId().equals(userLoggedId))
                 .map(user ->
                         new Workmate(
                                 user.getId(),
@@ -165,13 +205,21 @@ public class DetailViewModel extends ViewModel {
      */
     public void onRestaurantChoice(String restaurantName) {
         firestoreRepository.updateRestaurantChosen(
-                firebaseAuthRepository.getCurrentUser().getUid(),
+                userLoggedId,
                 placeId,
                 restaurantName);
     }
 
-    public void onFavoriteChoice(String restaurantName) {
 
+    public void onFavoriteChoice(Boolean isPlaceInFavorites) {
+        Log.i("vmdetail", "onfavoritechoice");
+        if (isPlaceInFavorites) {
+            Log.i("vmdetail", "id deja existant");
+            firestoreRepository.removeFromFavoriteList(userLoggedId, placeId);
+        } else {
+            Log.i("vmdetail", "id non existant");
+            firestoreRepository.addToFavoriteList(userLoggedId, placeId);
+        }
     }
 }
 

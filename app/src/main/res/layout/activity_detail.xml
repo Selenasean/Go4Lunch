@@ -99,6 +99,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingBottom="8dp"
         >
+
         <!-- Lyt for call -->
         <LinearLayout
             android:id="@+id/lyt_call"
@@ -124,13 +125,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/call"
+                android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textColor="?colorPrimary"/>
 
         </LinearLayout>
+
         <!-- Lyt for like -->
         <LinearLayout
-            android:id="@+id/lyt_like"
             android:layout_width="88dp"
             android:layout_height="88dp"
             android:orientation="vertical"
@@ -150,11 +152,15 @@
                 android:layout_marginBottom="8dp"
                 />
             <TextView
+                android:id="@+id/like_textview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="@string/like"
+                android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textColor="@color/red"/>
+
         </LinearLayout>
         <!-- Lyt for website -->
         <LinearLayout
@@ -181,6 +187,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/website"
+                android:textAllCaps="true"
                 android:textStyle="bold"
                 android:textColor="?colorPrimary"/>
 

@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.model.User;
+import fr.selquicode.go4lunch.ui.utils.WorkmatesComparator;
 
 public class WorkmatesViewModel extends ViewModel {
 
@@ -56,27 +57,11 @@ public class WorkmatesViewModel extends ViewModel {
                                 user.getRestaurantName(),
                                 user.getRestaurantId())
                 )
-                .sorted(choiceComparator)
+                .sorted(new WorkmatesComparator.ChoiceComparator())
                 .collect(Collectors.toList());
         Log.i("WorkmatesVM", String.valueOf(usersList.size()));
         return usersList;
     }
 
-    /**
-     * To sort the list of WorkmatesViewState by displaying the users who chose a restaurant first
-     */
-    private final Comparator<WorkmatesViewState> choiceComparator = new Comparator<WorkmatesViewState>(){
-        @Override
-        public int compare(WorkmatesViewState w1, WorkmatesViewState w2) {
-            if(w1.hasChosenRestaurant() && w2.hasChosenRestaurant()){
-                return 0;
-            };
-            if(w1.hasChosenRestaurant() && !w2.hasChosenRestaurant()){
-                return -1;
-            }
-           return 1;
-        }
-
-    };
 
 }

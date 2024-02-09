@@ -90,7 +90,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         SavedStateHandle savedStateHandle = createSavedStateHandle(extras);
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //injection of the Repository in the ViewModel constructor
-            return (T) new MainViewModel(permissionChecker, locationRepository);
+            return (T) new MainViewModel(permissionChecker, locationRepository, firestoreRepository, firebaseAuthRepository);
         } else if (modelClass.isAssignableFrom(MapViewModel.class)) {
             return (T) new MapViewModel(repository, locationRepository, permissionChecker);
         } else if (modelClass.isAssignableFrom(ListViewModel.class)) {

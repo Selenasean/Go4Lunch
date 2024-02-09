@@ -8,14 +8,19 @@ import java.util.List;
 public class CreateUserRequest {
 
     @NonNull
-    String id, displayName;
+    String id, displayName, email;
 
     @Nullable
     String photoUserUrl;
 
-    public CreateUserRequest(@NonNull String id, @NonNull String displayName, @Nullable String photoUserUrl) {
+    public CreateUserRequest(
+            @NonNull String id,
+            @NonNull String displayName,
+            @NonNull String email,
+            @Nullable String photoUserUrl) {
         this.id = id;
         this.displayName = displayName;
+        this.email = email;
         this.photoUserUrl = photoUserUrl;
     }
 
@@ -28,6 +33,11 @@ public class CreateUserRequest {
     @NonNull
     public String getDisplayName() {
         return displayName;
+    }
+
+    @NonNull
+    public String getEmail() {
+        return email;
     }
 
     @Nullable

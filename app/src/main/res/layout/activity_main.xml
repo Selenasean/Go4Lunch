@@ -8,9 +8,6 @@
     android:fitsSystemWindows="true"
     tools:context="ui.MainActivity">
 
-
-
-
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
@@ -34,6 +31,7 @@
                 android:background="@android:color/transparent"
                 android:elevation="0dp"
                 app:navigationIcon="@drawable/ic_menu"
+                app:menu="@menu/app_bar_search_menu"
                 app:title="@string/hungry_string" />
 
         </com.google.android.material.appbar.AppBarLayout>
@@ -68,9 +66,22 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/orange"
+        app:itemTextColor="?colorOnPrimary"
+        app:itemIconTint="?colorOnPrimary"
         app:headerLayout="@layout/header_navigation_drawer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/navigation_drawer_menu"/>
+        app:menu="@menu/navigation_drawer_menu"
+        app:theme="@style/BottomNavigationViewStyle"
+        >
+
+        <ImageView
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:srcCompat="@drawable/icon_go4lunch"
+            android:layout_gravity="center_horizontal|bottom"
+            android:contentDescription="@string/logo" />
+
+    </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
