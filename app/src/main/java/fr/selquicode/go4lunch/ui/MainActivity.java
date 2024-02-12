@@ -1,16 +1,25 @@
 package fr.selquicode.go4lunch.ui;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -47,6 +56,8 @@ public class MainActivity extends AppCompatActivity  {
     private final PlaceRepository repository = new PlaceRepository(RetrofitService.getPlaceAPI());
     private MainViewModel mainViewModel;
     private String placeId;
+    @Nullable
+    public AlertDialog dialog = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,14 +107,46 @@ public class MainActivity extends AppCompatActivity  {
                 }
                 break;
             case R.id.settings:
-                // TODO : open settings actvity or dialog ?
-                Log.i("navDrawer", "settings");
+                showDialogSettings();
                 break;
             case R.id.logout:
                 mainViewModel.signOut(this).addOnSuccessListener(listener -> startLogInActivity());
                 break;
         }
         return true;
+    }
+
+    private void showDialogSettings() {
+        final AlertDialog dialog = getSettingsDialog();
+        dialog.show();
+    }
+
+    private AlertDialog getSettingsDialog() {
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this, R.style.Theme_Go4Lunch);
+
+        alertBuilder.setTitle(R.string.settings_title);
+        alertBuilder.setView(R.layout.dialog_settings);
+        alertBuilder.setPositiveButton(R.string.change, null);
+        alertBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                dialog = null;
+            }
+        });
+        dialog = alertBuilder.create();
+        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
+            @Override
+            public void onShow(DialogInterface dialogInterface) {
+                Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        //TODO : do something when button clicked
+                    }
+                });
+            }
+        });
+        return dialog;
     }
 
     /**
@@ -140,6 +183,27 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu){
+        getMenuInflater().inflate(R.menu.app_bar_search_menu, menu);
+        MenuItem searchViewItem = menu.findItem(R.id.app_bar_search);
+        SearchView searchView = (SearchView) searchViewItem.getActionView();
+        assert searchView != null;
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+            @Override
+            public boolean onQueryTextSubmit(String query){
+                // TODO : if list contains query : show places -> go through viewModel using query in parameter
+                // else : show Toast
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
     /**
      * Settings to link ViewModel
      */
@@ -154,6 +218,12 @@ public class MainActivity extends AppCompatActivity  {
         });
     }
 
+    /**
+     * Method to display user logged's data the header of the drawer
+     * @param photoUserUrl user's profile picture
+     * @param displayName user's name
+     * @param email user's email
+     */
     private void setUserLoggedData(String photoUserUrl, String displayName, String email) {
         //display user profile picture
         Glide.with(MainApplication.getApplication())

@@ -17,13 +17,18 @@ import retrofit2.Response;
 
 public class PlaceRepository {
 
-    private PlacesAPI apiService;
-    private static String TAG= "PlaceRepository";
+    private final PlacesAPI apiService;
+    private static final String TAG= "PlaceRepository";
 
     public PlaceRepository(PlacesAPI apiService){
         this.apiService = apiService;
     }
 
+    /**
+     * To get all places
+     * @param location we are searching for
+     * @return list of places type LiveData
+     */
     public LiveData<List<Place>> getPlaces(Location location){
         MutableLiveData<List<Place>> placesMutableLiveData = new MutableLiveData<>();
 
@@ -49,6 +54,11 @@ public class PlaceRepository {
         return placesMutableLiveData;
     }
 
+    /**
+     * To get details of a place
+     * @param placeId of the place we are looking for
+     * @return details of the place type LiveData
+     */
     public LiveData<Place> getPlaceDetails(String placeId){
         MutableLiveData<Place> placeDetailsMutableLiveData = new MutableLiveData<>();
 
@@ -71,5 +81,9 @@ public class PlaceRepository {
 
         return placeDetailsMutableLiveData;
     }
+
+    //TODO : method to request PlaceAutocomplete with location & string in parameters
+    // return list of places type LiveData
+    // compare result from request's response and list retrieved by the getPlaces()
 
 }

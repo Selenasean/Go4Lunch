@@ -43,4 +43,7 @@
     //FOR TOP APP BAR
     <string name="hungry_string">J\'ai faim !</string>
     <string name="search">Rechercher</string>
+
+    //FOR DIALOG SETTINGS
+    <string name="lunch_choice">Voici votre restaurant où manger ! </string>
 </resources>

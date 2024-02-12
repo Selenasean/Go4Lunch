@@ -27,7 +27,7 @@ public class MainViewModel extends ViewModel {
     private final LocationRepository locationRepository;
     private final FirestoreRepository firestoreRepository;
     private final FirebaseAuthRepository firebaseAuthRepository;
-    private String userLoggedId;
+    private final String userLoggedId;
 
 
     public MainViewModel(
@@ -69,4 +69,6 @@ public class MainViewModel extends ViewModel {
     public LiveData<User> getUserLogged(){
         return firestoreRepository.userLogged(userLoggedId);
     }
+
+    //TODO : get list of places from PlaceAutocomplete (type LiveData ->
 }
