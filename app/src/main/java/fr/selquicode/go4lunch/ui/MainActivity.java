@@ -1,47 +1,33 @@
 package fr.selquicode.go4lunch.ui;
 
 import android.Manifest;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Objects;
-
-import fr.selquicode.go4lunch.BuildConfig;
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
-import fr.selquicode.go4lunch.data.model.User;
 import fr.selquicode.go4lunch.data.place.PlaceRepository;
 import fr.selquicode.go4lunch.data.place.RetrofitService;
 import fr.selquicode.go4lunch.databinding.ActivityMainBinding;
-
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 import fr.selquicode.go4lunch.ui.list.ListViewFragment;
 import fr.selquicode.go4lunch.ui.login.LogInActivity;
@@ -49,8 +35,10 @@ import fr.selquicode.go4lunch.ui.map.MapViewFragment;
 import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewFragment;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
+    private static final String KEY_BUNDLE = "placesFromPlaceAutocomplete";
+    public static final String LIST_PLACE_ID = "ListOfPlacesId";
     private ActivityMainBinding binding;
 
     private final PlaceRepository repository = new PlaceRepository(RetrofitService.getPlaceAPI());
@@ -94,15 +82,16 @@ public class MainActivity extends AppCompatActivity  {
 
     /**
      * To chose a item in the drawer
+     *
      * @param menuItem item of the drawer : lunch, settings & logout
      * @return a boolean
      */
     private boolean navigationDrawer(MenuItem menuItem) {
-        switch(menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.lunch:
-                if(placeId != null){
-                    DetailActivity.launch(placeId,this);
-                }else{
+                if (placeId != null) {
+                    DetailActivity.launch(placeId, this);
+                } else {
                     Snackbar.make(binding.mainContent, R.string.no_lunch_chosen, Snackbar.LENGTH_SHORT).show();
                 }
                 break;
@@ -127,24 +116,14 @@ public class MainActivity extends AppCompatActivity  {
         alertBuilder.setTitle(R.string.settings_title);
         alertBuilder.setView(R.layout.dialog_settings);
         alertBuilder.setPositiveButton(R.string.change, null);
-        alertBuilder.setOnDismissListener(new DialogInterface.OnDismissListener() {
-            @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                dialog = null;
-            }
-        });
+        alertBuilder.setOnDismissListener(dialogInterface -> dialog = null);
         dialog = alertBuilder.create();
-        dialog.setOnShowListener(new DialogInterface.OnShowListener() {
-            @Override
-            public void onShow(DialogInterface dialogInterface) {
-                Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                button.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        //TODO : do something when button clicked
-                    }
-                });
-            }
+
+        dialog.setOnShowListener(dialogInterface -> {
+            Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            button.setOnClickListener(view -> {
+                //TODO : do something when button clicked
+            });
         });
         return dialog;
     }
@@ -159,16 +138,17 @@ public class MainActivity extends AppCompatActivity  {
     /**
      * Method that allows us to replace fragment according to the item selected by user
      */
-    private void replaceFragment(Fragment fragment){
+    private void replaceFragment(Fragment fragment) {
         FragmentManager fragmentMg = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentMg.beginTransaction();
         fragmentTransaction.replace(R.id.fragment_container, fragment);
         fragmentTransaction.commit();
     }
+
     /**
      * Choice of fragments
      */
-    private boolean fragmentChoice(MenuItem item){
+    private boolean fragmentChoice(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.mapView:
                 MainActivity.this.replaceFragment(new MapViewFragment());
@@ -183,17 +163,28 @@ public class MainActivity extends AppCompatActivity  {
         return true;
     }
 
+    /**
+     * To search a restaurant
+     * @param menu menu app bar
+     * @return a boolean
+     */
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.app_bar_search_menu, menu);
         MenuItem searchViewItem = menu.findItem(R.id.app_bar_search);
         SearchView searchView = (SearchView) searchViewItem.getActionView();
         assert searchView != null;
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener(){
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query){
-                // TODO : if list contains query : show places -> go through viewModel using query in parameter
-                // else : show Toast
+            public boolean onQueryTextSubmit(String query) {
+                if(query != null){
+                    searchView.clearFocus();
+                    Log.i("mainActivity", "query = "+ query );
+                    mainViewModel.searchQuery(query);
+
+                }else{
+                    return false;
+                }
                 return false;
             }
 
@@ -204,25 +195,24 @@ public class MainActivity extends AppCompatActivity  {
         });
         return super.onCreateOptionsMenu(menu);
     }
+
     /**
      * Settings to link ViewModel
      */
     private void setViewModel() {
         mainViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MainViewModel.class);
-        mainViewModel.getUserLogged().observe(this, new Observer<User>() {
-            @Override
-            public void onChanged(User user) {
-                placeId = user.getRestaurantId();
-                setUserLoggedData(user.getPhotoUserUrl(), user.getDisplayName(), user.getEmail());
-            }
+        mainViewModel.getUserLogged().observe(this, user -> {
+            placeId = user.getRestaurantId();
+            setUserLoggedData(user.getPhotoUserUrl(), user.getDisplayName(), user.getEmail());
         });
     }
 
     /**
-     * Method to display user logged's data the header of the drawer
+     * Method to display user logged data into the header of the drawer
+     *
      * @param photoUserUrl user's profile picture
-     * @param displayName user's name
-     * @param email user's email
+     * @param displayName  user's name
+     * @param email        user's email
      */
     private void setUserLoggedData(String photoUserUrl, String displayName, String email) {
         //display user profile picture
@@ -231,15 +221,15 @@ public class MainActivity extends AppCompatActivity  {
                 .apply(RequestOptions.circleCropTransform())
                 .into((ImageView) findViewById(R.id.profile_picture));
         //display email and firstName
-        ((TextView)findViewById(R.id.user_name)).setText((displayName.contains(" ") ?
+        ((TextView) findViewById(R.id.user_name)).setText((displayName.contains(" ") ?
                 displayName.split(" ")[0] : displayName));
-        ((TextView)findViewById(R.id.user_email)).setText(email);
+        ((TextView) findViewById(R.id.user_email)).setText(email);
     }
 
     /**
      * To start LogInActivity
      */
-    private void startLogInActivity(){
+    private void startLogInActivity() {
         Intent intent = new Intent(this, LogInActivity.class);
         this.startActivity(intent);
         finish();

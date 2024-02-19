@@ -19,5 +19,5 @@ public interface PlacesAPI {
 
     //request to get list of place according user search
     @GET("autocomplete/json?radius=5000&type=restaurant&key=" + BuildConfig.MAPS_API_KEY)
-    Call<PlacesAutocompleteResponse> getPlacesSearch(@Query("input") String search, @Query("location") String location);
+    Call<PlacesAutocompleteResponse> getSearchedPlaces(@Query("input") String search, @Query("location") String location);
 }

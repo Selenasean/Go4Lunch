@@ -31,7 +31,6 @@ public class DetailActivity extends AppCompatActivity {
     private String restaurantName;
     private DetailViewModel detailViewModel;
     private final WorkmatesListDetailAdapter adapter = new WorkmatesListDetailAdapter();
-    private Boolean isPlaceInFavorites;
 
     /**
      * Start DetailActivity
@@ -66,12 +65,6 @@ public class DetailActivity extends AppCompatActivity {
         //btn to choose or not a restaurant user is gonna eat to
         binding.fabAddRestaurant.setOnClickListener( listener -> detailViewModel.onRestaurantChoice(restaurantName));
 
-        //btn to chose restaurant to add on favorite restaurant's list
-        binding.likeBtn.setOnClickListener( listener -> {
-            Log.i("detailAct", String.valueOf(isPlaceInFavorites));
-            detailViewModel.onFavoriteChoice(isPlaceInFavorites);
-
-        });
     }
 
     /**
@@ -91,8 +84,10 @@ public class DetailActivity extends AppCompatActivity {
        detailViewModel.getDetailViewStateLD().observe(this, detailViewState -> {
            render(detailViewState);
            refreshFab(detailViewState.isUserLoggedChose());
-           isPlaceInFavorites = detailViewState.isPlaceInFavorites();
-           refreshFavorites();
+
+           boolean isPlaceInFavorites = detailViewState.isPlaceInFavorites();
+           refreshFavorites(isPlaceInFavorites);
+
            adapter.submitList(detailViewState.getWorkmateList());
        });
     }
@@ -100,7 +95,7 @@ public class DetailActivity extends AppCompatActivity {
     /**
      * Method to refresh the like textView according the boolean isPlaceInFavorites
      */
-    private void refreshFavorites() {
+    private void refreshFavorites(boolean isPlaceInFavorites) {
         TextView likeTV = binding.likeTextview;
         if(isPlaceInFavorites){
             likeTV.setText(R.string.unlike);
@@ -109,6 +104,13 @@ public class DetailActivity extends AppCompatActivity {
             likeTV.setText(R.string.like);
             likeTV.setTextSize(14);
         }
+
+        //btn to chose restaurant to add on favorite restaurant's list
+        binding.likeBtn.setOnClickListener( listener -> {
+            Log.i("detailAct", String.valueOf(isPlaceInFavorites));
+            detailViewModel.onFavoriteChoice(isPlaceInFavorites);
+
+        });
     }
 
     /**

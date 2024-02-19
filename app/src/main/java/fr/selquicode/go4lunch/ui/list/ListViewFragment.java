@@ -45,12 +45,9 @@ public class ListViewFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         //settings for ViewModel and Observer
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(ListViewModel.class);
-        viewModel.getPlaces().observe(getViewLifecycleOwner(), new Observer<List<ListViewState>>() {
-            @Override
-            public void onChanged(List<ListViewState> listViewStates) {
-                adapter.submitList(listViewStates);
-                Log.i("listVS", listViewStates.toString());
-            }
+        viewModel.getPlaces().observe(getViewLifecycleOwner(), listViewStates -> {
+            adapter.submitList(listViewStates);
+            Log.i("listVS", listViewStates.toString());
         });
 
         //settings for recyclerView

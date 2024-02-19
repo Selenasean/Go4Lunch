@@ -14,6 +14,8 @@ import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.List;
+
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.data.place.PlaceRepository;
 import fr.selquicode.go4lunch.data.place.RetrofitService;
@@ -21,6 +23,7 @@ import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.permission_checker.PermissionChecker;
+import fr.selquicode.go4lunch.ui.MainActivity;
 import fr.selquicode.go4lunch.ui.MainViewModel;
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 import fr.selquicode.go4lunch.ui.detail.DetailViewModel;
@@ -55,7 +58,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     }
 
     //Injection : reaching PlacesNearbySearchResponseAPI by putting it in repository constructor
-    private final PlaceRepository repository = new PlaceRepository(RetrofitService.getPlaceAPI());
+    private final PlaceRepository placeRepository = new PlaceRepository(RetrofitService.getPlaceAPI());
     private final LocationRepository locationRepository;
     private final PermissionChecker permissionChecker;
     private final FirebaseAuthRepository firebaseAuthRepository;
@@ -90,16 +93,16 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         SavedStateHandle savedStateHandle = createSavedStateHandle(extras);
         if (modelClass.isAssignableFrom(MainViewModel.class)) {
             //injection of the Repository in the ViewModel constructor
-            return (T) new MainViewModel(permissionChecker, locationRepository, firestoreRepository, firebaseAuthRepository);
+            return (T) new MainViewModel(permissionChecker, locationRepository, firestoreRepository, firebaseAuthRepository, placeRepository);
         } else if (modelClass.isAssignableFrom(MapViewModel.class)) {
-            return (T) new MapViewModel(repository, locationRepository, permissionChecker);
+            return (T) new MapViewModel(placeRepository, locationRepository, permissionChecker);
         } else if (modelClass.isAssignableFrom(ListViewModel.class)) {
-            return (T) new ListViewModel(repository, locationRepository);
+            return (T) new ListViewModel(placeRepository, locationRepository);
         } else if (modelClass.isAssignableFrom(WorkmatesViewModel.class)) {
             return (T) new WorkmatesViewModel(firestoreRepository, firebaseAuthRepository);
         } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {
             String placeId = savedStateHandle.get(DetailActivity.PLACE_ID);
-            return (T) new DetailViewModel(repository, placeId, firestoreRepository, firebaseAuthRepository);
+            return (T) new DetailViewModel(placeRepository, placeId, firestoreRepository, firebaseAuthRepository);
         } else if (modelClass.isAssignableFrom(LogInViewModel.class)) {
             return (T) new LogInViewModel(firebaseAuthRepository, firestoreRepository);
         }

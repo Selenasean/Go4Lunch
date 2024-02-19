@@ -64,6 +64,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         Log.i("MainActivity", places.size() + "");
         for (Place place : places) {
             Log.i("MainActivity", place.toString());
+            assert place.getGeometry() != null;
+            //TODO : list empty : marker present anyway , why ?
             LatLng restaurant = new LatLng(place.getGeometry().getLocation().getLat(), place.getGeometry().getLocation().getLng());
             map.addMarker(new MarkerOptions()
                     .position(restaurant)
@@ -85,7 +87,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     @SuppressLint("MissingPermission")
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
-        // Add a marker in Lognes and move the camera
+        // move the camera to lognes
         LatLng lognes = new LatLng(48.834275, 2.63731);
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(lognes, 16));
         // add a sign on map to see user's localisation

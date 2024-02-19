@@ -36,6 +36,7 @@ public class DetailViewModel extends ViewModel {
      * @param placeRepository     where we get all the places
      * @param placeId             to know which restaurant we wanna get
      * @param firestoreRepository to get info in db
+     * @param firebaseAuthRepository where we get user logged data
      */
     public DetailViewModel(
             PlaceRepository placeRepository,
@@ -57,22 +58,6 @@ public class DetailViewModel extends ViewModel {
 
         //get a boolean if user logged has chosen the restaurant displayed or not
         LiveData<User> userLoggedData = firestoreRepository.userLogged(userLoggedId);
-        LiveData<Boolean> isUserLoggedChooseLD = Transformations.map(
-                userLoggedData,
-                user -> Objects.equals(user.getRestaurantId(), placeId));
-
-        //get boolean if current restaurant is in user's favorite list
-        LiveData<Boolean> isPlaceInFavoriteListLD = Transformations.map(
-                userLoggedData,
-                user -> {
-                    Log.i("vmdetailLD", String.valueOf(user.getFavoritePlacesId()));
-                    if (user.getFavoritePlacesId().contains(placeId)) {
-                        return true;
-                    }else{
-                        return false;
-                    }
-                }
-        );
 
         //combine the sources of the mediatorLivedata for the UI
         detailMediatorLiveData.addSource(
@@ -80,8 +65,7 @@ public class DetailViewModel extends ViewModel {
                 placeDetail -> combine(
                         placeDetail,
                         workmatesWhoChoseListLD.getValue(),
-                        isUserLoggedChooseLD.getValue(),
-                        isPlaceInFavoriteListLD.getValue()
+                        userLoggedData.getValue()
                 )
         );
         detailMediatorLiveData.addSource(
@@ -89,29 +73,18 @@ public class DetailViewModel extends ViewModel {
                 workmatesWhoChoose -> combine(
                         placeLiveData.getValue(),
                         workmatesWhoChoose,
-                        isUserLoggedChooseLD.getValue(),
-                        isPlaceInFavoriteListLD.getValue()
+                        userLoggedData.getValue()
                 )
         );
         detailMediatorLiveData.addSource(
-                isUserLoggedChooseLD,
-                choice -> combine(
+                userLoggedData,
+                userLogged -> combine(
                         placeLiveData.getValue(),
                         workmatesWhoChoseListLD.getValue(),
-                        choice,
-                        isPlaceInFavoriteListLD.getValue()
+                        userLogged
                 )
         );
 
-        detailMediatorLiveData.addSource(
-                isPlaceInFavoriteListLD,
-                isPlaceInFavoriteList -> combine(
-                        placeLiveData.getValue(),
-                        workmatesWhoChoseListLD.getValue(),
-                        isUserLoggedChooseLD.getValue(),
-                        isPlaceInFavoriteList
-                )
-        );
     }
 
     /**
@@ -119,16 +92,14 @@ public class DetailViewModel extends ViewModel {
      *
      * @param place              = a place
      * @param workmatesWhoChose  = a list of workmates who chose the restaurant displayed in UI
-     * @param isUserLoggedChose  = a boolean, true if user logged chose the restaurant displayed
-     * @param isPlaceInFavorites = a boolean, true if current restaurant is in user's favorite list
+     * @param userLogged = user logged data
      */
     private void combine(
             Place place,
             List<User> workmatesWhoChose,
-            Boolean isUserLoggedChose,
-            Boolean isPlaceInFavorites) {
+            User userLogged) {
 
-        if (place == null || isUserLoggedChose == null || isPlaceInFavorites == null) {
+        if (place == null || userLogged == null) {
             return;
         }
 
@@ -149,7 +120,6 @@ public class DetailViewModel extends ViewModel {
             workmatesList = parseToWorkmatesList(workmatesWhoChose);
         }
 
-
         //create a DetailViewState
         assert place.getPlaceId() != null;
         DetailViewState viewState = new DetailViewState(
@@ -161,8 +131,8 @@ public class DetailViewModel extends ViewModel {
                 photo,
                 rating,
                 workmatesList,
-                isUserLoggedChose,
-                isPlaceInFavorites
+                Objects.equals(userLogged.getRestaurantId(), placeId),
+                userLogged.getFavoritePlacesId().contains(placeId)
         );
         //set final value into mediatorLiveData
         detailMediatorLiveData.setValue(viewState);
