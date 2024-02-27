@@ -95,7 +95,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             //injection of the Repository in the ViewModel constructor
             return (T) new MainViewModel(permissionChecker, locationRepository, firestoreRepository, firebaseAuthRepository, placeRepository);
         } else if (modelClass.isAssignableFrom(MapViewModel.class)) {
-            return (T) new MapViewModel(placeRepository, locationRepository, permissionChecker);
+            return (T) new MapViewModel(placeRepository, locationRepository, permissionChecker, firestoreRepository);
         } else if (modelClass.isAssignableFrom(ListViewModel.class)) {
             return (T) new ListViewModel(placeRepository, locationRepository);
         } else if (modelClass.isAssignableFrom(WorkmatesViewModel.class)) {

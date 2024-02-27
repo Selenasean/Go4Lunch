@@ -21,27 +21,62 @@ import fr.selquicode.go4lunch.ui.utils.RatingCalculator;
 
 public class ListViewModel extends ViewModel {
 
-    private PlaceRepository placeRepository;
-    private LocationRepository locationRepository;
-    private LiveData<List<ListViewState>> listLiveData;
+    private final PlaceRepository placeRepository;
+    private final LocationRepository locationRepository;
     LiveData<Location> locationLiveData;
-
     private final MediatorLiveData<List<ListViewState>> listMediatorLiveData = new MediatorLiveData<>();
-    private final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
 
     public ListViewModel(PlaceRepository placeRepository,
                          LocationRepository locationRepository) {
         this.placeRepository = placeRepository;
         this.locationRepository = locationRepository;
 
-
+        //get the user's location
         locationLiveData = locationRepository.getLocationLiveData();
 
+        //get the list of places from the user's location
         LiveData<List<Place>> placesLiveData = Transformations.switchMap(locationLiveData, placeRepository::getPlaces);
-        listLiveData = Transformations.map(placesLiveData, this::parseToViewState);
 
+        // to get searchedPlaces from place repository
+        LiveData<List<String>> searchedPlacesLiveData = placeRepository.getSearchedPlaces();
+
+        listMediatorLiveData.addSource(
+                placesLiveData,
+                places -> combine(
+                        places,
+                        searchedPlacesLiveData.getValue()
+                )
+        );
+
+        listMediatorLiveData.addSource(
+                searchedPlacesLiveData,
+                searchedPlaces -> combine(
+                        placesLiveData.getValue(),
+                        searchedPlaces
+                )
+        );
     }
 
+    private void combine(List<Place> places, List<String> searchedPlaceId) {
+        if(places == null){
+            return;
+        }
+        if(searchedPlaceId == null){
+            List<ListViewState> placesListParsed = parseToViewState(places);
+            listMediatorLiveData.setValue(placesListParsed);
+        }else{
+            List<Place> filteredPlaces = new ArrayList<>();
+            for(Place place : places){
+                if(searchedPlaceId.contains(place.getPlaceId())){
+                    filteredPlaces.add(place);
+                }
+            }
+            List<ListViewState> filteredListParsed = parseToViewState(filteredPlaces);
+            listMediatorLiveData.setValue(filteredListParsed);
+
+        }
+
+    }
 
     private List<ListViewState> parseToViewState(List<Place> places) {
         List<ListViewState> listViewState = new ArrayList<>();
@@ -97,7 +132,7 @@ public class ListViewModel extends ViewModel {
      * @return places type LiveData
      */
     public LiveData<List<ListViewState>> getPlaces() {
-        return listLiveData;
+        return listMediatorLiveData;
     }
 
 }

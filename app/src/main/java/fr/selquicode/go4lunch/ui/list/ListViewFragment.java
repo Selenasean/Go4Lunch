@@ -16,10 +16,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 import java.util.Objects;
 
+import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.databinding.FragmentListViewBinding;
 import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 
@@ -46,7 +48,11 @@ public class ListViewFragment extends Fragment {
         //settings for ViewModel and Observer
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(ListViewModel.class);
         viewModel.getPlaces().observe(getViewLifecycleOwner(), listViewStates -> {
-            adapter.submitList(listViewStates);
+            if(listViewStates.size() < 1){
+                Toast.makeText(getContext(), R.string.no_restaurant_found, Toast.LENGTH_SHORT).show();
+            }else{
+                adapter.submitList(listViewStates);
+            }
             Log.i("listVS", listViewStates.toString());
         });
 

@@ -115,7 +115,7 @@ public class PlaceRepository {
      * @param location of the user currently logged
      */
     public void searchedPlaces(String search, Location location){
-        String locationString = location.getLatitude() + "%2C" + location.getLatitude();
+        String locationString = location.getLatitude() + "," + location.getLongitude();
         apiService.getSearchedPlaces(search, locationString).enqueue(new Callback<PlacesAutocompleteResponse>() {
             @Override
             public void onResponse(@NonNull Call<PlacesAutocompleteResponse> call, @NonNull Response<PlacesAutocompleteResponse> response) {

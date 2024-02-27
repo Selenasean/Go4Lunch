@@ -81,7 +81,6 @@ public class MainViewModel extends ViewModel {
     }
 
     public void searchQuery(String query) {
-
         if(locationRepository.getLocation() == null){
             return;
         }

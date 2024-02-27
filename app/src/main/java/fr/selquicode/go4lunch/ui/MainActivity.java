@@ -1,19 +1,30 @@
 package fr.selquicode.go4lunch.ui;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -22,6 +33,9 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
@@ -39,7 +53,9 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String KEY_BUNDLE = "placesFromPlaceAutocomplete";
     public static final String LIST_PLACE_ID = "ListOfPlacesId";
+
     private ActivityMainBinding binding;
+
 
     private final PlaceRepository repository = new PlaceRepository(RetrofitService.getPlaceAPI());
     private MainViewModel mainViewModel;
@@ -56,10 +72,12 @@ public class MainActivity extends AppCompatActivity {
         setDrawer();
 
         //ask permission to localise the user
-        this.requestPermissions(
-                new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
-                0
-        );
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            this.requestPermissions(
+                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION},
+                    0
+            );
+        }
 
         //the fragment that will be displayed by default
         replaceFragment(new MapViewFragment());
@@ -69,8 +87,32 @@ public class MainActivity extends AppCompatActivity {
         //settings for ViewModel
         setViewModel();
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                    this,
+                    Collections.singletonList(Manifest.permission.POST_NOTIFICATIONS).toArray(new String[0]),
+                    0
+            );
+        }
+//        binding.btnNotif.setOnClickListener(listener -> createNotification());
+
 
     }
+
+    private void createNotification() {
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MainApplication.CHANNEL_ID)
+                    .setSmallIcon(R.drawable.ic_food)
+                    .setContentTitle("Notification")
+                    .setContentText("A table !")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
+
+            NotificationManagerCompat.from(this).notify(0, builder.build());
+        }else {
+            Toast.makeText(this, "GIVE PERMISSION PLEASE", Toast.LENGTH_LONG).show();
+        }
+    }
+
 
     /**
      * Setting for drawer
@@ -111,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private AlertDialog getSettingsDialog() {
-        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this, R.style.Theme_Go4Lunch);
+        final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 
         alertBuilder.setTitle(R.string.settings_title);
         alertBuilder.setView(R.layout.dialog_settings);
