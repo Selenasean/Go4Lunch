@@ -4,11 +4,13 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -18,8 +20,11 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 
 import fr.selquicode.go4lunch.data.model.CreateUserRequest;
 import fr.selquicode.go4lunch.data.model.User;
@@ -31,6 +36,7 @@ public class FirestoreRepository {
     private static final String FAVORITE_PLACE = "favoritePlacesId";
     private static final String RESTAURANT_TO_EAT = "restaurantId";
     private static final String RESTAURANT_NAME = "restaurantName";
+    private static final String RESTAURANT_ADDRESS = "restaurantAddress";
     private static final String USER_NAME = "displayName";
     private static final String USER_PICTURE = "photoUserUrl";
     private final FirebaseFirestore firebaseFirestore;
@@ -68,6 +74,7 @@ public class FirestoreRepository {
                 userRequest.getId(),
                 userRequest.getDisplayName(),
                 userRequest.getEmail(),
+                null,
                 null,
                 null,
                 userRequest.getPhotoUserUrl(),
@@ -151,30 +158,6 @@ public class FirestoreRepository {
     }
 
     /**
-     * Request to get id of the place choose to eat by user logged
-     * @param userId String of the user logged id
-     * @return
-     */
-    public LiveData<String> getPlaceIdUserLogged(String userId){
-        MutableLiveData<String> placeIdUserLogged = new MutableLiveData<>();
-        this.getUsersCollection().document(userId)
-                .addSnapshotListener(new EventListener<DocumentSnapshot>() {
-                    @Override
-                    public void onEvent(@Nullable DocumentSnapshot value, @Nullable FirebaseFirestoreException error) {
-                        if(error == null && value != null){
-                            User userLogged = value.toObject(User.class);
-                            assert userLogged != null;
-                            placeIdUserLogged.setValue(userLogged.getRestaurantId());
-                        } else {
-                            // TODO deal with error
-                            Log.e(TAG, "task.getException in getPlaceIdUserLogged");
-                        }
-                    }
-                });
-                return placeIdUserLogged;
-    }
-
-    /**
      * Request to get a list of user who choose a specific place to eat
      *
      * @param placeId id of the restaurant chosen to eat
@@ -203,11 +186,12 @@ public class FirestoreRepository {
 
     /**
      * Request to update a restaurant chosen by user logged
-     * @param userId user id logged
-     * @param placeId restaurant id clicked by user logged
+     *
+     * @param userId         user id logged
+     * @param placeId        restaurant id clicked by user logged
      * @param restaurantName name of the restaurant clicked
      */
-    public void updateRestaurantChosen(String userId, String placeId, String restaurantName) {
+    public void updateRestaurantChosen(String userId, String placeId, String restaurantName, String restaurantAddress) {
         this.getUsersCollection().document(userId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -221,14 +205,16 @@ public class FirestoreRepository {
                                     //or that the user has clicked on a different restaurant from the one he chose
                                     getUsersCollection().document(userId).update(
                                             RESTAURANT_TO_EAT, placeId,
-                                            RESTAURANT_NAME, restaurantName
+                                            RESTAURANT_NAME, restaurantName,
+                                            RESTAURANT_ADDRESS, restaurantAddress
                                     );
                                 }
                                 if (Objects.equals(user.getRestaurantId(), placeId) && user.getRestaurantId() != null) {
                                     //means that the user has already chosen this particular restaurant : set values to null
                                     getUsersCollection().document(userId).update(
                                             RESTAURANT_TO_EAT, null,
-                                            RESTAURANT_NAME, null
+                                            RESTAURANT_NAME, null,
+                                            RESTAURANT_ADDRESS, null
                                     );
                                 }
 
@@ -244,16 +230,13 @@ public class FirestoreRepository {
     }
 
 
-    // TODO : create request to add a restaurant to favorite
-    // if idRestaurant != idRestaurant in the list -> add
-    // if idRestaurant = idRestaurant in the list -> remove from list
-
     /**
      * Request to add a restaurant to the favorite list
-     * @param userId String of the user id
+     *
+     * @param userId       String of the user id
      * @param restaurantId String of the current place id
      */
-    public void addToFavoriteList(String userId, String restaurantId){
+    public void addToFavoriteList(String userId, String restaurantId) {
         this.getUsersCollection().document(userId).update(
                 FAVORITE_PLACE,
                 FieldValue.arrayUnion(restaurantId));
@@ -261,13 +244,28 @@ public class FirestoreRepository {
 
     /**
      * Request to remove a restaurant from the favorite list
-     * @param userId String of iid user
+     *
+     * @param userId       String of iid user
      * @param restaurantId String of the current place id
      */
-    public void removeFromFavoriteList(String userId, String restaurantId){
+    public void removeFromFavoriteList(String userId, String restaurantId) {
         Log.i("reporemove", "remove");
         this.getUsersCollection().document(userId).update(
                 FAVORITE_PLACE,
                 FieldValue.arrayRemove(restaurantId));
+    }
+
+    @WorkerThread
+    public User getUserLoggedSynchronously(String userLoggedId) throws ExecutionException, InterruptedException {
+            Task<DocumentSnapshot> task = this.getUsersCollection().document(userLoggedId).get();
+            DocumentSnapshot result = Tasks.await(task);
+            return  result.toObject(User.class);
+    }
+
+    @WorkerThread
+    public List<User> getUsersWhoChooseSynchronously(String placeId) throws ExecutionException, InterruptedException {
+        Task<QuerySnapshot> task = this.getUsersCollection().whereEqualTo(RESTAURANT_TO_EAT, placeId).get();
+        QuerySnapshot result = Tasks.await(task);
+        return result.toObjects(User.class);
     }
 }

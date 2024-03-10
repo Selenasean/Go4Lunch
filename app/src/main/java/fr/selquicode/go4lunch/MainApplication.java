@@ -1,23 +1,28 @@
 package fr.selquicode.go4lunch;
 
-import static com.google.gson.internal.$Gson$Types.arrayOf;
-
-import android.Manifest;
 import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
-import android.util.Log;
 
-import androidx.core.app.ActivityCompat;
+import com.google.android.gms.location.LocationServices;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.Arrays;
-
-import fr.selquicode.go4lunch.ui.MainActivity;
+import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
+import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
+import fr.selquicode.go4lunch.data.location.LocationRepository;
+import fr.selquicode.go4lunch.data.model.Place;
+import fr.selquicode.go4lunch.data.place.PlaceRepository;
+import fr.selquicode.go4lunch.data.place.RetrofitService;
 
 public class MainApplication extends Application {
     private static Application sApplication;
     public static final String CHANNEL_ID = "MAIN_CHANNEL";
+    private LocationRepository locationRepository;
+    private FirebaseAuthRepository firebaseAuthRepository;
+    private FirestoreRepository firestoreRepository;
+    private PlaceRepository placeRepository;
 
     @Override
     public void onCreate() {
@@ -35,11 +40,30 @@ public class MainApplication extends Application {
             notificationManager.createNotificationChannel(channel);
         }
 
+        locationRepository = new LocationRepository(LocationServices.getFusedLocationProviderClient(this));
+        firebaseAuthRepository = new FirebaseAuthRepository(FirebaseAuth.getInstance());
+        firestoreRepository = new FirestoreRepository(FirebaseFirestore.getInstance());
+        placeRepository = new PlaceRepository(RetrofitService.getPlaceAPI());
 
     }
 
-    public static Application getApplication() {
-        return sApplication;
+    public static MainApplication getApplication() {
+        return (MainApplication) sApplication;
     }
 
+    public LocationRepository getLocationRepository() {
+        return locationRepository;
+    }
+
+    public FirebaseAuthRepository getFirebaseAuthRepository() {
+        return firebaseAuthRepository;
+    }
+
+    public FirestoreRepository getFirestoreRepository() {
+        return firestoreRepository;
+    }
+
+    public PlaceRepository getPlaceRepository() {
+        return placeRepository;
+    }
 }

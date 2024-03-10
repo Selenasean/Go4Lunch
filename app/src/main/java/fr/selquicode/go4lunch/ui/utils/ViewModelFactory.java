@@ -43,13 +43,13 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
         if (factory == null) {
             synchronized (ViewModelFactory.class) {
                 if (factory == null) {
-                    Application application = MainApplication.getApplication();
+                    MainApplication application = MainApplication.getApplication();
 
                     factory = new ViewModelFactory(
                             new PermissionChecker(application),
-                            new LocationRepository(LocationServices.getFusedLocationProviderClient(application)),
-                            new FirebaseAuthRepository(FirebaseAuth.getInstance()),
-                            new FirestoreRepository(FirebaseFirestore.getInstance())
+                            application.getLocationRepository(),
+                            application.getFirebaseAuthRepository(),
+                            application.getFirestoreRepository()
                     );
                 }
             }
@@ -58,7 +58,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     }
 
     //Injection : reaching PlacesNearbySearchResponseAPI by putting it in repository constructor
-    private final PlaceRepository placeRepository = new PlaceRepository(RetrofitService.getPlaceAPI());
+    private final PlaceRepository placeRepository = MainApplication.getApplication().getPlaceRepository();
     private final LocationRepository locationRepository;
     private final PermissionChecker permissionChecker;
     private final FirebaseAuthRepository firebaseAuthRepository;

@@ -99,19 +99,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    private void createNotification() {
-        if(ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED){
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(this, MainApplication.CHANNEL_ID)
-                    .setSmallIcon(R.drawable.ic_food)
-                    .setContentTitle("Notification")
-                    .setContentText("A table !")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT);
 
-            NotificationManagerCompat.from(this).notify(0, builder.build());
-        }else {
-            Toast.makeText(this, "GIVE PERMISSION PLEASE", Toast.LENGTH_LONG).show();
-        }
-    }
 
 
     /**

@@ -15,7 +15,7 @@ public class User {
     String id, displayName, email;
 
     @Nullable
-    String restaurantId, restaurantName, photoUserUrl;
+    String restaurantId, restaurantName, photoUserUrl, restaurantAddress;
 
     @Nullable
     List<String> favoritePlacesId;
@@ -26,6 +26,7 @@ public class User {
             @NonNull String email,
             @Nullable String restaurantId,
             @Nullable String restaurantName,
+            @Nullable String restaurantAddress,
             @Nullable String photoUserUrl,
             @Nullable List<String> favoritePlacesId
     ) {
@@ -34,6 +35,7 @@ public class User {
         this.email = email;
         this.restaurantId = restaurantId;
         this.restaurantName = restaurantName;
+        this.restaurantAddress = restaurantAddress;
         this.photoUserUrl = photoUserUrl;
         this.favoritePlacesId = favoritePlacesId;
     }
@@ -78,6 +80,11 @@ public class User {
         return favoritePlacesId;
     }
 
+    @Nullable
+    public String getRestaurantAddress() {
+        return restaurantAddress;
+    }
+
     //UTILS
     @NonNull
     @Override
@@ -89,6 +96,7 @@ public class User {
                 ", restaurantId='" + restaurantId + '\'' +
                 ", restaurantName='" + restaurantName + '\'' +
                 ", photoUserUrl='" + photoUserUrl + '\'' +
+                ", restaurantAddress='" + restaurantAddress + '\'' +
                 ", favoritePlacesId=" + favoritePlacesId +
                 '}';
     }
@@ -98,11 +106,11 @@ public class User {
         if (this == o) return true;
         if (!(o instanceof User)) return false;
         User user = (User) o;
-        return Objects.equals(getId(), user.getId()) && Objects.equals(getDisplayName(), user.getDisplayName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getRestaurantId(), user.getRestaurantId()) && Objects.equals(getRestaurantName(), user.getRestaurantName()) && Objects.equals(getPhotoUserUrl(), user.getPhotoUserUrl()) && Objects.equals(getFavoritePlacesId(), user.getFavoritePlacesId());
+        return Objects.equals(getId(), user.getId()) && Objects.equals(getDisplayName(), user.getDisplayName()) && Objects.equals(getEmail(), user.getEmail()) && Objects.equals(getRestaurantId(), user.getRestaurantId()) && Objects.equals(getRestaurantName(), user.getRestaurantName()) && Objects.equals(getPhotoUserUrl(), user.getPhotoUserUrl()) && Objects.equals(getRestaurantAddress(), user.getRestaurantAddress()) && Objects.equals(getFavoritePlacesId(), user.getFavoritePlacesId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getDisplayName(), getEmail(), getRestaurantId(), getRestaurantName(), getPhotoUserUrl(), getFavoritePlacesId());
+        return Objects.hash(getId(), getDisplayName(), getEmail(), getRestaurantId(), getRestaurantName(), getPhotoUserUrl(), getRestaurantAddress(), getFavoritePlacesId());
     }
 }

@@ -20,6 +20,7 @@ import fr.selquicode.go4lunch.data.model.PlacePhoto;
 import fr.selquicode.go4lunch.data.model.User;
 import fr.selquicode.go4lunch.data.model.Workmate;
 import fr.selquicode.go4lunch.data.place.PlaceRepository;
+import fr.selquicode.go4lunch.domain.NotificationSchedule;
 import fr.selquicode.go4lunch.ui.utils.RatingCalculator;
 
 public class DetailViewModel extends ViewModel {
@@ -29,6 +30,7 @@ public class DetailViewModel extends ViewModel {
     private final String placeId;
     private final MediatorLiveData<DetailViewState> detailMediatorLiveData = new MediatorLiveData<>();
     private String userLoggedId;
+    private NotificationSchedule notificationSchedule;
 
     /**
      * Constructor
@@ -173,11 +175,13 @@ public class DetailViewModel extends ViewModel {
      *
      * @param restaurantName a String of the restaurant's name
      */
-    public void onRestaurantChoice(String restaurantName) {
+    public void onRestaurantChoice(String restaurantName, String restaurantAddress) {
         firestoreRepository.updateRestaurantChosen(
                 userLoggedId,
                 placeId,
-                restaurantName);
+                restaurantName,
+                restaurantAddress);
+        notificationSchedule.scheduleNotification();
     }
 
 

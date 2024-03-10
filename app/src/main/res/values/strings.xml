@@ -48,4 +48,7 @@
     <string name="change">change</string>
     <string name="settings_title">Settings</string>
     <string name="no_restaurant_found">No restaurant found 🥺</string>
+    <string name="first_part_notif">"Hello ! Don't forget to go eat at %1$s, %2$s"</string>
+    <string name="second_part_notif">"with %1$s"</string>
+    <string name="give_notif_permission">Give permission to receive notifications please !</string>
 </resources>
