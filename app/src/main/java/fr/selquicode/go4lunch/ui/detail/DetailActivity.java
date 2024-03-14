@@ -11,6 +11,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -66,7 +67,7 @@ public class DetailActivity extends AppCompatActivity {
 
         //btn to choose or not a restaurant user is gonna eat to
         binding.fabAddRestaurant.setOnClickListener(listener ->
-                detailViewModel.onRestaurantChoice(restaurantName, restaurantAddress));
+            detailViewModel.onRestaurantChoice(restaurantName, restaurantAddress));
 
     }
 
@@ -202,8 +203,8 @@ public class DetailActivity extends AppCompatActivity {
             });
         } else {
             // make phone icon not clickable and grey
-            callBtn.setColorFilter(getResources().getColor(R.color.grey, null));
-            callTV.setTextColor(getResources().getColor(R.color.grey, null));
+            callBtn.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+            callTV.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
         }
     }
 
@@ -227,8 +228,8 @@ public class DetailActivity extends AppCompatActivity {
                 }
             });
         } else {
-            website.setColorFilter(getResources().getColor(R.color.grey, null));
-            websiteTV.setTextColor(getResources().getColor(R.color.grey, null));
+            website.setColorFilter(ContextCompat.getColor(getApplicationContext(), R.color.grey));
+            websiteTV.setTextColor(ContextCompat.getColor(getApplicationContext(), R.color.grey));
         }
     }
 

@@ -9,6 +9,7 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,6 +64,17 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
 
             //set distance between user's location and restaurant's location
             distance.setText(String.valueOf(item.getDistance()));
+
+            // set opening
+            if(item.getOpening()!= null){
+                if(item.getOpening()){
+                    opening.setText(R.string.open);
+                    opening.setTextColor(ContextCompat.getColor(MainApplication.getApplication().getApplicationContext(), R.color.green));
+                }else{
+                    opening.setText(R.string.closed);
+                    opening.setTextColor(ContextCompat.getColor(MainApplication.getApplication().getApplicationContext(),R.color.red));
+                }
+            }
 
         }
     }

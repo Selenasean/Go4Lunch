@@ -48,7 +48,7 @@ public class ListViewFragment extends Fragment {
         //settings for ViewModel and Observer
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(ListViewModel.class);
         viewModel.getPlaces().observe(getViewLifecycleOwner(), listViewStates -> {
-            if(listViewStates.size() < 1){
+            if(listViewStates.isEmpty()){
                 Toast.makeText(getContext(), R.string.no_restaurant_found, Toast.LENGTH_SHORT).show();
             }else{
                 adapter.submitList(listViewStates);
@@ -61,7 +61,7 @@ public class ListViewFragment extends Fragment {
     }
 
     /**
-     * Settings for Recycleview
+     * Settings for Recyclerview
      */
     private void setRecyclerView() {
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this.requireContext(), DividerItemDecoration.VERTICAL);

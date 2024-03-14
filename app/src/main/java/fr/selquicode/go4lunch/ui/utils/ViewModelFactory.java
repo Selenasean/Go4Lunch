@@ -2,28 +2,20 @@ package fr.selquicode.go4lunch.ui.utils;
 
 import static androidx.lifecycle.SavedStateHandleSupport.createSavedStateHandle;
 
-import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.SavedStateHandle;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.viewmodel.CreationExtras;
-
-import com.google.android.gms.location.LocationServices;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.FirebaseFirestore;
-
-import java.util.List;
+import androidx.work.WorkManager;
 
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.data.place.PlaceRepository;
-import fr.selquicode.go4lunch.data.place.RetrofitService;
 import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.permission_checker.PermissionChecker;
-import fr.selquicode.go4lunch.ui.MainActivity;
+import fr.selquicode.go4lunch.domain.NotificationSchedule;
 import fr.selquicode.go4lunch.ui.MainViewModel;
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 import fr.selquicode.go4lunch.ui.detail.DetailViewModel;
@@ -49,8 +41,8 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
                             new PermissionChecker(application),
                             application.getLocationRepository(),
                             application.getFirebaseAuthRepository(),
-                            application.getFirestoreRepository()
-                    );
+                            application.getFirestoreRepository(),
+                            new NotificationSchedule(WorkManager.getInstance(MainApplication.getApplication().getApplicationContext())));
                 }
             }
         }
@@ -63,6 +55,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
     private final PermissionChecker permissionChecker;
     private final FirebaseAuthRepository firebaseAuthRepository;
     private final FirestoreRepository firestoreRepository;
+    private final NotificationSchedule notificationSchedule;
 
     /**
      * Constructor
@@ -71,11 +64,13 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             PermissionChecker permissionChecker,
             LocationRepository locationRepository,
             FirebaseAuthRepository firebaseAuthRepository,
-            FirestoreRepository firestoreRepository) {
+            FirestoreRepository firestoreRepository,
+            NotificationSchedule notificationSchedule) {
         this.permissionChecker = permissionChecker;
         this.locationRepository = locationRepository;
         this.firebaseAuthRepository = firebaseAuthRepository;
         this.firestoreRepository = firestoreRepository;
+        this.notificationSchedule = notificationSchedule;
     }
 
     /**
@@ -102,7 +97,7 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new WorkmatesViewModel(firestoreRepository, firebaseAuthRepository);
         } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {
             String placeId = savedStateHandle.get(DetailActivity.PLACE_ID);
-            return (T) new DetailViewModel(placeRepository, placeId, firestoreRepository, firebaseAuthRepository);
+            return (T) new DetailViewModel(placeRepository, placeId, firestoreRepository, firebaseAuthRepository, notificationSchedule);
         } else if (modelClass.isAssignableFrom(LogInViewModel.class)) {
             return (T) new LogInViewModel(firebaseAuthRepository, firestoreRepository);
         }

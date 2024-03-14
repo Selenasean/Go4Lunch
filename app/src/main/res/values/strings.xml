@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
 
-    //string for bottom navigation bar
+    //FOR BOTTOM NAVIGATION BAR
     <string name="map">Map View</string>
     <string name="list">List View</string>
     <string name="workmates">Workmates</string>
@@ -9,7 +9,7 @@
     <string name="list_map_view_desc">icon list to see the restaurants\' list</string>
     <string name="workmates_desc">icon with people to see workmates</string>
 
-    //string for detailActivity
+    //FOR DETAIL ACTIVITY
     <string name="imageDescription">Restaurant\'s picture</string>
     <string name="fab_add">button to add a restaurant</string>
     <string name="ic_phone">phone icon to call restaurant</string>
@@ -22,7 +22,7 @@
     <string name="photo_description">workmate profile photo</string>
     <string name="icon_workmates">person icon</string>
 
-    //string for firebase layout
+    //FOR FIREBASE LAYOUT
     <string name="logo">bowl drawing logo go4Lunch</string>
     <string name="catch_phrase">Find a nice restaurant and invite your co-workers for lunch !</string>
     <string name="backgroundDescription">clementine image for background</string>
@@ -33,7 +33,7 @@
     <string name="unknown_error">Unknown error </string>
     <string name="is_joining">is joining</string>
 
-    //STRING FOR DRAWER
+    //FOR DRAWER
     <string name="lunch">your lunch</string>
     <string name="settings">settings</string>
     <string name="logout">logout</string>
@@ -48,7 +48,14 @@
     <string name="change">change</string>
     <string name="settings_title">Settings</string>
     <string name="no_restaurant_found">No restaurant found 🥺</string>
+
+    //FOR NOTIFICATION
+    <string name="notification_reminder">"Dinner's ready ! " </string>
     <string name="first_part_notif">"Hello ! Don't forget to go eat at %1$s, %2$s"</string>
     <string name="second_part_notif">"with %1$s"</string>
     <string name="give_notif_permission">Give permission to receive notifications please !</string>
+
+    //FOR LIST FRAGMENT
+    <string name="open">Open</string>
+    <string name="closed">Closed</string>
 </resources>

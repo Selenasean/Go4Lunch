@@ -7,12 +7,14 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
+import androidx.work.WorkManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.model.Place;
@@ -44,11 +46,14 @@ public class DetailViewModel extends ViewModel {
             PlaceRepository placeRepository,
             String placeId,
             FirestoreRepository firestoreRepository,
-            FirebaseAuthRepository firebaseAuthRepository) {
+            FirebaseAuthRepository firebaseAuthRepository,
+            NotificationSchedule notificationSchedule) {
 
         this.firestoreRepository = firestoreRepository;
         this.firebaseAuthRepository = firebaseAuthRepository;
         this.placeId = placeId;
+        this.notificationSchedule = notificationSchedule;
+
 
         // defined user logged id
         userLoggedId = firebaseAuthRepository.getCurrentUser().getUid();
@@ -110,7 +115,7 @@ public class DetailViewModel extends ViewModel {
         //get first photo of the restaurant from the list
         PlacePhoto photo;
         List<PlacePhoto> photolist = place.getPlacePhotos();
-        if (photolist == null || photolist.size() == 0) {
+        if (photolist == null || photolist.isEmpty()) {
             photo = null;
         } else {
             photo = photolist.get(0);
@@ -176,12 +181,22 @@ public class DetailViewModel extends ViewModel {
      * @param restaurantName a String of the restaurant's name
      */
     public void onRestaurantChoice(String restaurantName, String restaurantAddress) {
+        DetailViewState detailViewState = getDetailViewStateLD().getValue();
+        if(detailViewState != null){
+            if(!detailViewState.isUserLoggedChose()){
+                notificationSchedule.scheduleNotification();
+            }else{
+                //TODO : retirer la notif de la liste;
+            }
+        }
+
         firestoreRepository.updateRestaurantChosen(
                 userLoggedId,
                 placeId,
                 restaurantName,
                 restaurantAddress);
-        notificationSchedule.scheduleNotification();
+
+
     }
 
 

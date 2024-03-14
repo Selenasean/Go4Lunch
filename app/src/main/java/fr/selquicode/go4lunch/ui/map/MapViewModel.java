@@ -85,7 +85,7 @@ public class MapViewModel extends ViewModel {
             //TODO : find how compare place.getId and user.getRestaurantId
             if (searchedPlacesId == null) {
                 Log.i("mapVM", "places = " + places.toString());
-                List<MapViewState> listParsed = parseToMapViewState(places);
+                List<MapViewState> listParsed = parseToMapViewState(places, users);
                 placesMediatorLivedata.setValue(listParsed);
             } else {
                 Log.i("mapVM", "searchedPLaces =" + searchedPlacesId);
@@ -97,15 +97,16 @@ public class MapViewModel extends ViewModel {
                     }
                 }
                 Log.i("MapVM", "filteredPlaces = " + filteredPlaces.toString());
-                List<MapViewState> filteredListParsed = parseToMapViewState(filteredPlaces);
+                List<MapViewState> filteredListParsed = parseToMapViewState(filteredPlaces, users);
                 placesMediatorLivedata.setValue(filteredListParsed);
             }
         }
 
     }
 
-    private List<MapViewState> parseToMapViewState(List<Place> places) {
+    private List<MapViewState> parseToMapViewState(List<Place> places, List<User> users) {
     //TODO : parse list into MapViewState & find how defined boolean according to user.getRestaurantId
+
         List<MapViewState> mapViewStateList = places.stream()
                 .map( place ->
                         new MapViewState(

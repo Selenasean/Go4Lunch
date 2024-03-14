@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Go4Lunch</string>
 
-    //string for bottom navigation bar
+    //FOR BOTTOM NAVIGATION BAR
     <string name="map">Carte</string>
     <string name="list">Liste</string>
     <string name="workmates">Collègues</string>
@@ -10,7 +10,7 @@
     <string name="list_map_view_desc">Icone liste pour voir la liste des restaurants</string>
     <string name="workmates_desc">Icone de plusieurs personnes pour voir les collègues</string>
 
-    //string for detailActivity
+    //FOR DETAIL ACTIVITY
     <string name="imageDescription">Photo du restaurant</string>
     <string name="fab_add">Bouton pour ajouter un restaurant</string>
     <string name="ic_phone">Icône téléphone pour afficher le numero de téléphone du restaurant</string>
@@ -23,7 +23,7 @@
     <string name="photo_description">Photo de profil d\'un collègue</string>
     <string name="icon_workmates">Icone personne</string>
 
-    //string for firebase layout
+    //FOR FIREBASE LAYOUT
     <string name="logo">Logo Go4Lunch : dessin d\'un bol</string>
     <string name="catch_phrase">Trouvez un restaurant sympa et invitez vos collègues pour le repas !</string>
     <string name="backgroundDescription">Image de clementine pour le fond</string>
@@ -34,16 +34,29 @@
     <string name="unknown_error">Erreur inconnue</string>
     <string name="is_joining">a rejoint</string>
 
-    //STRING FOR DRAWER
+    //FOR DRAWER
     <string name="lunch">ton dejeuner</string>
     <string name="settings">parametres</string>
     <string name="logout">deconnexion</string>
     <string name="no_lunch_chosen">Vous n\'avez pas encore choisi de restaurant !</string>
 
-    //FOR TOP APP BAR
+    //TOP APP BAR
     <string name="hungry_string">J\'ai faim !</string>
     <string name="search">Rechercher</string>
 
     //FOR DIALOG SETTINGS
     <string name="lunch_choice">Voici votre restaurant où manger ! </string>
+    <string name="change">changer</string>
+    <string name="settings_title">Paramètres</string>
+    <string name="no_restaurant_found">Aucun restaurant trouvé 🥺</string>
+
+    //FOR NOTIFICATION
+    <string name="notification_reminder">"A table ! " </string>
+    <string name="first_part_notif">"Hello ! N'oublies pas d'aller manger à %1$s, %2$s"</string>
+    <string name="second_part_notif">"avec %1$s"</string>
+    <string name="give_notif_permission">Donnez la permission de recevoir des notification s\'il vous plaît !</string>
+
+    //FOR LIST FRAGMENT
+    <string name="open">Ouvert</string>
+    <string name="closed">Fermé</string>
 </resources>

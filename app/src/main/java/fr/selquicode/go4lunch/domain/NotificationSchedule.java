@@ -1,10 +1,13 @@
 package fr.selquicode.go4lunch.domain;
 
+import android.util.Log;
+
 import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 
 import androidx.work.WorkManager;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -24,17 +27,21 @@ public class NotificationSchedule {
     }
 
     public void scheduleNotification(){
-//        ZoneId z = ZoneId.of("Europe/Paris");
-        LocalTime currentTime = LocalTime.now();
-        LocalTime dueTime = LocalTime.NOON;
-
+        ZonedDateTime currentTime = ZonedDateTime.now();
+        Log.i("localtime", String.valueOf(currentTime));
+        ZonedDateTime dueTime = ZonedDateTime.of(LocalDateTime.of(LocalDate.now(), LocalTime.NOON), ZoneId.systemDefault());
+        Log.i("initialdelay", "duetime = " + dueTime + ", currentTime = " + currentTime  );
+        ZonedDateTime dueTimeFinal;
         if(dueTime.isBefore(currentTime)){
-            dueTime.plusHours(24);
+            dueTimeFinal = dueTime.plusDays(1);
+        }else {
+            dueTimeFinal = dueTime;
         }
-        long initialDelay = dueTime.getSecond() - currentTime.getSecond();
-//        .setInitialDelay( initialDelay, TimeUnit.SECONDS)
+        long initialDelay = dueTimeFinal.toEpochSecond() - currentTime.toEpochSecond();
+        Log.i("initialdelay", "initialdelay =" + initialDelay+ "dueTimeFinale = "+ dueTimeFinal);
 
         OneTimeWorkRequest uploadWorkRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                .setInitialDelay( initialDelay, TimeUnit.SECONDS)
                 .build();
         workManager.enqueueUniqueWork("notification_id", ExistingWorkPolicy.REPLACE, uploadWorkRequest);
     }

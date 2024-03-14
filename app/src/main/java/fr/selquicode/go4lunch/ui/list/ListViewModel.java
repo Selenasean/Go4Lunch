@@ -87,7 +87,7 @@ public class ListViewModel extends ViewModel {
             //to get the first photo of the restaurant from the photo's list
             List<PlacePhoto> photosList = place.getPlacePhotos();
             PlacePhoto photo;
-            if (photosList == null || photosList.size() == 0) {
+            if (photosList == null || photosList.isEmpty()) {
                 photo = null;
             } else {
                 photo = photosList.get(0);

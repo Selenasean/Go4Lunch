@@ -1,6 +1,7 @@
 package fr.selquicode.go4lunch.domain;
 
 import static fr.selquicode.go4lunch.R.string.app_name;
+import static fr.selquicode.go4lunch.R.string.notification_reminder;
 
 import android.Manifest;
 import android.app.PendingIntent;
@@ -65,10 +66,11 @@ public class NotificationWorker extends Worker {
                 String restaurantAddress = userLogged.getRestaurantAddress();
                 String notificationText = context.getString(R.string.first_part_notif, restaurantName, restaurantAddress);
                 String workmatesNames = workmatesEatingTogether.stream()
+                        .filter(user -> !user.getId().equals(firebaseAuthRepository.getCurrentUser().getUid()))
                         .map(user -> user.getDisplayName().contains(" ")?
                                 user.getDisplayName().split(" ")[0] : user.getDisplayName())
                         .collect(Collectors.joining(", "));
-                if (!workmatesEatingTogether.isEmpty()) {
+                if (!workmatesNames.isEmpty()) {
                     notificationText += " " +context.getString(R.string.second_part_notif, workmatesNames) ;
                 }
 
@@ -99,8 +101,9 @@ public class NotificationWorker extends Worker {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), MainApplication.CHANNEL_ID)
                     .setSmallIcon(R.drawable.ic_food)
-                    .setContentTitle(context.getString(app_name))
+                    .setContentTitle(context.getString(notification_reminder))
                     .setContentText(text)
+                    .setStyle(new NotificationCompat.BigTextStyle().bigText(text))
                     .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                     .setContentIntent(pendingIntent)
                     .setAutoCancel(true);

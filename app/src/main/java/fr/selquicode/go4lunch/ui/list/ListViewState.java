@@ -27,10 +27,10 @@ public class ListViewState {
     @NonNull
     private String distance;
 
-    @NonNull
+    @Nullable
     private PlacePhoto restaurantImg;
 
-    @NonNull private float ratings;
+   private float ratings;
 
 
     /**
@@ -49,7 +49,7 @@ public class ListViewState {
                          @Nullable PlacePhoto restaurantImg,
                          @NonNull String distance,
                          @Nullable Boolean opening,
-                         @NonNull float ratings
+                         float ratings
                          ){
         this.id = id;
         this.nameRestaurant = nameRestaurant;
@@ -92,7 +92,6 @@ public class ListViewState {
         return distance;
     }
 
-    @NonNull
     public float getRatings() {
         return ratings;
     }
@@ -111,6 +110,7 @@ public class ListViewState {
         return Objects.hash(getId(), getNameRestaurant(), getVicinity(), getOpening(), getRestaurantImg(), getDistance(), getRatings());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "ListViewState{" +
