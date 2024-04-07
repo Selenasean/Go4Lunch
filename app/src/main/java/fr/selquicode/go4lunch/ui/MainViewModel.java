@@ -7,7 +7,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import com.google.android.gms.tasks.Task;
@@ -77,7 +76,7 @@ public class MainViewModel extends ViewModel {
      * @return User type LiveData
      */
     public LiveData<User> getUserLogged(){
-        return firestoreRepository.userLogged(userLoggedId);
+        return firestoreRepository.getOneUser(userLoggedId);
     }
 
     public void searchQuery(String query) {

@@ -1,5 +1,6 @@
 package fr.selquicode.go4lunch.data.model;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.Expose;
@@ -46,13 +47,13 @@ public class Place {
     @Expose
     private String website;
 
-    public Place(@Nullable String placeId,
-                 @Nullable Geometry geometry,
-                 @Nullable String vicinity,
+    public Place(@NonNull String placeId,
+                 @NonNull Geometry geometry,
+                 @NonNull String vicinity,
                  @Nullable String name,
                  @Nullable PlaceOpeningHours opening,
                  @Nullable List<PlacePhoto> placePhoto,
-                 @Nullable double rating,
+                 double rating,
                  @Nullable String phone,
                  @Nullable String website){
 
@@ -71,7 +72,10 @@ public class Place {
     //GETTERS
     @Nullable
     public String getPlaceId() {
-        return placeId;
+        if(placeId != null){
+            return placeId;
+        }
+        return null;
     }
 
     @Nullable

@@ -27,7 +27,6 @@ import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 
 public class ListViewFragment extends Fragment {
 
-    private ListViewModel viewModel;
     private final ListViewAdapter adapter = new ListViewAdapter();
     private FragmentListViewBinding binding;
 
@@ -46,7 +45,7 @@ public class ListViewFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         //settings for ViewModel and Observer
-        viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(ListViewModel.class);
+        ListViewModel viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(ListViewModel.class);
         viewModel.getPlaces().observe(getViewLifecycleOwner(), listViewStates -> {
             if(listViewStates.isEmpty()){
                 Toast.makeText(getContext(), R.string.no_restaurant_found, Toast.LENGTH_SHORT).show();

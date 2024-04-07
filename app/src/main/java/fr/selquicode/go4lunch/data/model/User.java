@@ -12,7 +12,7 @@ import java.util.Objects;
 public class User {
 
     @NonNull
-    String id, displayName, email;
+    private String id, displayName, email;
 
     @Nullable
     String restaurantId, restaurantName, photoUserUrl, restaurantAddress;

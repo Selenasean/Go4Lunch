@@ -15,10 +15,12 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 
 import fr.selquicode.go4lunch.BuildConfig;
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
+import fr.selquicode.go4lunch.data.model.Message;
 import fr.selquicode.go4lunch.databinding.RestaurantItemBinding;
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 
@@ -29,24 +31,25 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView name, address, opening, distance;
+        private final TextView name, address, opening, distance, workmatesEating;
         private final ImageView restaurantImg;
         private final RatingBar rating;
 
         public ViewHolder(@NonNull RestaurantItemBinding binding) {
             super(binding.getRoot());
-            //binding element
+            //binding elements
             name = binding.nameRestaurant;
             address = binding.address;
             opening = binding.opening;
             distance = binding.meters;
             restaurantImg = binding.imageRestaurant;
             rating = binding.ratingBar;
+            workmatesEating = binding.workmatesNumber;
         }
 
         public void bind(ListViewState item) {
             //binding with viewState
-            // TODO : bind avec le viewState opening
+            // TODO : bind avec le viewState numbers of workmates
             name.setText(item.getNameRestaurant());
             address.setText(item.getVicinity());
 
@@ -59,11 +62,19 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
                 Glide.with(MainApplication.getApplication()).load(R.drawable.no_image).into(restaurantImg);
             }
 
+            //set numbers of workmates who eating in restaurant
+            if(item.getWorkmateEatingCount()>0){
+                String workmatesCount = String.valueOf(item.getWorkmateEatingCount());
+                workmatesEating.setText(workmatesCount);
+            }else{
+                workmatesEating.setText("");
+            }
+
             //set rating
             rating.setRating(item.getRatings());
 
             //set distance between user's location and restaurant's location
-            distance.setText(String.valueOf(item.getDistance()));
+            distance.setText(item.getDistance());
 
             // set opening
             if(item.getOpening()!= null){
@@ -77,6 +88,7 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
             }
 
         }
+
     }
 
     @NonNull

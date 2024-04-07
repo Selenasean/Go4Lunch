@@ -4,13 +4,11 @@ package fr.selquicode.go4lunch.ui.workmates;
 
 
 
-import static android.provider.Settings.System.getString;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -28,19 +26,27 @@ import com.bumptech.glide.request.RequestOptions;
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.databinding.WorkmatesItemBinding;
-import fr.selquicode.go4lunch.ui.detail.DetailActivity;
+import fr.selquicode.go4lunch.ui.utils.OnWorkmateClickedListener;
 
 
 public class WorkmatesListViewAdapter extends ListAdapter<WorkmatesViewState, WorkmatesListViewAdapter.ViewHolder> {
 
+    private final OnWorkmateClickedListener listener;
 
-    public WorkmatesListViewAdapter() {
+
+    public WorkmatesListViewAdapter(OnWorkmateClickedListener listener) {
         super(DIFF_CALLBACK);
+        this.listener = listener;
     }
 
+    //START PART OF THE VIEW HOLDER
+    /**
+     * ViewHolder
+     */
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final ImageView workmatePictureProfile;
         private final TextView workmateName, restaurantName;
+        private final ImageView chatBtn;
 
         public ViewHolder(@NonNull WorkmatesItemBinding binding) {
             super(binding.getRoot());
@@ -48,6 +54,7 @@ public class WorkmatesListViewAdapter extends ListAdapter<WorkmatesViewState, Wo
             workmateName = binding.workmateName;
             restaurantName = binding.restaurantName;
             workmatePictureProfile = binding.workmatePhoto;
+            chatBtn = binding.btnChat;
 
         }
 
@@ -76,9 +83,9 @@ public class WorkmatesListViewAdapter extends ListAdapter<WorkmatesViewState, Wo
             }
 
 
-
         }
     }
+    //END PART OF THE VIEW HOLDER
 
     @NonNull
     @Override
@@ -93,14 +100,24 @@ public class WorkmatesListViewAdapter extends ListAdapter<WorkmatesViewState, Wo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(getItem(position));
-        // listener only on workmate who has chosen a restaurant to eat
-        if(getItem(position).hasChosenRestaurant()){
-            holder.itemView.setOnClickListener(v ->{
-            final Context context = holder.itemView.getContext();
-            String placeId = getItem(position).getRestaurantId();
-            DetailActivity.launch(placeId, context);
-            });
-        }
+        boolean hasChosen = getItem(position).hasChosenRestaurant();
+        String placeId = getItem(position).getRestaurantId();
+        String workmateId = getItem(position).getWorkmateId();
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onWorkmateClick(hasChosen, placeId);
+            }
+        });
+
+        holder.chatBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onChatClicked(workmateId);
+            }
+        });
+
     }
 
     /**

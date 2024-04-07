@@ -19,6 +19,7 @@ public class PlacesAutocompleteResponse {
         this.placesPredictions = placesPredictions;
 
     }
+
     //GETTERS
 
     public List<PlaceAutocompletePrediction> getPlacesPredictions() {

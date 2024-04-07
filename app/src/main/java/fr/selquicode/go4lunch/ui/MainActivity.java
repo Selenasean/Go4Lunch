@@ -56,7 +56,6 @@ public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
 
-
     private final PlaceRepository repository = new PlaceRepository(RetrofitService.getPlaceAPI());
     private MainViewModel mainViewModel;
     private String placeId;
@@ -94,13 +93,7 @@ public class MainActivity extends AppCompatActivity {
                     0
             );
         }
-//        binding.btnNotif.setOnClickListener(listener -> createNotification());
-
-
     }
-
-
-
 
     /**
      * Setting for drawer

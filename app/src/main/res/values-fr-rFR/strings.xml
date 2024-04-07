@@ -36,6 +36,7 @@
 
     //FOR DRAWER
     <string name="lunch">ton dejeuner</string>
+    <string name="chat">messages</string>
     <string name="settings">parametres</string>
     <string name="logout">deconnexion</string>
     <string name="no_lunch_chosen">Vous n\'avez pas encore choisi de restaurant !</string>
@@ -59,4 +60,10 @@
     //FOR LIST FRAGMENT
     <string name="open">Ouvert</string>
     <string name="closed">Fermé</string>
+    <string name="restaurant">restaurant</string>
+
+    //CHAT ACTIVITY
+    <string name="chat_error">Ce fils de discution ne contient aucun message pour le moment..</string>
+    <string name="compose_message">Composer votre message</string>
+    <string name="send">envoyer</string>
 </resources>

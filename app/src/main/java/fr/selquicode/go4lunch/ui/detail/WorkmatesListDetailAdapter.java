@@ -4,6 +4,7 @@ import static fr.selquicode.go4lunch.ui.list.ListViewAdapter.DIFF_CALLBACK;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,17 +35,21 @@ public class WorkmatesListDetailAdapter extends ListAdapter<Workmate, WorkmatesL
    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
-        private final ImageView workmatePictureProfile;
+        private final ImageView workmatePictureProfile, chatBtn;
         private final TextView workmateName, joiningString;
+
 
         public ViewHolder(@NonNull WorkmatesItemBinding binding) {
             super(binding.getRoot());
             workmateName = binding.workmateName;
             workmatePictureProfile = binding.workmatePhoto;
             joiningString = binding.restaurantName;
+            chatBtn = binding.btnChat;
         }
 
         public void bind(Workmate item){
+            //hide btn to the chat
+            chatBtn.setVisibility(View.GONE);
             //display workmates profile picture
             Glide.with(MainApplication.getApplication())
                     .load(item.getWorkmatePhotoUrl())

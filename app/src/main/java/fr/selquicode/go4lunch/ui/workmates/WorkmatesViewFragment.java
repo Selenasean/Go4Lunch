@@ -3,6 +3,7 @@ package fr.selquicode.go4lunch.ui.workmates;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -12,22 +13,34 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.ContextThemeWrapper;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.PopupMenu;
 
 import java.util.List;
 
+import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.data.model.User;
 import fr.selquicode.go4lunch.databinding.FragmentWorkmatesViewBinding;
+import fr.selquicode.go4lunch.ui.MainActivity;
+import fr.selquicode.go4lunch.ui.chat.ChatActivity;
+import fr.selquicode.go4lunch.ui.detail.DetailActivity;
+import fr.selquicode.go4lunch.ui.utils.OnWorkmateClickedListener;
 import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 
-public class WorkmatesViewFragment extends Fragment {
+public class WorkmatesViewFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 
     private WorkmatesViewModel viewModel;
     private FragmentWorkmatesViewBinding binding;
-    private final WorkmatesListViewAdapter adapter = new WorkmatesListViewAdapter();
+    private WorkmatesListViewAdapter adapter;
+    private String restaurantId;
+    private String workmateId;
+    private Context context;
 
 
     public static WorkmatesViewFragment newInstance() {
@@ -37,6 +50,8 @@ public class WorkmatesViewFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+        assert container != null;
+        this.context = container.getContext();
         binding = FragmentWorkmatesViewBinding.inflate(inflater);
         return binding.getRoot();
     }
@@ -44,6 +59,11 @@ public class WorkmatesViewFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //settings for adapter
+        setAdapter();
+        // Settings for RecycleView
+        setRecycleView();
+
         //Settings for viewModel and Observer
         viewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(WorkmatesViewModel.class);
         viewModel.getUsers().observe(getViewLifecycleOwner(), new Observer<List<WorkmatesViewState>>() {
@@ -52,8 +72,24 @@ public class WorkmatesViewFragment extends Fragment {
                 adapter.submitList(workmatesViewState);
             }
         });
-        // Settings for RecycleView
-        setRecycleView();
+
+    }
+
+    private void setAdapter() {
+        adapter = new WorkmatesListViewAdapter(new OnWorkmateClickedListener() {
+            @Override
+            public void onWorkmateClick(boolean hasChosen, String placeId) {
+                if(hasChosen){
+                    DetailActivity.launch(placeId, context);
+                }
+            }
+
+            @Override
+            public void onChatClicked(String workmateId) {
+                ChatActivity.launch(workmateId, context);
+            }
+
+        });
     }
 
     /**
@@ -66,5 +102,18 @@ public class WorkmatesViewFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this.getContext()));
         recyclerView.setAdapter(adapter);
+    }
+
+    @Override
+    public boolean onMenuItemClick(MenuItem menuItem) {
+        switch (menuItem.getItemId()){
+            case(R.id.restaurant) :
+                DetailActivity.launch(restaurantId, context);
+                break;
+            case(R.id.chat) :
+                ChatActivity.launch(workmateId, context);
+        }
+
+        return true;
     }
 }

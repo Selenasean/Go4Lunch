@@ -6,16 +6,20 @@ import android.location.LocationManager;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
+import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
+import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.model.Place;
 import fr.selquicode.go4lunch.data.model.PlacePhoto;
+import fr.selquicode.go4lunch.data.model.User;
 import fr.selquicode.go4lunch.data.place.PlaceRepository;
 import fr.selquicode.go4lunch.ui.utils.RatingCalculator;
 
@@ -23,28 +27,37 @@ public class ListViewModel extends ViewModel {
 
     private final PlaceRepository placeRepository;
     private final LocationRepository locationRepository;
+    private final FirestoreRepository firestoreRepository;
+    private final FirebaseAuthRepository firebaseAuthRepository;
     LiveData<Location> locationLiveData;
     private final MediatorLiveData<List<ListViewState>> listMediatorLiveData = new MediatorLiveData<>();
 
     public ListViewModel(PlaceRepository placeRepository,
-                         LocationRepository locationRepository) {
+                         LocationRepository locationRepository, FirestoreRepository firestoreRepository, FirebaseAuthRepository firebaseAuthRepository) {
         this.placeRepository = placeRepository;
         this.locationRepository = locationRepository;
+        this.firestoreRepository = firestoreRepository;
+        this.firebaseAuthRepository = firebaseAuthRepository;
 
         //get the user's location
         locationLiveData = locationRepository.getLocationLiveData();
 
+
         //get the list of places from the user's location
         LiveData<List<Place>> placesLiveData = Transformations.switchMap(locationLiveData, placeRepository::getPlaces);
 
-        // to get searchedPlaces from place repository
+        //get searchedPlaces from place repository
         LiveData<List<String>> searchedPlacesLiveData = placeRepository.getSearchedPlaces();
+
+        //get list of all users
+        LiveData<List<User>> usersListLiveData = firestoreRepository.getUsers();
 
         listMediatorLiveData.addSource(
                 placesLiveData,
                 places -> combine(
                         places,
-                        searchedPlacesLiveData.getValue()
+                        searchedPlacesLiveData.getValue(),
+                        usersListLiveData.getValue()
                 )
         );
 
@@ -52,17 +65,27 @@ public class ListViewModel extends ViewModel {
                 searchedPlacesLiveData,
                 searchedPlaces -> combine(
                         placesLiveData.getValue(),
-                        searchedPlaces
+                        searchedPlaces,
+                        usersListLiveData.getValue()
                 )
+        );
+
+        listMediatorLiveData.addSource(
+                usersListLiveData,
+                users -> combine(
+                        placesLiveData.getValue(),
+                        searchedPlacesLiveData.getValue(),
+                        users)
         );
     }
 
-    private void combine(List<Place> places, List<String> searchedPlaceId) {
-        if(places == null){
+    private void combine(List<Place> places, List<String> searchedPlaceId, List<User> users) {
+        if(places == null || users == null){
             return;
         }
+
         if(searchedPlaceId == null){
-            List<ListViewState> placesListParsed = parseToViewState(places);
+            List<ListViewState> placesListParsed = parseToViewState(places, users);
             listMediatorLiveData.setValue(placesListParsed);
         }else{
             List<Place> filteredPlaces = new ArrayList<>();
@@ -71,14 +94,14 @@ public class ListViewModel extends ViewModel {
                     filteredPlaces.add(place);
                 }
             }
-            List<ListViewState> filteredListParsed = parseToViewState(filteredPlaces);
+            List<ListViewState> filteredListParsed = parseToViewState(filteredPlaces, users);
             listMediatorLiveData.setValue(filteredListParsed);
 
         }
 
     }
 
-    private List<ListViewState> parseToViewState(List<Place> places) {
+    private List<ListViewState> parseToViewState(List<Place> places, List<User> users) {
         List<ListViewState> listViewState = new ArrayList<>();
         Location userLocation = locationRepository.getLocation();
 
@@ -104,6 +127,13 @@ public class ListViewModel extends ViewModel {
             float distance = userLocation.distanceTo(restaurantLocation);
             String distanceString = String.valueOf(distance).split("\\.")[0] + "m";
 
+            //get count of workmates using a Map and Collectors
+            Map<String, Long> countByPlace = users.stream()
+                    .filter(user -> !user.getId().equals(firebaseAuthRepository.getCurrentUser().getUid()))
+                    .filter( user -> user.getRestaurantId() != null)
+                    .collect(Collectors.groupingBy(user -> user.getRestaurantId(),Collectors.counting()));
+
+
             assert place.getPlaceId() != null;
             listViewState.add(new ListViewState(
                     place.getPlaceId(),
@@ -112,8 +142,9 @@ public class ListViewModel extends ViewModel {
                     photo,
                     distanceString,
                     place.getOpening() == null ? null : place.getOpening().isOpenNow(),
-                    rating
-            ));
+                    rating,
+                    countByPlace.getOrDefault(place.getPlaceId(), 0L)
+                    ));
         }
         //sort by closer place first
         listViewState.sort((o1, o2) -> {

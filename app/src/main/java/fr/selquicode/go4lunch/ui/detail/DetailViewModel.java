@@ -5,16 +5,13 @@ import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
-import androidx.work.WorkManager;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.model.Place;
@@ -64,7 +61,7 @@ public class DetailViewModel extends ViewModel {
         LiveData<List<User>> workmatesWhoChoseListLD = firestoreRepository.getUsersWhoChose(placeId);
 
         //get a boolean if user logged has chosen the restaurant displayed or not
-        LiveData<User> userLoggedData = firestoreRepository.userLogged(userLoggedId);
+        LiveData<User> userLoggedData = firestoreRepository.getOneUser(userLoggedId);
 
         //combine the sources of the mediatorLivedata for the UI
         detailMediatorLiveData.addSource(
@@ -170,7 +167,7 @@ public class DetailViewModel extends ViewModel {
      * To get all the data we want to display in UI
      *
      * @return a mediatorLiveData which is the sum of the 3 LiveData used for this UI
-     */
+     */ 
     public LiveData<DetailViewState> getDetailViewStateLD() {
         return detailMediatorLiveData;
     }
@@ -186,7 +183,7 @@ public class DetailViewModel extends ViewModel {
             if(!detailViewState.isUserLoggedChose()){
                 notificationSchedule.scheduleNotification();
             }else{
-                //TODO : retirer la notif de la liste;
+                notificationSchedule.notificationToCancelled();
             }
         }
 

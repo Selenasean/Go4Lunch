@@ -3,7 +3,6 @@ package fr.selquicode.go4lunch.ui.list;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-
 import java.util.Objects;
 
 import fr.selquicode.go4lunch.data.model.PlacePhoto;
@@ -22,26 +21,30 @@ public class ListViewState {
     private final String nameRestaurant, vicinity;
 
     @Nullable
-    private Boolean opening;
+    private final Boolean opening;
 
     @NonNull
-    private String distance;
+    private final String distance;
 
     @Nullable
-    private PlacePhoto restaurantImg;
+    private final PlacePhoto restaurantImg;
 
-   private float ratings;
+    private final float ratings;
+
+    private final Long workmateEatingCount;
 
 
     /**
      * Constructor
-     * @param id                type String
-     * @param nameRestaurant    type String
-     * @param vicinity          type String
-     * @param restaurantImg     type PlacePhoto
-     * @param distance          type String
-     * @param opening           type Boolean
-     * @param ratings           type float
+     *
+     * @param id                  type String
+     * @param nameRestaurant      type String
+     * @param vicinity            type String
+     * @param restaurantImg       type PlacePhoto
+     * @param distance            type String
+     * @param opening             type Boolean
+     * @param ratings             type float
+     * @param workmateEatingCount type Long
      */
     public ListViewState(@NonNull String id,
                          @NonNull String nameRestaurant,
@@ -49,16 +52,16 @@ public class ListViewState {
                          @Nullable PlacePhoto restaurantImg,
                          @NonNull String distance,
                          @Nullable Boolean opening,
-                         float ratings
-                         ){
+                         float ratings,
+                         Long workmateEatingCount) {
         this.id = id;
         this.nameRestaurant = nameRestaurant;
-        this.vicinity  = vicinity;
+        this.vicinity = vicinity;
         this.opening = opening;
         this.restaurantImg = restaurantImg;
         this.distance = distance;
         this.ratings = ratings;
-
+        this.workmateEatingCount = workmateEatingCount;
     }
 
     // GETTERS
@@ -94,6 +97,10 @@ public class ListViewState {
 
     public float getRatings() {
         return ratings;
+    }
+
+    public Long getWorkmateEatingCount() {
+        return workmateEatingCount;
     }
 
     //UTILS

@@ -17,6 +17,8 @@ import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.permission_checker.PermissionChecker;
 import fr.selquicode.go4lunch.domain.NotificationSchedule;
 import fr.selquicode.go4lunch.ui.MainViewModel;
+import fr.selquicode.go4lunch.ui.chat.ChatActivity;
+import fr.selquicode.go4lunch.ui.chat.ChatViewModel;
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 import fr.selquicode.go4lunch.ui.detail.DetailViewModel;
 import fr.selquicode.go4lunch.ui.list.ListViewModel;
@@ -90,9 +92,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             //injection of the Repository in the ViewModel constructor
             return (T) new MainViewModel(permissionChecker, locationRepository, firestoreRepository, firebaseAuthRepository, placeRepository);
         } else if (modelClass.isAssignableFrom(MapViewModel.class)) {
-            return (T) new MapViewModel(placeRepository, locationRepository, permissionChecker, firestoreRepository);
+            return (T) new MapViewModel(placeRepository, locationRepository, permissionChecker, firestoreRepository, firebaseAuthRepository);
         } else if (modelClass.isAssignableFrom(ListViewModel.class)) {
-            return (T) new ListViewModel(placeRepository, locationRepository);
+            return (T) new ListViewModel(placeRepository, locationRepository, firestoreRepository, firebaseAuthRepository);
         } else if (modelClass.isAssignableFrom(WorkmatesViewModel.class)) {
             return (T) new WorkmatesViewModel(firestoreRepository, firebaseAuthRepository);
         } else if (modelClass.isAssignableFrom(DetailViewModel.class)) {
@@ -100,6 +102,9 @@ public class ViewModelFactory implements ViewModelProvider.Factory {
             return (T) new DetailViewModel(placeRepository, placeId, firestoreRepository, firebaseAuthRepository, notificationSchedule);
         } else if (modelClass.isAssignableFrom(LogInViewModel.class)) {
             return (T) new LogInViewModel(firebaseAuthRepository, firestoreRepository);
+        } else if (modelClass.isAssignableFrom(ChatViewModel.class)){
+            String workmateId = savedStateHandle.get(ChatActivity.WORKMATE_ID);
+            return (T) new ChatViewModel(firestoreRepository, firebaseAuthRepository, workmateId);
         }
         throw new IllegalArgumentException("Unknown ViewModel class : " + modelClass);
     }

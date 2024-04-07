@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import fr.selquicode.go4lunch.data.model.Place;
 import fr.selquicode.go4lunch.data.model.PlaceAutocompletePrediction;
@@ -43,30 +44,27 @@ public class PlaceRepository {
 
         String locationString = location.getLatitude() + "," + location.getLongitude();
 
-        //get data from the cache, if = null means that there no list in memory
+        //get data from the cache, if = null means that there is no list in memory
         //if cache != null means that there is already a list in memory
         List<Place> response = cachedList.get(locationString);
         if(response != null ){
-            Log.i(TAG, "returning cached list of places");
             placesMutableLiveData.setValue(response);
         }else{
             apiService.getListOfPlaces(locationString).enqueue(new Callback<PlacesNearbySearchResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<PlacesNearbySearchResponse> call,@NonNull Response<PlacesNearbySearchResponse> response) {
-                    Log.i(TAG, "onResponse requete");
                     if(response.isSuccessful() && response.body() != null){
                         List<Place> responseRequest = response.body().getResults();
                         cachedList.put(locationString, responseRequest);
                         placesMutableLiveData.setValue(responseRequest);
                     }else{
-                        Log.e(TAG, "else onresponse");
+                        Log.e(TAG, response.message());
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<PlacesNearbySearchResponse> call, @NonNull Throwable t) {
-                    Log.e(TAG, "onFailure");
-                    t.printStackTrace();
+                    Log.e(TAG, "message =" + t.getMessage());
                 }
             });
         }
@@ -83,7 +81,6 @@ public class PlaceRepository {
 
         Place response = cachedPlaceDetail.get(placeId);
         if(response != null) {
-            Log.i(TAG, "returning cached detail");
             placeDetailsMutableLiveData.setValue(response);
         }else{
             apiService.getDetailOfPlace(placeId).enqueue(new Callback<PlaceDetailsResponse>() {
@@ -94,14 +91,13 @@ public class PlaceRepository {
                         cachedPlaceDetail.put(placeId, responseRequest);
                         placeDetailsMutableLiveData.setValue(responseRequest);
                     }else{
-                        Log.e(TAG,"else onresponse place's details");
+                        Log.e(TAG,response.message());
                     }
                 }
 
                 @Override
                 public void onFailure(@NonNull Call<PlaceDetailsResponse> call, @NonNull Throwable t) {
-                    Log.e(TAG, "onFailure place's details");
-                    t.printStackTrace();
+                    Log.e(TAG, "message =" + t.getMessage());
                 }
             });
         }
@@ -123,21 +119,24 @@ public class PlaceRepository {
                     List<String> placeIdList = new ArrayList<>();
                     for(PlaceAutocompletePrediction place : response.body().getPlacesPredictions()){
                         placeIdList.add(place.getPlaceId());
-                        Log.i("placeRepo", "place.getDescription = " + place.getDescription());
                     }
                     searchedPlacesMutableLiveData.setValue(placeIdList);
                 }else{
-                    Log.e(TAG,"else onresponse placeAutoCompletePrediction details");
+                    Log.e(TAG,response.message());
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<PlacesAutocompleteResponse> call, @NonNull Throwable t) {
-                t.printStackTrace();
+                Log.e(TAG, "message =" + t.getMessage());
             }
         });
     }
 
+    /**
+     * To get list of places searched by user
+     * @return a list of places' id - type LiveData
+     */
     public LiveData<List<String>> getSearchedPlaces(){
         return searchedPlacesMutableLiveData;
     }

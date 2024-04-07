@@ -20,6 +20,7 @@ public class NotificationSchedule {
 
     //TODO : schedule notification here + add notificationWorker to WorManager
     // declencher une notif a 12H tous les jours
+    private String REMIND_TO_EAT = "notification_id";
     WorkManager workManager;
 
     public NotificationSchedule(WorkManager workManager) {
@@ -43,7 +44,14 @@ public class NotificationSchedule {
         OneTimeWorkRequest uploadWorkRequest = new OneTimeWorkRequest.Builder(NotificationWorker.class)
                 .setInitialDelay( initialDelay, TimeUnit.SECONDS)
                 .build();
-        workManager.enqueueUniqueWork("notification_id", ExistingWorkPolicy.REPLACE, uploadWorkRequest);
+        workManager.enqueueUniqueWork(REMIND_TO_EAT, ExistingWorkPolicy.REPLACE, uploadWorkRequest);
+    }
+
+    /**
+     * To cancelled work into WorkManager
+     */
+    public void notificationToCancelled(){
+        workManager.cancelUniqueWork(REMIND_TO_EAT);
     }
 
 }

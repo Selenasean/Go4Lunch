@@ -30,8 +30,6 @@ public class PlaceAutocompletePrediction {
         return description;
     }
 
-
-
     public String getPlaceId() {
         return placeId;
     }

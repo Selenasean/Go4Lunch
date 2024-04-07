@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- WORKMATE DETAILS CONTAINER -->
+    <LinearLayout
+        android:id="@+id/workmate_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        android:orientation="horizontal"
+        android:background="@color/colorBgdBtn">
+
+        <!-- PROFILE PICTURE -->
+        <ImageView
+            android:id="@+id/workmate_photo"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginStart="16dp"
+            android:contentDescription="@string/photo_description"
+            android:src="@drawable/round_img"
+            android:scaleType="centerCrop"
+            />
+
+        <!-- WORKMATE NAME -->
+        <TextView
+            android:id="@+id/workmate_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_gravity="center_vertical"
+            android:textStyle="bold"
+            tools:text="Workmate"/>
+    </LinearLayout>
+
+    <!-- RECYCLER VIEW CONTAINER -->
+    <LinearLayout
+        android:id="@+id/recyclerview_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@+id/workmate_container"
+        >
+
+        <!-- MESSAGE RECYCLER VIEW EMPTY -->
+        <TextView
+            android:id="@+id/empty_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/chat_error"
+            android:textAlignment="center"
+            android:layout_margin="20dp"/>
+
+        <!-- RECYCLER VIEW -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chat_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+
+
+    <!-- ADD MESSAGE CONTAINER -->
+    <LinearLayout
+        android:id="@+id/message_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_alignParentBottom="true">
+
+
+        <!-- TEXT MESSAGE EDIT TEXT -->
+        <EditText
+            android:id="@+id/chat_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:textSize="13sp"
+            android:hint="@string/compose_message"/>
+
+        <!-- ADD MESSAGE BUTTON -->
+        <Button
+            android:id="@+id/send_btn"
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/red"
+            android:text="@string/send"/>
+
+    </LinearLayout>
+</RelativeLayout>

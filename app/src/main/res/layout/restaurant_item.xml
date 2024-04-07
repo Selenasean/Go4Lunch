@@ -86,10 +86,10 @@
         android:id="@+id/workmates_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-
         android:layout_marginEnd="8dp"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@id/icon_workmates"
-        app:layout_constraintTop_toTopOf="@id/icon_workmates"
+        app:layout_constraintBottom_toBottomOf="@+id/icon_workmates"
         app:layout_constraintEnd_toStartOf="@id/image_restaurant"
         tools:text="(3)"/>
 

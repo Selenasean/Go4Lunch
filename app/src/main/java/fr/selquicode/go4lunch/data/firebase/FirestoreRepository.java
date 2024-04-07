@@ -11,23 +11,24 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
+import fr.selquicode.go4lunch.data.model.CreateMessageRequest;
 import fr.selquicode.go4lunch.data.model.CreateUserRequest;
+import fr.selquicode.go4lunch.data.model.Message;
 import fr.selquicode.go4lunch.data.model.User;
+import fr.selquicode.go4lunch.data.model.UserSender;
 
 public class FirestoreRepository {
 
@@ -39,12 +40,12 @@ public class FirestoreRepository {
     private static final String RESTAURANT_ADDRESS = "restaurantAddress";
     private static final String USER_NAME = "displayName";
     private static final String USER_PICTURE = "photoUserUrl";
+    private static final String COLLECTION_CHAT = "chats";
+    private static final String COLLECTION_MESSAGE = "messages";
     private final FirebaseFirestore firebaseFirestore;
-    private final FirebaseAuthRepository firebaseAuthRepository = new FirebaseAuthRepository(FirebaseAuth.getInstance());
 
     /**
      * Constructor
-     *
      * @param firebaseFirestore to access data from Firestore
      */
     public FirestoreRepository(FirebaseFirestore firebaseFirestore) {
@@ -53,7 +54,6 @@ public class FirestoreRepository {
 
     /**
      * To get user collection in db
-     *
      * @return Collection user type CollectionReference
      */
     private CollectionReference getUsersCollection() {
@@ -65,7 +65,6 @@ public class FirestoreRepository {
      * To create a new user from scratch if he's new,
      * or to update a user already known,
      * used when a user try to login
-     *
      * @param userRequest which is the info we get from the user logged
      */
     public void createUser(CreateUserRequest userRequest) {
@@ -119,10 +118,9 @@ public class FirestoreRepository {
                                         @Nullable FirebaseFirestoreException error) {
                         if (error == null && value != null) {
                             List<User> usersList = value.toObjects(User.class);
-                            Log.i(TAG, usersList.size() + "");
                             usersListMutableLiveData.setValue(usersList);
                         } else {
-                            Log.i(TAG, "task.getException");
+                            Log.e(TAG, "" + error);
                         }
                     }
                 });
@@ -130,13 +128,13 @@ public class FirestoreRepository {
     }
 
     /**
-     * Request to get the specific user logged
+     * Request to get a specific user
      *
-     * @param userId id of the user currently logged
+     * @param userId id of the user we want to get
      * @return user's data
      */
-    public LiveData<User> userLogged(String userId) {
-        MutableLiveData<User> userLoggedDataLD = new MutableLiveData<>();
+    public LiveData<User> getOneUser(String userId) {
+        MutableLiveData<User> userDataLD = new MutableLiveData<>();
         this.getUsersCollection().document(userId)
                 .addSnapshotListener(new EventListener<DocumentSnapshot>() {
                     @Override
@@ -144,17 +142,13 @@ public class FirestoreRepository {
                                         @Nullable FirebaseFirestoreException error) {
                         if (error == null && value != null) {
                             User userLogged = value.toObject(User.class);
-                            userLoggedDataLD.setValue(userLogged);
-                            Log.i("repofirestore", String.valueOf(
-                                    userLogged
-                            ));
+                            userDataLD.setValue(userLogged);
                         } else {
-                            //TODO deal with error
-                            Log.e(TAG, "task.getException in userLogged()");
+                            Log.e(TAG, "" + error);
                         }
                     }
                 });
-        return userLoggedDataLD;
+        return userDataLD;
     }
 
     /**
@@ -175,8 +169,7 @@ public class FirestoreRepository {
                             List<User> usersWhoChoseList = value.toObjects(User.class);
                             usersWhoChoseListMLD.setValue(usersWhoChoseList);
                         } else {
-                            //TODO : deal with error
-                            Log.e(TAG, "task.getException in getUsersWhaChose()");
+                            Log.e(TAG, "" + error);
                         }
 
                     }
@@ -220,8 +213,7 @@ public class FirestoreRepository {
 
                             } else {
                                 //means user maybe == null
-                                // TODO : deal with error if task == null
-                                Log.e(TAG, "task.getException in updateRestaurantChosen");
+                                Log.e(TAG, "" + task.getResult());
                             }
 
                         }
@@ -255,6 +247,11 @@ public class FirestoreRepository {
                 FieldValue.arrayRemove(restaurantId));
     }
 
+    /**
+     * Request to get a user synchronously
+     * @param userLoggedId id of the user logged -type String
+     * @return a User
+     */
     @WorkerThread
     public User getUserLoggedSynchronously(String userLoggedId) throws ExecutionException, InterruptedException {
             Task<DocumentSnapshot> task = this.getUsersCollection().document(userLoggedId).get();
@@ -262,10 +259,89 @@ public class FirestoreRepository {
             return  result.toObject(User.class);
     }
 
+    /**
+     * Request to get users who have chosen a restaurant to eat synchronously
+     * @param placeId id of the place - type String
+     * @return a list of User
+     */
     @WorkerThread
     public List<User> getUsersWhoChooseSynchronously(String placeId) throws ExecutionException, InterruptedException {
         Task<QuerySnapshot> task = this.getUsersCollection().whereEqualTo(RESTAURANT_TO_EAT, placeId).get();
         QuerySnapshot result = Tasks.await(task);
         return result.toObjects(User.class);
     }
+
+    //START OF CHAT PART//
+
+    /**
+     * get Collection Chat from firestore
+     * @return a CollectionReference
+     */
+    public CollectionReference getChatCollection(){
+        return firebaseFirestore.collection(COLLECTION_CHAT);
+    }
+
+    /**
+     * To get the 50 last messages from document inside Collection Chat
+     * @param workmateId - type String
+     * @return a Query
+     */
+    public Query getAllMessageForChat( String userId, String workmateId){
+
+        return  this.getChatCollection()
+                .document(createMessageUid(userId, workmateId))
+                .collection(COLLECTION_MESSAGE)
+                .orderBy("dateCreated")
+                .limit(50);
+    }
+
+    private String createMessageUid(String userId, String workmateId){
+       return userId.compareTo(workmateId) > 0 ? userId + "_" + workmateId : workmateId + "_" + userId;
+    }
+
+    /**
+     * To create a message
+     */
+    public void createMessageForChat(CreateMessageRequest messageRequest, String userId, String workmateId){
+        //get user sender
+        this.getUsersCollection().document(userId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    User user = task.getResult().toObject(User.class);
+                    if(user != null){
+                        //Store message to Firebase
+
+                        getChatCollection().document(createMessageUid(userId, workmateId))
+                                .collection(COLLECTION_MESSAGE)
+                                .add(createMessage(user, messageRequest));
+
+                    }
+
+                }else{
+                    Log.i("createMessage", "" + task.getResult());
+                }
+            }
+
+
+        });
+
+    }
+
+    private Message createMessage(User user, CreateMessageRequest messageRequest) {
+        // create a userSender
+        UserSender userSender = new UserSender(
+                user.getId(),
+                user.getDisplayName(),
+                user.getPhotoUserUrl() != null ? user.getPhotoUserUrl() : ""
+        );
+
+        //create a message using userSender
+        return  new Message (
+                messageRequest.getMessage(),
+                messageRequest.getDateCreated(),
+                userSender);
+    }
+
+    //END OF CHAT PART//
 }

@@ -32,6 +32,11 @@ public class FirebaseAuthRepository {
         return getCurrentUser() != null;
     }
 
+    /**
+     * To logout the user
+     * @param context - context af the App
+     * @return void type Task
+     */
     public Task<Void> signOut(Context context){
         return AuthUI.getInstance().signOut(context);
     }

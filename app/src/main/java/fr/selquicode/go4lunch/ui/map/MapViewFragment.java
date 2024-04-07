@@ -19,6 +19,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -72,13 +73,19 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
             for (MapViewState place : places) {
                 Log.i("MainActivity", place.toString());
                 LatLng restaurant = new LatLng(place.getGeometry().getLocation().getLat(), place.getGeometry().getLocation().getLng());
-                Marker markerCreated = map.addMarker(new MarkerOptions()
-                        .position(restaurant)
-                        .title(place.getName())
+                Marker markerCreated;
+
+                markerCreated = map.addMarker(new MarkerOptions()
+                            .position(restaurant)
+                            .title(place.getName())
                 );
                 if(markerCreated != null){
                     markerCreated.setTag(place.getPlaceId());
+                    if(place.isWorkmatesEatingThere){
+                        markerCreated.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
+                    }
                 }
+
                 //TODO : change marker's color if there is workmates eating there
             }
             map.setOnMarkerClickListener(this::onMarkerClicked);
