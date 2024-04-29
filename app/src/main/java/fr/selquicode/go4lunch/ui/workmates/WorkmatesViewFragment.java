@@ -13,8 +13,6 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.ContextThemeWrapper;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,15 +21,11 @@ import android.widget.PopupMenu;
 
 import java.util.List;
 
-import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
-import fr.selquicode.go4lunch.data.model.User;
 import fr.selquicode.go4lunch.databinding.FragmentWorkmatesViewBinding;
-import fr.selquicode.go4lunch.ui.MainActivity;
 import fr.selquicode.go4lunch.ui.chat.ChatActivity;
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;
-import fr.selquicode.go4lunch.ui.utils.OnWorkmateClickedListener;
-import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
+import fr.selquicode.go4lunch.ui.ViewModelFactory;
 
 public class WorkmatesViewFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
 

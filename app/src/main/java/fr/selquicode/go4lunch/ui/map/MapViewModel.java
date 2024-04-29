@@ -81,29 +81,22 @@ public class MapViewModel extends ViewModel {
                         users
                 )
         );
-
-
     }
 
     private void combine(List<Place> places, List<String> searchedPlacesId, List<User> users) {
         if (places == null || users == null) {
             return;
         } else {
-            //TODO : find how compare place.getId and user.getRestaurantId
-            if (searchedPlacesId == null) {
-                Log.i("mapVM", "places = " + places.toString());
+            if (searchedPlacesId == null || searchedPlacesId.isEmpty()) {
                 List<MapViewState> listParsed = parseToMapViewState(places, users);
                 placesMediatorLivedata.setValue(listParsed);
             } else {
-                Log.i("mapVM", "searchedPLaces =" + searchedPlacesId);
                 List<Place> filteredPlaces = new ArrayList<>();
                 for (Place place : places) {
                     if (searchedPlacesId.contains(place.getPlaceId())) {
                         filteredPlaces.add(place);
-                        Log.i("mapVM", "place.getPlaceId =" + place.getPlaceId());
                     }
                 }
-                Log.i("MapVM", "filteredPlaces = " + filteredPlaces.toString());
                 List<MapViewState> filteredListParsed = parseToMapViewState(filteredPlaces, users);
                 placesMediatorLivedata.setValue(filteredListParsed);
             }

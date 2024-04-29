@@ -59,7 +59,6 @@ public class WorkmatesViewModel extends ViewModel {
                 )
                 .sorted(new WorkmatesComparator.ChoiceComparator())
                 .collect(Collectors.toList());
-        Log.i("WorkmatesVM", String.valueOf(usersList.size()));
         return usersList;
     }
 

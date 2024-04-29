@@ -1,4 +1,4 @@
-package fr.selquicode.go4lunch.Repositories;
+package fr.selquicode.go4lunch.repositories;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -10,6 +10,5 @@ public class FirebaseAuthRepositoryTest {
     @Test
     public void getCurrentUser(){}
 
-    @Test
-    public void signOutUser(){}
+
 }

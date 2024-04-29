@@ -1,11 +1,7 @@
 package fr.selquicode.go4lunch.ui;
 
 import android.Manifest;
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,15 +12,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -34,7 +26,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Arrays;
 import java.util.Collections;
 
 import fr.selquicode.go4lunch.MainApplication;
@@ -46,7 +37,6 @@ import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 import fr.selquicode.go4lunch.ui.list.ListViewFragment;
 import fr.selquicode.go4lunch.ui.login.LogInActivity;
 import fr.selquicode.go4lunch.ui.map.MapViewFragment;
-import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
 import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewFragment;
 
 public class MainActivity extends AppCompatActivity {
@@ -59,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
     private final PlaceRepository repository = new PlaceRepository(RetrofitService.getPlaceAPI());
     private MainViewModel mainViewModel;
     private String placeId;
+    private String placeName;
     @Nullable
     public AlertDialog dialog = null;
 
@@ -137,15 +128,29 @@ public class MainActivity extends AppCompatActivity {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 
         alertBuilder.setTitle(R.string.settings_title);
-        alertBuilder.setView(R.layout.dialog_settings);
+        View dialogView = getLayoutInflater().inflate( R.layout.dialog_settings,null);
+        alertBuilder.setView(dialogView);
+        TextView placeNameTextView = dialogView.findViewById(R.id.place_tv);
+        placeNameTextView.setText(placeName);
+        View lineView = dialogView.findViewById(R.id.line);
+        if(placeName == null){
+            alertBuilder.setMessage(R.string.no_restaurant_found);
+            lineView.setVisibility(View.GONE);
+        }else{
+            alertBuilder.setMessage(R.string.lunch_choice);
+        }
+
+
         alertBuilder.setPositiveButton(R.string.change, null);
-        alertBuilder.setOnDismissListener(dialogInterface -> dialog = null);
         dialog = alertBuilder.create();
+
 
         dialog.setOnShowListener(dialogInterface -> {
             Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
             button.setOnClickListener(view -> {
-                //TODO : do something when button clicked
+                MainActivity.this.replaceFragment(new ListViewFragment());
+                binding.drawerLayout.close();
+                dialog.cancel();
             });
         });
         return dialog;
@@ -226,6 +231,7 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MainViewModel.class);
         mainViewModel.getUserLogged().observe(this, user -> {
             placeId = user.getRestaurantId();
+            placeName = user.getRestaurantName();
             setUserLoggedData(user.getPhotoUserUrl(), user.getDisplayName(), user.getEmail());
         });
     }
@@ -248,6 +254,7 @@ public class MainActivity extends AppCompatActivity {
                 displayName.split(" ")[0] : displayName));
         ((TextView) findViewById(R.id.user_email)).setText(email);
     }
+
 
     /**
      * To start LogInActivity

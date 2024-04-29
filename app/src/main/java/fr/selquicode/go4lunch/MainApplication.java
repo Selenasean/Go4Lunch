@@ -4,6 +4,8 @@ import android.app.Application;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.os.Build;
+import android.os.Looper;
+
 
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.auth.FirebaseAuth;
@@ -12,7 +14,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
-import fr.selquicode.go4lunch.data.model.Place;
+
 import fr.selquicode.go4lunch.data.place.PlaceRepository;
 import fr.selquicode.go4lunch.data.place.RetrofitService;
 
@@ -40,7 +42,7 @@ public class MainApplication extends Application {
             notificationManager.createNotificationChannel(channel);
         }
 
-        locationRepository = new LocationRepository(LocationServices.getFusedLocationProviderClient(this));
+        locationRepository = new LocationRepository(LocationServices.getFusedLocationProviderClient(this), Looper.getMainLooper());
         firebaseAuthRepository = new FirebaseAuthRepository(FirebaseAuth.getInstance());
         firestoreRepository = new FirestoreRepository(FirebaseFirestore.getInstance());
         placeRepository = new PlaceRepository(RetrofitService.getPlaceAPI());

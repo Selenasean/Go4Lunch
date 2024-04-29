@@ -26,7 +26,6 @@ import com.bumptech.glide.request.RequestOptions;
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.databinding.WorkmatesItemBinding;
-import fr.selquicode.go4lunch.ui.utils.OnWorkmateClickedListener;
 
 
 public class WorkmatesListViewAdapter extends ListAdapter<WorkmatesViewState, WorkmatesListViewAdapter.ViewHolder> {

@@ -8,29 +8,23 @@
     android:paddingStart="16dp"
     android:paddingTop="12dp"
     android:paddingEnd="16dp">
-
-    <TextView
-        android:id="@+id/tv_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/lunch_choice"
-        android:layout_marginBottom="20dp"/>
     
     <TextView
         android:id="@+id/place_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="4dp"
+        android:layout_margin="4dp"
         tools:text="KFC"/>
 
     <View
+        android:id="@+id/line"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:background="@color/black"
-        android:layout_marginBottom="20dp"/>
+        android:layout_marginBottom="4dp"/>
 
 
 </LinearLayout>

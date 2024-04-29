@@ -1,6 +1,5 @@
-package fr.selquicode.go4lunch.ui.utils;
+package fr.selquicode.go4lunch.ui.workmates;
 
-import android.view.View;
 
 public interface OnWorkmateClickedListener {
 

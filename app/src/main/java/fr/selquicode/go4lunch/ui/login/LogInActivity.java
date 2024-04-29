@@ -20,14 +20,13 @@ import com.google.android.material.snackbar.Snackbar;
 
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.databinding.ActivityLoginBinding;
 import fr.selquicode.go4lunch.ui.MainActivity;
-import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
+import fr.selquicode.go4lunch.ui.ViewModelFactory;
 
 public class LogInActivity extends AppCompatActivity {
 

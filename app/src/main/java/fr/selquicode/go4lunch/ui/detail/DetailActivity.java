@@ -22,8 +22,7 @@ import fr.selquicode.go4lunch.BuildConfig;
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.databinding.ActivityDetailBinding;
-import fr.selquicode.go4lunch.domain.NotificationSchedule;
-import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
+import fr.selquicode.go4lunch.ui.ViewModelFactory;
 
 public class DetailActivity extends AppCompatActivity {
 

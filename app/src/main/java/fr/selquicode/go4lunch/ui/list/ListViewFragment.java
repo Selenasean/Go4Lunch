@@ -1,6 +1,5 @@
 package fr.selquicode.go4lunch.ui.list;
 
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
@@ -18,12 +17,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import java.util.List;
-import java.util.Objects;
-
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.databinding.FragmentListViewBinding;
-import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
+import fr.selquicode.go4lunch.ui.ViewModelFactory;
 
 public class ListViewFragment extends Fragment {
 

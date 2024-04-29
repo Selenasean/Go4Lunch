@@ -4,6 +4,7 @@ import android.location.Location;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresPermission;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -21,18 +22,21 @@ public class LocationRepository {
 
     @NonNull
     private final FusedLocationProviderClient fusedLocationProviderClient;
-
     @NonNull
     private final MutableLiveData<Location> locationMutableLiveData = new MutableLiveData<>();
-
+    @NonNull
+    private final Looper looper;
+    @Nullable
     private LocationCallback callback;
 
     /**
      * Constructor
+     *
      * @param fusedLocationProviderClient allows to access user's position
      */
-    public LocationRepository(@NonNull FusedLocationProviderClient fusedLocationProviderClient){
+    public LocationRepository(@NonNull FusedLocationProviderClient fusedLocationProviderClient, @NonNull Looper looper){
         this.fusedLocationProviderClient = fusedLocationProviderClient;
+        this.looper = looper;
     }
 
     /**
@@ -43,6 +47,10 @@ public class LocationRepository {
         return locationMutableLiveData;
     }
 
+    /**
+     * To get user's position type Location
+     * @return a Location
+     */
     public Location getLocation() {return getLocationLiveData().getValue(); }
 
     /**
@@ -70,7 +78,7 @@ public class LocationRepository {
                         .build(),
                 callback,
                 //call callback on the mainThread
-                Looper.getMainLooper()
+                looper
         );
     }
 

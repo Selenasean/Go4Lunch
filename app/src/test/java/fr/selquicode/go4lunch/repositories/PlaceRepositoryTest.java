@@ -1,11 +1,9 @@
-package fr.selquicode.go4lunch.Repositories;
+package fr.selquicode.go4lunch.repositories;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -16,16 +14,12 @@ import androidx.lifecycle.LiveData;
 
 import junit.framework.TestCase;
 
-import net.bytebuddy.asm.Advice;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -146,6 +140,7 @@ public class PlaceRepositoryTest extends TestCase {
         when(placesAPI.getSearchedPlaces(anyString(), anyString())).thenReturn(getSearchedPlacesCallMock);
 
         //method to test
+        placeRepository.searchedPlaces("search", mockLocation(1.0, 2.0));
         LiveData<List<String>> placesSearchedIdListLD = placeRepository.getSearchedPlaces();
 
         ArgumentCaptor<Callback<PlacesAutocompleteResponse>> argumentCaptor = ArgumentCaptor.captor();
@@ -160,16 +155,12 @@ public class PlaceRepositoryTest extends TestCase {
                 createPlaceAutocompletePrediction("id3")
         ));
         callback.onResponse(getSearchedPlacesCallMock, Response.success(placesAutocompleteResponse));
+        List<String> listExpected = Arrays.asList("id1","id2","id3");
 
-        List<String> idSearchedPlaceList = new ArrayList<>();
-        for(PlaceAutocompletePrediction place : placesAutocompleteResponse.getPlacesPredictions()){
-            idSearchedPlaceList.add(place.getPlaceId());
-        }
+        List<String> listActual = LiveDataTestUtils.getOrAwaitValue(placesSearchedIdListLD);
 
-        List<String> listExpected = LiveDataTestUtils.getOrAwaitValue(placesSearchedIdListLD);
-
-        assertThat(listExpected).isEqualTo(idSearchedPlaceList);
+        assertThat(listActual).isEqualTo(listExpected);
+        verify(placesAPI).getSearchedPlaces("search", "2.0,1.0");
         verifyNoMoreInteractions(placesAPI);
-
     }
 }

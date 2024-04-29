@@ -27,9 +27,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.List;
 
 import fr.selquicode.go4lunch.R;
-import fr.selquicode.go4lunch.data.model.Place;
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;
-import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
+import fr.selquicode.go4lunch.ui.ViewModelFactory;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
@@ -85,8 +84,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                         markerCreated.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                     }
                 }
-
-                //TODO : change marker's color if there is workmates eating there
             }
             map.setOnMarkerClickListener(this::onMarkerClicked);
         }

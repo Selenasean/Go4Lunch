@@ -29,6 +29,7 @@ import fr.selquicode.go4lunch.data.model.CreateUserRequest;
 import fr.selquicode.go4lunch.data.model.Message;
 import fr.selquicode.go4lunch.data.model.User;
 import fr.selquicode.go4lunch.data.model.UserSender;
+import fr.selquicode.go4lunch.ui.utils.IdCreator;
 
 public class FirestoreRepository {
 
@@ -229,7 +230,8 @@ public class FirestoreRepository {
      * @param restaurantId String of the current place id
      */
     public void addToFavoriteList(String userId, String restaurantId) {
-        this.getUsersCollection().document(userId).update(
+        this.getUsersCollection().document(userId)
+                .update(
                 FAVORITE_PLACE,
                 FieldValue.arrayUnion(restaurantId));
     }
@@ -241,7 +243,6 @@ public class FirestoreRepository {
      * @param restaurantId String of the current place id
      */
     public void removeFromFavoriteList(String userId, String restaurantId) {
-        Log.i("reporemove", "remove");
         this.getUsersCollection().document(userId).update(
                 FAVORITE_PLACE,
                 FieldValue.arrayRemove(restaurantId));
@@ -289,14 +290,11 @@ public class FirestoreRepository {
     public Query getAllMessageForChat( String userId, String workmateId){
 
         return  this.getChatCollection()
-                .document(createMessageUid(userId, workmateId))
+                .document(IdCreator.createMessageUid(userId, workmateId))
                 .collection(COLLECTION_MESSAGE)
                 .orderBy("dateCreated")
                 .limit(50);
-    }
 
-    private String createMessageUid(String userId, String workmateId){
-       return userId.compareTo(workmateId) > 0 ? userId + "_" + workmateId : workmateId + "_" + userId;
     }
 
     /**
@@ -311,8 +309,7 @@ public class FirestoreRepository {
                     User user = task.getResult().toObject(User.class);
                     if(user != null){
                         //Store message to Firebase
-
-                        getChatCollection().document(createMessageUid(userId, workmateId))
+                        getChatCollection().document(IdCreator.createMessageUid(userId, workmateId))
                                 .collection(COLLECTION_MESSAGE)
                                 .add(createMessage(user, messageRequest));
 

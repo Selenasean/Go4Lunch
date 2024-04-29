@@ -30,7 +30,6 @@ public class MainViewModel extends ViewModel {
     private final FirebaseAuthRepository firebaseAuthRepository;
     private final PlaceRepository placeRepository;
     private final String userLoggedId;
-    private Location locationUser;
 
 
     public MainViewModel(
@@ -83,7 +82,6 @@ public class MainViewModel extends ViewModel {
         if(locationRepository.getLocation() == null){
             return;
         }
-        Log.i("searchquery", locationRepository.getLocation().getLatitude() + "+" + locationRepository.getLocation().getLongitude());
         placeRepository.searchedPlaces(query, locationRepository.getLocation());
     }
 

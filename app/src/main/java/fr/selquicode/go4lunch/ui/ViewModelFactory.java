@@ -1,4 +1,4 @@
-package fr.selquicode.go4lunch.ui.utils;
+package fr.selquicode.go4lunch.ui;
 
 import static androidx.lifecycle.SavedStateHandleSupport.createSavedStateHandle;
 
@@ -16,7 +16,6 @@ import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.location.LocationRepository;
 import fr.selquicode.go4lunch.data.permission_checker.PermissionChecker;
 import fr.selquicode.go4lunch.domain.NotificationSchedule;
-import fr.selquicode.go4lunch.ui.MainViewModel;
 import fr.selquicode.go4lunch.ui.chat.ChatActivity;
 import fr.selquicode.go4lunch.ui.chat.ChatViewModel;
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;

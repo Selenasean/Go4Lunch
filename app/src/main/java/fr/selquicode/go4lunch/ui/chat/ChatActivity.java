@@ -20,7 +20,7 @@ import com.google.firebase.firestore.Query;
 import fr.selquicode.go4lunch.data.model.Message;
 import fr.selquicode.go4lunch.data.model.User;
 import fr.selquicode.go4lunch.databinding.ActivityChatBinding;
-import fr.selquicode.go4lunch.ui.utils.ViewModelFactory;
+import fr.selquicode.go4lunch.ui.ViewModelFactory;
 
 public class ChatActivity extends AppCompatActivity implements ChatAdapter.Listener{
 

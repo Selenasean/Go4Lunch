@@ -46,7 +46,7 @@
     <string name="search">Rechercher</string>
 
     //FOR DIALOG SETTINGS
-    <string name="lunch_choice">Voici votre restaurant où manger ! </string>
+    <string name="lunch_choice">Voici votre restaurant choisi : </string>
     <string name="change">changer</string>
     <string name="settings_title">Paramètres</string>
     <string name="no_restaurant_found">Aucun restaurant trouvé 🥺</string>
