@@ -17,7 +17,7 @@ public class PlaceOpeningHours {
      */
     @SerializedName("open_now")
     @Expose
-    private Boolean isOpenNow;
+    private final Boolean isOpenNow;
 
 
     public PlaceOpeningHours(@Nullable Boolean isOpenNow) {

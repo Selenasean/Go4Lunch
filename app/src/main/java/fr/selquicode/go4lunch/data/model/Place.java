@@ -13,39 +13,39 @@ public class Place {
 
     @SerializedName("place_id")
     @Expose
-    private String placeId;
+    private final String placeId;
 
     @SerializedName("geometry")
     @Expose
-    private Geometry geometry;
+    private final Geometry geometry;
 
     @SerializedName("vicinity")
     @Expose
-    private String vicinity;
+    private final String vicinity;
 
     @SerializedName("name")
     @Expose
-    private String name;
+    private final String name;
 
     @SerializedName("opening_hours")
     @Expose
-    private PlaceOpeningHours opening;
+    private final PlaceOpeningHours opening;
 
     @SerializedName("photos")
     @Expose
-    private List<PlacePhoto> placePhoto;
+    private final List<PlacePhoto> placePhoto;
 
     @SerializedName("rating")
     @Expose
-    private double rating;
+    private final double rating;
 
     @SerializedName("international_phone_number")
     @Expose
-    private String phone;
+    private final String phone;
 
     @SerializedName("website")
     @Expose
-    private String website;
+    private final String website;
 
     public Place(@NonNull String placeId,
                  @NonNull Geometry geometry,
@@ -55,7 +55,7 @@ public class Place {
                  @Nullable List<PlacePhoto> placePhoto,
                  double rating,
                  @Nullable String phone,
-                 @Nullable String website){
+                 @Nullable String website) {
 
         this.placeId = placeId;
         this.geometry = geometry;
@@ -72,10 +72,7 @@ public class Place {
     //GETTERS
     @Nullable
     public String getPlaceId() {
-        if(placeId != null){
-            return placeId;
-        }
-        return null;
+        return placeId != null ? placeId : null;
     }
 
     @Nullable
@@ -84,7 +81,9 @@ public class Place {
     }
 
     @Nullable
-    public String getVicinity(){ return vicinity; }
+    public String getVicinity() {
+        return vicinity;
+    }
 
     @Nullable
     public String getName() {
@@ -101,7 +100,6 @@ public class Place {
         return placePhoto;
     }
 
-    @Nullable
     public double getRating() {
         return rating;
     }
@@ -116,21 +114,22 @@ public class Place {
         return website;
     }
 
-   //METHODS UTILS
-   @Override
-   public String toString() {
-       return "Place{" +
-               "placeId='" + placeId + '\'' +
-               ", geometry=" + geometry +
-               ", vicinity='" + vicinity + '\'' +
-               ", name='" + name + '\'' +
-               ", opening=" + opening +
-               ", placePhoto=" + placePhoto +
-               ", rating=" + rating +
-               ", phone='" + phone + '\'' +
-               ", website='" + website + '\'' +
-               '}';
-   }
+    //METHODS UTILS
+    @NonNull
+    @Override
+    public String toString() {
+        return "Place{" +
+                "placeId='" + placeId + '\'' +
+                ", geometry=" + geometry +
+                ", vicinity='" + vicinity + '\'' +
+                ", name='" + name + '\'' +
+                ", opening=" + opening +
+                ", placePhoto=" + placePhoto +
+                ", rating=" + rating +
+                ", phone='" + phone + '\'' +
+                ", website='" + website + '\'' +
+                '}';
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -13,25 +13,25 @@ public class PlacePhoto {
 
     @SerializedName("height")
     @Expose
-    private double height;
+    private final double height;
 
     @SerializedName("html_attributions")
     @Expose
-    private List<String> html_attributions;
+    private final List<String> html_attributions;
 
     @SerializedName("photo_reference")
     @Expose
-    private String photo_reference;
+    private final String photo_reference;
 
     @SerializedName("width")
     @Expose
-    private double width;
+    private final double width;
 
 
-    public PlacePhoto(@NonNull double height,
+    public PlacePhoto(double height,
                       @NonNull List<String> html_attributions,
                       @NonNull String photo_reference,
-                      @NonNull double width){
+                      double width){
 
         this.height = height;
         this.html_attributions = html_attributions;
@@ -40,7 +40,6 @@ public class PlacePhoto {
     }
 
     //GETTERS
-    @NonNull
     public double getHeight() {
         return height;
     }
@@ -55,12 +54,12 @@ public class PlacePhoto {
         return photo_reference;
     }
 
-    @NonNull
     public double getWidth() {
         return width;
     }
 
     //METHODS UTILS
+    @NonNull
     @Override
     public String toString() {
         return "PlacePhoto{" +
@@ -76,12 +75,11 @@ public class PlacePhoto {
         if (this == o) return true;
         if (!(o instanceof PlacePhoto)) return false;
         PlacePhoto that = (PlacePhoto) o;
-        return Double.compare(that.getHeight(), getHeight()) == 0 && Double.compare(that.getWidth(), getWidth()) == 0 && getHtml_attributions().equals(that.getHtml_attributions()) && getPhoto_reference().equals(that.getPhoto_reference());
+        return Double.compare(getHeight(), that.getHeight()) == 0 && Double.compare(getWidth(), that.getWidth()) == 0 && Objects.equals(getHtml_attributions(), that.getHtml_attributions()) && Objects.equals(getPhoto_reference(), that.getPhoto_reference());
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(getHeight(), getHtml_attributions(), getPhoto_reference(), getWidth());
     }
-
 }

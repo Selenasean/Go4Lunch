@@ -64,7 +64,7 @@ public class Workmate {
     @NonNull
     @Override
     public String toString() {
-        return "Wormate{" +
+        return "Workmate{" +
                 "workmateId='" + workmateId + '\'' +
                 ", workmateDisplayName='" + workmateDisplayName + '\'' +
                 ", workmatePhotoUrl='" + workmatePhotoUrl + '\'' +

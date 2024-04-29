@@ -41,9 +41,6 @@ import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final String KEY_BUNDLE = "placesFromPlaceAutocomplete";
-    public static final String LIST_PLACE_ID = "ListOfPlacesId";
-
     private ActivityMainBinding binding;
 
     private final PlaceRepository repository = new PlaceRepository(RetrofitService.getPlaceAPI());
@@ -58,6 +55,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        //setting for TopAppBar & drawer
         setTopAppBar();
         setDrawer();
 
@@ -119,11 +118,18 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    /**
+     * Show the Dialog
+     */
     private void showDialogSettings() {
         final AlertDialog dialog = getSettingsDialog();
         dialog.show();
     }
 
+    /**
+     * Settings for the AlertDialog
+     * @return an AlertDialog built
+     */
     private AlertDialog getSettingsDialog() {
         final AlertDialog.Builder alertBuilder = new AlertDialog.Builder(this);
 
@@ -140,10 +146,8 @@ public class MainActivity extends AppCompatActivity {
             alertBuilder.setMessage(R.string.lunch_choice);
         }
 
-
         alertBuilder.setPositiveButton(R.string.change, null);
         dialog = alertBuilder.create();
-
 
         dialog.setOnShowListener(dialogInterface -> {
             Button button = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -207,9 +211,7 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 if(query != null){
                     searchView.clearFocus();
-                    Log.i("mainActivity", "query = "+ query );
                     mainViewModel.searchQuery(query);
-
                 }else{
                     return false;
                 }

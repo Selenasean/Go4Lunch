@@ -3,7 +3,7 @@ package fr.selquicode.go4lunch.data.model;
 
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
+
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -14,11 +14,10 @@ public class LatLngLiteral {
 
     @SerializedName("lat")
     @Expose
-    private double lat;
+    private final double lat;
     @SerializedName("lng")
     @Expose
-    private double  lng;
-
+    private final double lng;
 
     public LatLngLiteral(double lat, double lng) {
         this.lat = lat;

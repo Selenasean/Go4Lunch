@@ -12,25 +12,24 @@ public class PlaceOpeningHoursPeriodDetail {
 
     @SerializedName("day")
     @Expose
-    private Double day;
+    private final Double day;
 
     @SerializedName("time")
     @Expose
-    private String time;
+    private final String time;
 
     @SerializedName("date")
     @Expose
-    private String date;
+    private final String date;
 
 
-    public PlaceOpeningHoursPeriodDetail(@NonNull double day, @NonNull String time, @Nullable String date){
+    public PlaceOpeningHoursPeriodDetail(double day, @NonNull String time, @Nullable String date){
         this.day = day;
         this.date = date;
         this.time = time;
     }
 
     //GETTERS
-    @NonNull
     public double getDay() {
         return day;
     }
@@ -59,6 +58,7 @@ public class PlaceOpeningHoursPeriodDetail {
         return Objects.hash(getDay(), getTime(), getDate());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "PlaceOpeningHoursPeriodDetail{" +

@@ -42,6 +42,7 @@ public class MainApplication extends Application {
             notificationManager.createNotificationChannel(channel);
         }
 
+        //create all repositories
         locationRepository = new LocationRepository(LocationServices.getFusedLocationProviderClient(this), Looper.getMainLooper());
         firebaseAuthRepository = new FirebaseAuthRepository(FirebaseAuth.getInstance());
         firestoreRepository = new FirestoreRepository(FirebaseFirestore.getInstance());

@@ -26,18 +26,22 @@ public class MainViewModel extends ViewModel {
 
     @NonNull
     private final LocationRepository locationRepository;
+    @NonNull
     private final FirestoreRepository firestoreRepository;
+    @NonNull
     private final FirebaseAuthRepository firebaseAuthRepository;
+    @NonNull
     private final PlaceRepository placeRepository;
+    @NonNull
     private final String userLoggedId;
 
 
     public MainViewModel(
             @NonNull PermissionChecker permissionChecker,
             @NonNull LocationRepository locationRepository,
-            FirestoreRepository firestoreRepository,
-            FirebaseAuthRepository firebaseAuthRepository,
-            PlaceRepository placeRepository) {
+            @NonNull FirestoreRepository firestoreRepository,
+            @NonNull FirebaseAuthRepository firebaseAuthRepository,
+            @NonNull PlaceRepository placeRepository) {
 
         this.permissionChecker = permissionChecker;
         this.locationRepository = locationRepository;
@@ -78,6 +82,10 @@ public class MainViewModel extends ViewModel {
         return firestoreRepository.getOneUser(userLoggedId);
     }
 
+    /**
+     * To request placeRepository with the search of the user
+     * @param query -type String
+     */
     public void searchQuery(String query) {
         if(locationRepository.getLocation() == null){
             return;

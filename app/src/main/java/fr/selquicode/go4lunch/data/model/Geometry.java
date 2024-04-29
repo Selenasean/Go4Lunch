@@ -13,7 +13,8 @@ public class Geometry {
 
     @SerializedName("location")
     @Expose
-    private LatLngLiteral location;
+    private final LatLngLiteral location;
+
     @SerializedName("viewport")
     @Expose
     private Bounds viewport;
@@ -47,6 +48,7 @@ public class Geometry {
         return Objects.hash(getLocation(), viewport);
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Geometry{" +

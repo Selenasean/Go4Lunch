@@ -12,11 +12,11 @@ public class PlaceOpeningHoursPeriod {
 
     @SerializedName("open")
     @Expose
-    private PlaceOpeningHoursPeriodDetail open;
+    private final PlaceOpeningHoursPeriodDetail open;
 
     @SerializedName("close")
     @Expose
-    private PlaceOpeningHoursPeriodDetail close;
+    private final PlaceOpeningHoursPeriodDetail close;
 
 
     public PlaceOpeningHoursPeriod(@NonNull PlaceOpeningHoursPeriodDetail open, @Nullable PlaceOpeningHoursPeriodDetail close){
@@ -49,6 +49,7 @@ public class PlaceOpeningHoursPeriod {
         return Objects.hash(getOpen(), getClose());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "PlaceOpeningHoursPeriod{" +

@@ -14,13 +14,14 @@ public class PlacesNearbySearchResponse {
 
     @SerializedName("results")
     @Expose
-    private List<Place> results;
+    private final List<Place> results;
 
     public PlacesNearbySearchResponse(List<Place> results) {
         this.results = results;
     }
 
     //GETTERS
+    @NonNull
     public List<Place> getResults() {
         return results;
     }

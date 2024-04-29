@@ -11,10 +11,11 @@ public class Bounds {
 
     @SerializedName("northeast")
     @Expose
-    private LatLngLiteral northeast;
+    private final LatLngLiteral northeast;
+
     @SerializedName("southwest")
     @Expose
-    private LatLngLiteral southwest;
+    private final LatLngLiteral southwest;
 
 
     public Bounds(@NonNull LatLngLiteral northeast, @NonNull LatLngLiteral southwest) {
@@ -47,6 +48,7 @@ public class Bounds {
         return Objects.hash(getNortheast(), getSouthwest());
     }
 
+    @NonNull
     @Override
     public String toString() {
         return "Bounds{" +

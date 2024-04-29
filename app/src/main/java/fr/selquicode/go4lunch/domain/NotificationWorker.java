@@ -1,6 +1,5 @@
 package fr.selquicode.go4lunch.domain;
 
-import static fr.selquicode.go4lunch.R.string.app_name;
 import static fr.selquicode.go4lunch.R.string.notification_reminder;
 
 import android.Manifest;
@@ -30,8 +29,6 @@ import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 
 public class NotificationWorker extends Worker {
 
-    //NOTIF PARAMS =   STRING NAME RESTAURANT + STRING ADRESS + LIST<USER.NAME> WORKMATES EATING THERE
-
     private final FirestoreRepository firestoreRepository;
     private final FirebaseAuthRepository firebaseAuthRepository;
     private final String userLoggedId;
@@ -55,6 +52,7 @@ public class NotificationWorker extends Worker {
     public Result doWork() {
         try {
             if (firebaseAuthRepository.isUserLogged()) {
+                //get user logged data synchronously
                 User userLogged = firestoreRepository.getUserLoggedSynchronously(userLoggedId);
                 String placeId = userLogged.getRestaurantId();
 
@@ -64,7 +62,10 @@ public class NotificationWorker extends Worker {
                 List<User> workmatesEatingTogether = firestoreRepository.getUsersWhoChooseSynchronously(placeId);
                 String restaurantName = userLogged.getRestaurantName();
                 String restaurantAddress = userLogged.getRestaurantAddress();
+                //build text for notification
                 String notificationText = context.getString(R.string.first_part_notif, restaurantName, restaurantAddress);
+
+                // create a string with workmates who has chosen the same restaurant to eat as user logged
                 String workmatesNames = workmatesEatingTogether.stream()
                         .filter(user -> !user.getId().equals(firebaseAuthRepository.getCurrentUser().getUid()))
                         .map(user -> user.getDisplayName().contains(" ")?
@@ -73,7 +74,7 @@ public class NotificationWorker extends Worker {
                 if (!workmatesNames.isEmpty()) {
                     notificationText += " " +context.getString(R.string.second_part_notif, workmatesNames) ;
                 }
-
+                //create the notification
                 createNotification(notificationText, placeId);
             }else {
                 return Result.failure();
@@ -81,7 +82,6 @@ public class NotificationWorker extends Worker {
         } catch (Exception e) {
             return Result.failure();
         }
-
         return Result.success();
     }
 

@@ -21,7 +21,7 @@ public class PlacesAutocompleteResponse {
     }
 
     //GETTERS
-
+    @NonNull
     public List<PlaceAutocompletePrediction> getPlacesPredictions() {
         return placesPredictions;
     }

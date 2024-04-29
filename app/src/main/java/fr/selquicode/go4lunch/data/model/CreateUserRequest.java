@@ -3,7 +3,7 @@ package fr.selquicode.go4lunch.data.model;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import java.util.List;
+import java.util.Objects;
 
 public class CreateUserRequest {
 
@@ -43,5 +43,30 @@ public class CreateUserRequest {
     @Nullable
     public String getPhotoUserUrl() {
         return photoUserUrl;
+    }
+
+    //METHOD UTILS
+    @NonNull
+    @Override
+    public String toString() {
+        return "CreateUserRequest{" +
+                "id='" + id + '\'' +
+                ", displayName='" + displayName + '\'' +
+                ", email='" + email + '\'' +
+                ", photoUserUrl='" + photoUserUrl + '\'' +
+                '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof CreateUserRequest)) return false;
+        CreateUserRequest that = (CreateUserRequest) o;
+        return Objects.equals(getId(), that.getId()) && Objects.equals(getDisplayName(), that.getDisplayName()) && Objects.equals(getEmail(), that.getEmail()) && Objects.equals(getPhotoUserUrl(), that.getPhotoUserUrl());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId(), getDisplayName(), getEmail(), getPhotoUserUrl());
     }
 }

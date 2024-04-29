@@ -1,5 +1,7 @@
 package fr.selquicode.go4lunch.data.model;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
@@ -8,7 +10,7 @@ public class PlaceDetailsResponse {
 
     @SerializedName("result")
     @Expose
-    private Place result;
+    private final Place result;
 
     public PlaceDetailsResponse(Place result) {
         this.result = result;
@@ -18,6 +20,7 @@ public class PlaceDetailsResponse {
     public Place getResult() { return result; }
 
     //METHOD UTILS
+    @NonNull
     @Override
     public String toString() {
         return "PlaceDetailsResponse{" +

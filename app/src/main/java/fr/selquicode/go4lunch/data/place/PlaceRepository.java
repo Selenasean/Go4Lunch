@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import fr.selquicode.go4lunch.data.model.Place;
 import fr.selquicode.go4lunch.data.model.PlaceAutocompletePrediction;
@@ -28,7 +27,7 @@ public class PlaceRepository {
     private static final String TAG= "PlaceRepository";
     private final Map<String, List<Place>> cachedList = new HashMap<>();
     private final Map<String, Place> cachedPlaceDetail = new HashMap<>();
-    MutableLiveData<List<String>> searchedPlacesMutableLiveData = new MutableLiveData<>();
+    private final MutableLiveData<List<String>> searchedPlacesMutableLiveData = new MutableLiveData<>();
 
     public PlaceRepository(PlacesAPI apiService){
         this.apiService = apiService;
