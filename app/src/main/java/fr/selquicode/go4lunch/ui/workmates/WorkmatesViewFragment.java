@@ -113,6 +113,7 @@ public class WorkmatesViewFragment extends Fragment implements PopupMenu.OnMenuI
                 break;
             case(R.id.chat) :
                 ChatActivity.launch(workmateId, context);
+                break;
         }
         return true;
     }
