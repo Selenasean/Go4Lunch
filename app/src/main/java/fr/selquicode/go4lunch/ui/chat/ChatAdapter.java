@@ -61,7 +61,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatAdapter.V
         this.chatViewModel = chatViewModel;
     }
 
-
     //START PART CLASS VIEW HOLDER
     /**
      * ViewHolder
@@ -96,9 +95,12 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatAdapter.V
             colorRemoteUser = ContextCompat.getColor(itemView.getContext(), R.color.grey);
         }
 
-
+        /**
+         * Update display on screen according to messages
+         * @param message -type Message
+         * @param glide -type RequestManager to update profile picture
+         */
         public void updateWithMessage(Message message, RequestManager glide){
-
             //Update message
             messageTV.setText(message.getMessage());
             messageTV.setTextAlignment(isSender ? View.TEXT_ALIGNMENT_TEXT_END : View.TEXT_ALIGNMENT_TEXT_START);
@@ -106,7 +108,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatAdapter.V
             //Update date
             Timestamp timestampDate = message.getDateCreated();
             Instant instant = timestampDate.toDate().toInstant();
-            dateTV.setText(this.convertDateToHour(instant));
+            dateTV.setText(convertDateToHour(instant));
 
             // Update profile picture
             if (message.getUserSender().getImageUrl() != null){
@@ -119,6 +121,9 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatAdapter.V
 
         }
 
+        /**
+         * Update display accroding to user's status : he's sender or not
+         */
         private void updateLayoutFromSenderType(){
             //update Message Bubble Color Background
             ((GradientDrawable) messageTextContainer.getBackground()).setColor(isSender ? colorCurrentUser : colorRemoteUser);
@@ -130,16 +135,22 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatAdapter.V
             }
         }
 
+        /**
+         * Display for profileContainer when it's not the user's logged message
+         */
         private void updateProfileContainer() {
-            //update constraint for the profile container -> push it to the left for receiver message)
+            //update constraint for the profile container -> push it to the left when it's the workmate message
             ConstraintLayout.LayoutParams profileContainerLayoutParams = (ConstraintLayout.LayoutParams) profileContainer.getLayoutParams();
             profileContainerLayoutParams.endToEnd = ConstraintLayout.LayoutParams.UNSET;
             profileContainerLayoutParams.startToStart = ConstraintLayout.LayoutParams.PARENT_ID;
             profileContainer.requestLayout();
         }
 
+        /**
+         * Display for messageContainer when it's not the user's logged message
+         */
         private void updateMessageContainer() {
-            //update constraint for message container -> push it to the right of the profile container for receiver message
+            //update constraint for message container -> push it to the right of the profile container when it's the workmate message
             ConstraintLayout.LayoutParams messageContainerLayoutParams = (ConstraintLayout.LayoutParams) messageContainerItem.getLayoutParams();
             messageContainerLayoutParams.startToStart = ConstraintLayout.LayoutParams.UNSET;
             messageContainerLayoutParams.endToStart = ConstraintLayout.LayoutParams.UNSET;
@@ -148,7 +159,7 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatAdapter.V
             messageContainerLayoutParams.horizontalBias = 0.0f;
             messageContainerItem.requestLayout();
 
-            //update gravity for the text of message -> align it to the left for receiver message
+            //update gravity for the text of message -> align it to the left
             LinearLayout.LayoutParams messageTextLayoutParams = (LinearLayout.LayoutParams) messageTextContainer.getLayoutParams();
             messageTextLayoutParams.gravity = Gravity.START;
             messageTextContainer.requestLayout();
@@ -158,6 +169,11 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, ChatAdapter.V
             dateTV.requestLayout();
         }
 
+        /**
+         * To convert an Instant into a String
+         * @param dateCreated of the message sent - type Instant
+         * @return a date readable by user - type String
+         */
         private String convertDateToHour(Instant dateCreated) {
             LocalDateTime localDateTime = LocalDateTime.ofInstant(dateCreated, ZoneId.systemDefault());
             return localDateTime.format(DateTimeFormatter.ofPattern("dd MMMM yyyy HH:mm"));

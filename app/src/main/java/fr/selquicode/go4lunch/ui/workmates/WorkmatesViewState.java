@@ -64,7 +64,6 @@ public class WorkmatesViewState {
 
 
     //UTILS
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

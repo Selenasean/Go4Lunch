@@ -1,6 +1,5 @@
 package fr.selquicode.go4lunch.ui.detail;
 
-import static fr.selquicode.go4lunch.ui.list.ListViewAdapter.DIFF_CALLBACK;
 
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
@@ -18,26 +17,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 
-import java.util.List;
 
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.data.model.Workmate;
 import fr.selquicode.go4lunch.databinding.WorkmatesItemBinding;
-import fr.selquicode.go4lunch.ui.workmates.WorkmatesListViewAdapter;
-import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewState;
 
 public class WorkmatesListDetailAdapter extends ListAdapter<Workmate, WorkmatesListDetailAdapter.ViewHolder> {
-
 
    public WorkmatesListDetailAdapter() {
         super(DIFF_CALLBACK);
    }
 
+   //START OF CLASS VIEW HOLDER
     public static class ViewHolder extends RecyclerView.ViewHolder{
         private final ImageView workmatePictureProfile, chatBtn;
         private final TextView workmateName, joiningString;
-
 
         public ViewHolder(@NonNull WorkmatesItemBinding binding) {
             super(binding.getRoot());
@@ -66,9 +61,9 @@ public class WorkmatesListDetailAdapter extends ListAdapter<Workmate, WorkmatesL
             joiningString.setTextColor(ContextCompat.getColor(MainApplication.getApplication(), R.color.black));
             joiningString.setText(R.string.is_joining);
 
-
         }
     }
+    //END OF CLASS VIEW HOLDER
 
     @NonNull
     @Override
@@ -86,7 +81,9 @@ public class WorkmatesListDetailAdapter extends ListAdapter<Workmate, WorkmatesL
     }
 
 
-
+    /**
+     * method that compare two item and their content to update them if it's necessary
+     */
     public static final DiffUtil.ItemCallback<Workmate> DIFF_CALLBACK =
             new DiffUtil.ItemCallback<Workmate>() {
                 @Override
@@ -100,6 +97,5 @@ public class WorkmatesListDetailAdapter extends ListAdapter<Workmate, WorkmatesL
                 }
 
             };
-
 
 }

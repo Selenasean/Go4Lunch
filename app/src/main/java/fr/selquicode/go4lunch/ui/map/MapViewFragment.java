@@ -56,31 +56,35 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
                 .findFragmentById(R.id.fragment_container_map);
         assert mapFragment != null;
         mapFragment.getMapAsync(this);
-
     }
 
+    /**
+     * Settings for viewModel
+     */
     private void settingViewModel() {
         mapViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MapViewModel.class);
     }
 
+    /**
+     * Method to display information on Map
+     * @param places - type List of MapViewState
+     */
     private void render(List<MapViewState> places) {
-        Log.i("MainActivity", places.size() + "");
         map.clear();
         if(places.size() < 1){
             Toast.makeText(getContext(), R.string.no_restaurant_found, Toast.LENGTH_SHORT).show();
         }else{
             for (MapViewState place : places) {
-                Log.i("MainActivity", place.toString());
                 LatLng restaurant = new LatLng(place.getGeometry().getLocation().getLat(), place.getGeometry().getLocation().getLng());
-                Marker markerCreated;
-
-                markerCreated = map.addMarker(new MarkerOptions()
+                //create a marker on the map
+                Marker markerCreated = map.addMarker(new MarkerOptions()
                             .position(restaurant)
                             .title(place.getName())
                 );
                 if(markerCreated != null){
                     markerCreated.setTag(place.getPlaceId());
                     if(place.isWorkmatesEatingThere){
+                        //change the color of the marker on map when there is workmates who'll eat there
                         markerCreated.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE));
                     }
                 }
@@ -93,19 +97,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Lognes, France.
-     * <p>
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
      */
     @Override
     @SuppressLint("MissingPermission")
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
         // move the camera to user's location
-        //TODO : getLocation synchronously from location repository
         if(mapViewModel.getUserLocation() != null){
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(mapViewModel.getUserLocation(), 16));
         }
@@ -113,12 +110,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
         mapViewModel.locateTheUserOnMap(map);
         // put Observer on the places' list
         mapViewModel.getPlaces().observe(getViewLifecycleOwner(), this::render);
-
     }
 
+    /**
+     * To open the DetailActivity linked to the corresponding place
+     * @param marker clicked by user
+     * @return - boolean - open DetailActivity
+     */
     private boolean onMarkerClicked(Marker marker) {
-        //TODO : open detail activity corresponding to the place id
-        //TODO : + count clik if click = 1 : show title, if click = 2 : open detail activity
         String placeId = (String) marker.getTag();
         DetailActivity.launch(placeId, getContext());
         return false;

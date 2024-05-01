@@ -23,7 +23,6 @@ public class MainViewModel extends ViewModel {
 
     @NonNull
     private final PermissionChecker permissionChecker;
-
     @NonNull
     private final LocationRepository locationRepository;
     @NonNull

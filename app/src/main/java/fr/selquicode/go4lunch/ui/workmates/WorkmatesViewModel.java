@@ -62,5 +62,4 @@ public class WorkmatesViewModel extends ViewModel {
         return usersList;
     }
 
-
 }

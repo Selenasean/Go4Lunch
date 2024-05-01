@@ -32,10 +32,7 @@ public class WorkmatesViewFragment extends Fragment implements PopupMenu.OnMenuI
     private WorkmatesViewModel viewModel;
     private FragmentWorkmatesViewBinding binding;
     private WorkmatesListViewAdapter adapter;
-    private String restaurantId;
-    private String workmateId;
     private Context context;
-
 
     public static WorkmatesViewFragment newInstance() {
         return new WorkmatesViewFragment();
@@ -69,6 +66,9 @@ public class WorkmatesViewFragment extends Fragment implements PopupMenu.OnMenuI
 
     }
 
+    /**
+     * Settings for adapter
+     */
     private void setAdapter() {
         adapter = new WorkmatesListViewAdapter(new OnWorkmateClickedListener() {
             @Override
@@ -98,6 +98,13 @@ public class WorkmatesViewFragment extends Fragment implements PopupMenu.OnMenuI
         recyclerView.setAdapter(adapter);
     }
 
+    private String restaurantId;
+    private String workmateId;
+    /**
+     * Choose a workmate to chat with or see where he gonna eat
+     * @param menuItem - a workmate on the list
+     * @return true - launch DetailActivity or ChatActivity
+     */
     @Override
     public boolean onMenuItemClick(MenuItem menuItem) {
         switch (menuItem.getItemId()){
@@ -107,7 +114,6 @@ public class WorkmatesViewFragment extends Fragment implements PopupMenu.OnMenuI
             case(R.id.chat) :
                 ChatActivity.launch(workmateId, context);
         }
-
         return true;
     }
 }

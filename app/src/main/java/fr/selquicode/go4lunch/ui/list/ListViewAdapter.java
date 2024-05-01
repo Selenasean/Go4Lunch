@@ -1,7 +1,7 @@
 package fr.selquicode.go4lunch.ui.list;
 
 import android.content.Context;
-import android.content.Intent;
+
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -15,12 +15,10 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.RequestManager;
 
 import fr.selquicode.go4lunch.BuildConfig;
 import fr.selquicode.go4lunch.MainApplication;
 import fr.selquicode.go4lunch.R;
-import fr.selquicode.go4lunch.data.model.Message;
 import fr.selquicode.go4lunch.databinding.RestaurantItemBinding;
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;
 
@@ -30,6 +28,7 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
         super(DIFF_CALLBACK);
     }
 
+    // START OF CLASS VIEW HOLDER
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView name, address, opening, distance, workmatesEating;
         private final ImageView restaurantImg;
@@ -49,7 +48,6 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
 
         public void bind(ListViewState item) {
             //binding with viewState
-            // TODO : bind avec le viewState numbers of workmates
             name.setText(item.getNameRestaurant());
             address.setText(item.getVicinity());
 
@@ -86,10 +84,9 @@ public class ListViewAdapter extends ListAdapter<ListViewState, ListViewAdapter.
                     opening.setTextColor(ContextCompat.getColor(MainApplication.getApplication().getApplicationContext(),R.color.red));
                 }
             }
-
         }
-
     }
+    //END OF CLASS VIEW HOLDER
 
     @NonNull
     @Override

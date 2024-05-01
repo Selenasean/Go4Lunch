@@ -29,7 +29,6 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
     private ChatAdapter chatAdapter;
     public static final String WORKMATE_ID = "WORKMATE_ID";
 
-
     /**
      * Start ChatActivity
      *
@@ -46,16 +45,25 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
         super.onCreate(savedInstanceState);
         binding = ActivityChatBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        //settings for viewModel
         setViewModel();
+        //setting for topBar
         setWorkmateBar();
+        //settings for recyclerView
         configureRecyclerView();
         setupSendBtn();
     }
 
+    /**
+     * Settings for the ViewModel
+     */
     private void setViewModel() {
         chatViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(ChatViewModel.class);
     }
 
+    /**
+     * Settings for the bar displayed on top of the screen
+     */
     private void setWorkmateBar() {
         chatViewModel.getWorkmateToChat().observe(this, new Observer<User>() {
             @Override
@@ -65,6 +73,10 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
         });
     }
 
+    /**
+     * Method to display data on screen
+     * @param user : with whom we chat - type User
+     */
     private void render(User user) {
         binding.workmateName.setText(user.getDisplayName().contains(" ")?
                 user.getDisplayName().split(" ")[0] : user.getDisplayName());
@@ -74,6 +86,9 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
                 .into(binding.workmatePhoto);
     }
 
+    /**
+     * Settings for RecyclerView & Adapter
+     */
     private void configureRecyclerView() {
         //Configure Adapter
         chatAdapter = new ChatAdapter(generateOptionsForAdapter(chatViewModel.getAllMessageForChat()),
@@ -94,6 +109,9 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
         binding.chatRecyclerview.setAdapter(chatAdapter);
     }
 
+    /**
+     * Settings for the button Send
+     */
     private void setupSendBtn() {
         binding.sendBtn.setOnClickListener(view -> {
             chatViewModel.sendMessage(binding.chatEditText);
@@ -102,8 +120,11 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
     }
 
 
-
-    //Create options for RecyclerView from a Query
+    /**
+     * Create options for RecyclerView from a Query
+     * @param query the message wrote by user
+     * @return a FirestoreRecyclerOptions<Message>
+     */
     private FirestoreRecyclerOptions<Message> generateOptionsForAdapter(Query query) {
         return new FirestoreRecyclerOptions.Builder<Message>()
                 .setQuery(query, Message.class)
@@ -112,6 +133,9 @@ public class ChatActivity extends AppCompatActivity implements ChatAdapter.Liste
     }
 
 
+    /**
+     * To show a message if there is nothing to display in the recyclerView
+     */
     @Override
     public void onDataChanged() {
         //show textView in case RecyclerView is empty

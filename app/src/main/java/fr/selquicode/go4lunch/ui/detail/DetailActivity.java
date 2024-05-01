@@ -96,7 +96,7 @@ public class DetailActivity extends AppCompatActivity {
     }
 
     /**
-     * Method to refresh the like textView according the boolean isPlaceInFavorites
+     * Method to refresh the like textView according to the boolean isPlaceInFavorites
      */
     private void refreshFavorites(boolean isPlaceInFavorites) {
         TextView likeTV = binding.likeTextview;
@@ -109,15 +109,11 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         //btn to chose restaurant to add on favorite restaurant's list
-        binding.likeBtn.setOnClickListener(listener -> {
-            Log.i("detailAct", String.valueOf(isPlaceInFavorites));
-            detailViewModel.onFavoriteChoice(isPlaceInFavorites);
-
-        });
+        binding.likeBtn.setOnClickListener(listener -> detailViewModel.onFavoriteChoice(isPlaceInFavorites));
     }
 
     /**
-     * Method to refreshes the style of the fab
+     * Method to refresh the style of the fab
      *
      * @param isUserLoggedChose type boolean
      */

@@ -1,10 +1,5 @@
 package fr.selquicode.go4lunch.ui.workmates;
 
-
-
-
-
-
 import android.graphics.Typeface;
 import android.view.LayoutInflater;
 
@@ -54,7 +49,6 @@ public class WorkmatesListViewAdapter extends ListAdapter<WorkmatesViewState, Wo
             restaurantName = binding.restaurantName;
             workmatePictureProfile = binding.workmatePhoto;
             chatBtn = binding.btnChat;
-
         }
 
         public void bind(WorkmatesViewState item){

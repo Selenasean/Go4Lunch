@@ -29,18 +29,23 @@ import fr.selquicode.go4lunch.data.place.PlaceRepository;
 
 public class MapViewModel extends ViewModel {
 
+    @NonNull
     private final PlaceRepository placeRepository;
+    @NonNull
     private final LocationRepository locationRepository;
+    @NonNull
     private final PermissionChecker permissionChecker;
+    @NonNull
     private final FirestoreRepository firestoreRepository;
+    @NonNull
     private final FirebaseAuthRepository firebaseAuthRepository;
     private final MediatorLiveData<List<MapViewState>> placesMediatorLivedata = new MediatorLiveData<>();
 
-    public MapViewModel(PlaceRepository placeRepository,
-                        LocationRepository locationRepository,
-                        PermissionChecker permissionChecker,
-                        FirestoreRepository firestoreRepository,
-                        FirebaseAuthRepository firebaseAuthRepository) {
+    public MapViewModel(@NonNull PlaceRepository placeRepository,
+                        @NonNull LocationRepository locationRepository,
+                        @NonNull PermissionChecker permissionChecker,
+                        @NonNull FirestoreRepository firestoreRepository,
+                        @NonNull FirebaseAuthRepository firebaseAuthRepository) {
         this.placeRepository = placeRepository;
         this.locationRepository = locationRepository;
         this.permissionChecker = permissionChecker;
@@ -83,6 +88,12 @@ public class MapViewModel extends ViewModel {
         );
     }
 
+    /**
+     * Method to combine all the values of LiveData
+     * @param places - type List of Place
+     * @param searchedPlacesId : List of places' id - type List of String
+     * @param users - type List of User
+     */
     private void combine(List<Place> places, List<String> searchedPlacesId, List<User> users) {
         if (places == null || users == null) {
             return;
@@ -104,6 +115,12 @@ public class MapViewModel extends ViewModel {
 
     }
 
+    /**
+     * To parse into a list of MapViewState for UI, userLogged filtered
+     * @param places - type List of Place
+     * @param users - type List of User
+     * @return a list of MapViewState
+     */
     private List<MapViewState> parseToMapViewState(List<Place> places, List<User> users) {
         //create a new list of restaurant's id chosen by users,
         // means if the place is chosen by a user it will be inside this new list

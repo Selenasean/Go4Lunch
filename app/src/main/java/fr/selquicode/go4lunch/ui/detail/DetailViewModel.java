@@ -1,8 +1,7 @@
 package fr.selquicode.go4lunch.ui.detail;
 
 
-import android.util.Log;
-
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModel;
@@ -24,12 +23,15 @@ import fr.selquicode.go4lunch.ui.utils.RatingCalculator;
 
 public class DetailViewModel extends ViewModel {
 
+    @NonNull
     private final FirestoreRepository firestoreRepository;
+    @NonNull
     private final FirebaseAuthRepository firebaseAuthRepository;
     private final String placeId;
     private final MediatorLiveData<DetailViewState> detailMediatorLiveData = new MediatorLiveData<>();
-    private String userLoggedId;
-    private NotificationSchedule notificationSchedule;
+    private final String userLoggedId;
+    @NonNull
+    private final NotificationSchedule notificationSchedule;
 
     /**
      * Constructor
@@ -40,11 +42,11 @@ public class DetailViewModel extends ViewModel {
      * @param firebaseAuthRepository where we get user logged data
      */
     public DetailViewModel(
-            PlaceRepository placeRepository,
+            @NonNull PlaceRepository placeRepository,
             String placeId,
-            FirestoreRepository firestoreRepository,
-            FirebaseAuthRepository firebaseAuthRepository,
-            NotificationSchedule notificationSchedule) {
+            @NonNull FirestoreRepository firestoreRepository,
+            @NonNull FirebaseAuthRepository firebaseAuthRepository,
+            @NonNull NotificationSchedule notificationSchedule) {
 
         this.firestoreRepository = firestoreRepository;
         this.firebaseAuthRepository = firebaseAuthRepository;
@@ -196,14 +198,14 @@ public class DetailViewModel extends ViewModel {
 
     }
 
-
+    /**
+     * Method to store or remove restaurant chosen in favorite from database
+     * @param isPlaceInFavorites - boolean
+     */
     public void onFavoriteChoice(Boolean isPlaceInFavorites) {
-        Log.i("vmdetail", "onfavoritechoice");
         if (isPlaceInFavorites) {
-            Log.i("vmdetail", "id deja existant");
             firestoreRepository.removeFromFavoriteList(userLoggedId, placeId);
         } else {
-            Log.i("vmdetail", "id non existant");
             firestoreRepository.addToFavoriteList(userLoggedId, placeId);
         }
     }

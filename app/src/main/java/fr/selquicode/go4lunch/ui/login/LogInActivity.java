@@ -3,7 +3,6 @@ package fr.selquicode.go4lunch.ui.login;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -44,16 +43,20 @@ public class LogInActivity extends AppCompatActivity {
         isUserSigned();
     }
 
+    /**
+     * To chose which Activity displayed depending on whether the user is logged in
+     */
     private void isUserSigned() {
-        Log.i("logInAct", viewModel.isUserLogged() + "");
         if(viewModel.isUserLogged()){
                 startMainActivity();
         }else{
-            Log.i("login", "open firebase activity");
             startFirebaseLogIn();
         }
     }
 
+    /**
+     * To start firebaseLogIn
+     */
     private void startFirebaseLogIn() {
         //bind the created custom layout XML resource & firebaseUI
         AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
@@ -63,6 +66,9 @@ public class LogInActivity extends AppCompatActivity {
                 .build();
 
         //choose authentication providers
+        //note that authentication by email only offers to sign in,
+        //because firebaseAuth doesn't store the email entered in memory for security reasons,
+        //it doesn't offer a saved email suggestion in email's placeholder, all users are considered as new users
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.GoogleBuilder().build(),
                 new AuthUI.IdpConfig.EmailBuilder().build());
@@ -100,7 +106,6 @@ public class LogInActivity extends AppCompatActivity {
             finish();
         } else {
             //sign in failed
-            Log.i("MA", "sign in failed");
             if(response == null){
                 //means that the user pressed back button
                 showSnackBar(R.string.cancelled_signin);
@@ -115,7 +120,6 @@ public class LogInActivity extends AppCompatActivity {
             }
             showSnackBar(R.string.unknown_error);
             finish();
-            Log.e("LogInActivity", "Sign-in error : ", response.getError());
         }
     }
 

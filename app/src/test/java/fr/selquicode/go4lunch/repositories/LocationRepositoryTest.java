@@ -49,7 +49,6 @@ public class LocationRepositoryTest {
     }
 
     //TEST
-
     @Test
     public void getLocationLiveData() throws InterruptedException{
         //get the callback
@@ -82,6 +81,6 @@ public class LocationRepositoryTest {
         locationRepository.startLocationRequest();
         locationRepository.stopLocationRequest();
 
-        verify(fusedLocationProviderClientMock, times(2)).removeLocationUpdates(any(LocationCallback.class));
+        verify(fusedLocationProviderClientMock,times(2)).removeLocationUpdates(any(LocationCallback.class));
     }
 }
