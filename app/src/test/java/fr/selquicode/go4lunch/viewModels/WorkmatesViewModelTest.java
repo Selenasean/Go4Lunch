@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -26,7 +25,6 @@ import fr.selquicode.go4lunch.ui.workmates.WorkmatesViewState;
 import fr.selquicode.go4lunch.utils.LiveDataTestUtils;
 
 public class WorkmatesViewModelTest {
-    //TODO test VM
 
     private final FirestoreRepository firestoreRepositoryMock = mock();
     private final FirebaseAuthRepository firebaseAuthRepositoryMock = mock();
@@ -38,7 +36,6 @@ public class WorkmatesViewModelTest {
     //DATA FOR TEST
     private List<User> usersList;
     private WorkmatesViewModel viewModel;
-
 
     @Before
     public void setup(){
@@ -109,15 +106,11 @@ public class WorkmatesViewModelTest {
 
         List<WorkmatesViewState> actualList = LiveDataTestUtils.getOrAwaitValue(viewModel.getUsers());
 
-        Truth.assertThat(actualList).containsExactlyElementsIn(workmatesViewStateList);
-        //verify first user of the list has chosen a restaurant
-        Truth.assertThat(actualList.get(0).getRestaurantId()).isEqualTo(usersList.get(2).getRestaurantId());
+        Truth.assertThat(actualList).containsExactlyElementsIn(workmatesViewStateList).inOrder();
         //verify that boolean hasChosenRestaurant is true for the first user of the list
         Truth.assertThat(actualList.get(0).hasChosenRestaurant()).isEqualTo(true);
-        //verify userLogged isn't in the list filtered
-        Truth.assertThat(actualList).doesNotContain(usersList.get(0));
         //verify user's display name is only one word from the string given
-        Truth.assertThat(actualList.get(1).getDisplayName()).isLessThan(usersList.get(1).getDisplayName());
+        Truth.assertThat(actualList.get(1).getDisplayName()).isEqualTo("2name");
     }
 
 }

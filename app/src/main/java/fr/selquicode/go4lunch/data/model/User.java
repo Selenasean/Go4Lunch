@@ -13,10 +13,10 @@ public class User {
     private String id, displayName, email;
 
     @Nullable
-    String restaurantId, restaurantName, photoUserUrl, restaurantAddress;
+    private String restaurantId, restaurantName, photoUserUrl, restaurantAddress;
 
     @Nullable
-    List<String> favoritePlacesId;
+     private List<String> favoritePlacesId;
 
     public User(
             @NonNull String id,
@@ -38,7 +38,8 @@ public class User {
         this.favoritePlacesId = favoritePlacesId;
     }
 
-    public User() {}
+    public User() {
+    }
 
     // GETTERS
     @NonNull

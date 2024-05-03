@@ -1,33 +1,28 @@
 package fr.selquicode.go4lunch.ui.workmates;
 
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import android.content.Context;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.view.LayoutInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.PopupMenu;
-
 import java.util.List;
 
-import fr.selquicode.go4lunch.R;
 import fr.selquicode.go4lunch.databinding.FragmentWorkmatesViewBinding;
+import fr.selquicode.go4lunch.ui.ViewModelFactory;
 import fr.selquicode.go4lunch.ui.chat.ChatActivity;
 import fr.selquicode.go4lunch.ui.detail.DetailActivity;
-import fr.selquicode.go4lunch.ui.ViewModelFactory;
 
-public class WorkmatesViewFragment extends Fragment implements PopupMenu.OnMenuItemClickListener {
+public class WorkmatesViewFragment extends Fragment {
 
     private WorkmatesViewModel viewModel;
     private FragmentWorkmatesViewBinding binding;
@@ -98,23 +93,4 @@ public class WorkmatesViewFragment extends Fragment implements PopupMenu.OnMenuI
         recyclerView.setAdapter(adapter);
     }
 
-    private String restaurantId;
-    private String workmateId;
-    /**
-     * Choose a workmate to chat with or see where he gonna eat
-     * @param menuItem - a workmate on the list
-     * @return true - launch DetailActivity or ChatActivity
-     */
-    @Override
-    public boolean onMenuItemClick(MenuItem menuItem) {
-        switch (menuItem.getItemId()){
-            case(R.id.restaurant) :
-                DetailActivity.launch(restaurantId, context);
-                break;
-            case(R.id.chat) :
-                ChatActivity.launch(workmateId, context);
-                break;
-        }
-        return true;
-    }
 }
