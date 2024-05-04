@@ -86,7 +86,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.11.0'
 
     //FIREBASE + FIREBASE UI + FIRESTORE
-    implementation platform('com.google.firebase:firebase-bom:33.0.0')
+    implementation platform('com.google.firebase:firebase-bom:32.8.1')
     implementation 'com.google.firebase:firebase-core:21.1.1'
     implementation 'com.google.firebase:firebase-analytics'
     implementation 'com.firebaseui:firebase-ui-auth:8.0.2'
