@@ -67,7 +67,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/name_restaurant"
         app:layout_constraintEnd_toStartOf="@id/icon_workmates"
-        tools:text="21 Boulevard du Segrais"/>
+        tools:text="18 cours de la faim"/>
 
     <!-- Icon + numbers of workmates who'll go in the current restaurant  -->
     <ImageView

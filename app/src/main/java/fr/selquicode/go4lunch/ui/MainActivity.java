@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -219,7 +218,10 @@ public class MainActivity extends AppCompatActivity {
             }
 
             @Override
-            public boolean onQueryTextChange(String s) {
+            public boolean onQueryTextChange(String query) {
+                if(query == null || query.isEmpty()){
+                    mainViewModel.updateSearchQuery();
+                }
                 return false;
             }
         });
@@ -232,6 +234,9 @@ public class MainActivity extends AppCompatActivity {
     private void setViewModel() {
         mainViewModel = new ViewModelProvider(this, ViewModelFactory.getInstance()).get(MainViewModel.class);
         mainViewModel.getUserLogged().observe(this, user -> {
+            if(user == null){
+                return;
+            }
             placeId = user.getRestaurantId();
             placeName = user.getRestaurantName();
             setUserLoggedData(user.getPhotoUserUrl(), user.getDisplayName(), user.getEmail());
@@ -247,15 +252,22 @@ public class MainActivity extends AppCompatActivity {
      */
     private void setUserLoggedData(String photoUserUrl, String displayName, String email) {
         //display user profile picture
-        Glide.with(MainApplication.getApplication())
-                .load(photoUserUrl)
-                .apply(RequestOptions.circleCropTransform())
-                .into((ImageView) findViewById(R.id.profile_picture));
+        if(photoUserUrl == null || photoUserUrl.isEmpty()){
+            ImageView imageView = findViewById(R.id.profile_picture);
+            imageView.setImageResource(R.drawable.ic_user_profile);
+        }else{
+            Glide.with(MainApplication.getApplication())
+                    .load(photoUserUrl)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into((ImageView) findViewById(R.id.profile_picture));
+        }
         //display email and firstName
         ((TextView) findViewById(R.id.user_name)).setText((displayName.contains(" ") ?
                 displayName.split(" ")[0] : displayName));
         ((TextView) findViewById(R.id.user_email)).setText(email);
     }
+
+
 
 
     /**

@@ -76,7 +76,7 @@
                     android:textSize="12sp"
                     android:singleLine="true"
                     android:textColor="?colorOnPrimary"
-                    tools:text="selena@gmail.com" />
+                    tools:text="test@gmail.com" />
 
             </LinearLayout>
 

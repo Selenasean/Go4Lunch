@@ -56,10 +56,14 @@ public class WorkmatesListViewAdapter extends ListAdapter<WorkmatesViewState, Wo
             workmateName.setText(item.getDisplayName());
 
             //set workmates profile picture
+            if(item.getPhotoUrl() == null || item.getPhotoUrl().isEmpty()){
+                workmatePictureProfile.setImageResource(R.drawable.ic_user_profile);
+            }else{
             Glide.with(MainApplication.getApplication())
                     .load(item.getPhotoUrl())
                     .apply(RequestOptions.circleCropTransform())
                     .into(workmatePictureProfile);
+            }
 
             //set place where workmate is gonna eat if it exist or set "hasn't decided yet"
             if(item.hasChosenRestaurant()){

@@ -7,7 +7,6 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
 
-import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.firebase.FirebaseAuthRepository;
 import fr.selquicode.go4lunch.data.firebase.FirestoreRepository;
 import fr.selquicode.go4lunch.data.model.CreateUserRequest;

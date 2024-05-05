@@ -2,8 +2,6 @@ package fr.selquicode.go4lunch.ui;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.location.Location;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -92,4 +90,7 @@ public class MainViewModel extends ViewModel {
         placeRepository.searchedPlaces(query, locationRepository.getLocation());
     }
 
+    public void updateSearchQuery() {
+        placeRepository.noQuerySearched();
+    }
 }

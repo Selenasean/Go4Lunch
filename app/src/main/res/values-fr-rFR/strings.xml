@@ -63,7 +63,7 @@
     <string name="restaurant">restaurant</string>
 
     //CHAT ACTIVITY
-    <string name="chat_error">Ce fils de discution ne contient aucun message pour le moment..</string>
+    <string name="chat_error">Ce fil de discution ne contient aucun message pour le moment..</string>
     <string name="compose_message">Composer votre message</string>
     <string name="send">envoyer</string>
 </resources>

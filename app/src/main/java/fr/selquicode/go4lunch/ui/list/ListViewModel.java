@@ -84,7 +84,7 @@ public class ListViewModel extends ViewModel {
             return;
         }
 
-        if(searchedPlaceId == null){
+        if(searchedPlaceId == null || searchedPlaceId.isEmpty()){
             List<ListViewState> placesListParsed = parseToViewState(places, users);
             listMediatorLiveData.setValue(placesListParsed);
         }else{

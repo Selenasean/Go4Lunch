@@ -4,7 +4,6 @@ package fr.selquicode.go4lunch.ui.login;
 import android.content.Intent;
 import android.os.Bundle;
 
-
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
@@ -16,7 +15,6 @@ import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract;
 import com.firebase.ui.auth.IdpResponse;
 import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult;
 import com.google.android.material.snackbar.Snackbar;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -99,6 +97,7 @@ public class LogInActivity extends AppCompatActivity {
      */
     private void onSignInResult(FirebaseAuthUIAuthenticationResult result) {
         IdpResponse response = result.getIdpResponse();
+
         if (result.getResultCode() == RESULT_OK) {
             // Successfully signed in
             viewModel.createUser();

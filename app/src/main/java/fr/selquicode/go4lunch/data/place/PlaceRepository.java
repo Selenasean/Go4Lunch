@@ -139,4 +139,8 @@ public class PlaceRepository {
     public LiveData<List<String>> getSearchedPlaces(){
         return searchedPlacesMutableLiveData;
     }
+
+    public void noQuerySearched() {
+        searchedPlacesMutableLiveData.setValue(null);
+    }
 }
